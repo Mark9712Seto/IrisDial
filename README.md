@@ -3,7 +3,7 @@
 Iris al polso: gli occhi di Iris e la chat con Hermes Agent sull'**Amazfit Balance 2** (Zepp OS, schermo rotondo 480×480).
 Progetto gemello di [Iris Notch](https://github.com/Mark9712Seto/IrisNotch), l'isola per Windows.
 
-> Stato: **bozza**. Ci sono le schermate (`design/balance2.html`, da aprire nel browser) e l'architettura (`docs/architettura.md`). Il codice dell'app non c'è ancora.
+> Stato: **bozza**. Ci sono le schermate (`design/balance2.html`), un prototipo da usare col mouse (`design/prototipo.html`) e l'architettura (`docs/architettura.md`). Il codice dell'app non c'è ancora.
 
 ## Cosa farà
 
@@ -21,5 +21,5 @@ Le chiavi stanno solo nelle impostazioni dell'app Zepp sul telefono, mai sull'or
 ## Demo
 
 ```
-python3 tools/bundle_demo.py   # rigenera design/balance2.html con il motore degli occhi
+python3 tools/bundle_demo.py   # rigenera le demo in design/ con il motore degli occhi
 ```

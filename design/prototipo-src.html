@@ -1,0 +1,389 @@
+<title>Iris Dial, prototipo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a sinistra un Balance 2 grande e vero da usare (tieni premuto, corona, pulsante); a destra cosa provare
+   e il registro di quello che succede tra orologio, telefono e casa. Su telefono le due colonne si impilano.
+   Un solo look scuro, come lo schermo AMOLED. */
+:root{
+  --ink:#06070b; --panel:#0e1017; --raise:#151823; --line:#222637;
+  --fg:#e9ebf3; --muted:#959cb3; --dim:#626984;
+  --eye:#7cc4ff; --ok:#4ade80; --warn:#fb7185; --gold:#fbbf24;
+  --display:"Bricolage Grotesque",ui-rounded,"Segoe UI",system-ui,sans-serif;
+  --body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ink);color:var(--fg);font:15px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:18px;padding-block:26px 64px;display:flex;flex-direction:column;gap:26px}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(28px,4.6vw,40px);line-height:1.06;font-weight:700}
+h3{font-size:15px;font-weight:700}
+p{margin:0;max-width:66ch}
+.lede{color:var(--muted)}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--eye)}
+header{display:flex;flex-direction:column;gap:12px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:30px;align-items:start}
+@media (max-width:860px){.main{grid-template-columns:1fr}}
+.stage{display:flex;flex-direction:column;align-items:center;gap:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+@media (max-width:860px){.stage{position:static}}
+.legend{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:4px 10px}
+kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;color:var(--fg)}
+
+/* l'orologio */
+.watch{position:relative;width:min(430px,100%);aspect-ratio:1;user-select:none;-webkit-user-select:none;touch-action:none}
+.watch.buzz{animation:buzz .09s linear 6}
+@keyframes buzz{25%{transform:translateX(-3px) rotate(-.6deg)}75%{transform:translateX(3px) rotate(.6deg)}}
+.case{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 25%,#5b5f6b,#2a2c33 45%,#14151a 75%);box-shadow:0 26px 60px -24px #000,inset 0 1px 1px #8a8f9c}
+.bezel{position:absolute;inset:3.5%;border-radius:50%;background:#0b0c10}
+.ticks{position:absolute;inset:3.5%;border-radius:50%}
+.crown,.btn2{position:absolute;border:0;padding:0;cursor:pointer}
+.crown{right:-3.4%;top:31%;width:5.6%;height:13%;border-radius:4px;background:repeating-linear-gradient(0deg,#3a3d46 0 2px,#6b707c 2px 4px);box-shadow:inset 0 0 0 1px #1a1b20}
+.btn2{right:-2.6%;top:58%;width:3.8%;height:9.5%;border-radius:4px;background:linear-gradient(90deg,#2a2c33,#5a5f6b)}
+.crown:focus-visible,.btn2:focus-visible{outline:2px solid var(--eye);outline-offset:2px}
+.screen{position:absolute;inset:8.5%;border-radius:50%;background:#000;overflow:hidden;container-type:inline-size;color:#f1f3f9;cursor:pointer;transition:filter .4s}
+.screen.off{filter:brightness(0)}
+.offnote{position:absolute;inset:8.5%;border-radius:50%;display:grid;place-items:center;font:500 13px var(--mono);color:#3d4256;pointer-events:none;opacity:0;transition:opacity .4s}
+.watch.isoff .offnote{opacity:1}
+
+/* dentro lo schermo (100cqw = 480 px veri) */
+.eyes{position:absolute;left:50%;top:50%;width:150cqw;aspect-ratio:178.4/38;transform:translate(-50%,-50%);transition:top .45s cubic-bezier(.3,.8,.3,1),width .45s cubic-bezier(.3,.8,.3,1);pointer-events:none}
+.eyes.small{top:13cqw;width:80cqw}
+.eyes.hide{opacity:0}
+.ring{position:absolute;inset:0;opacity:0;transition:opacity .2s;pointer-events:none}
+.ring.on{opacity:1}
+#ui{position:absolute;inset:0}
+.time{position:absolute;top:9cqw;width:100%;text-align:center;font:600 7.5cqw/1 var(--body);font-variant-numeric:tabular-nums;color:#cfd3e0}
+.hint{position:absolute;bottom:12cqw;left:19cqw;right:19cqw;font:500 4.6cqw/1.25 var(--body);color:#8e95ad;text-align:center;transition:color .2s}
+.hint.flash{color:var(--eye)}
+.status{position:absolute;bottom:21cqw;width:100%;font:600 5.2cqw/1.2 var(--body);color:var(--eye);text-align:center}
+.chip{position:absolute;bottom:17cqw;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:2cqw;padding:2.2cqw 4.4cqw;border-radius:99cqw;background:#13202c;color:#9fd2ff;font:500 4.4cqw/1 var(--mono);white-space:nowrap}
+.chip i{width:2.4cqw;height:2.4cqw;border-radius:50%;background:var(--eye);animation:pulse 1s ease-in-out infinite}
+.bubble{position:absolute;top:30cqw;left:15cqw;right:15cqw;padding:5cqw 6cqw;border-radius:6cqw;background:#141824;font:500 6cqw/1.3 var(--body);text-align:center}
+.pair{position:absolute;bottom:9cqw;left:0;right:0;display:flex;justify-content:center;gap:6cqw}
+.rb{width:17cqw;height:17cqw;border-radius:50%;display:grid;place-items:center;border:0;cursor:pointer}
+.rb svg{width:8cqw;height:8cqw}
+.rb.no{background:#24171b;color:#fda4af}.rb.yes{background:var(--eye);color:#04121f}
+.read{position:absolute;top:24cqw;bottom:18cqw;left:12cqw;right:12cqw;overflow:hidden;-webkit-mask:linear-gradient(transparent,#000 10%,#000 86%,transparent);mask:linear-gradient(transparent,#000 10%,#000 86%,transparent)}
+.read .txt{font:500 5.6cqw/1.42 var(--body);color:#e4e7f0;padding-block:2cqw 10cqw;transition:transform .25s ease-out}
+.read .tool{display:block;font:500 3.8cqw/1.3 var(--mono);color:#7d849c;margin-bottom:2cqw}
+.read .you{display:block;font:500 4.4cqw/1.3 var(--body);color:#8e95ad;margin-bottom:3cqw}
+.caret{display:inline-block;width:1.2cqw;height:5cqw;background:var(--eye);vertical-align:-.6cqw;margin-left:.6cqw;animation:pulse .8s infinite}
+.foot{position:absolute;bottom:5.5cqw;left:0;right:0;display:flex;justify-content:center;gap:4cqw}
+.foot button{width:11cqw;height:11cqw;border-radius:50%;border:0;background:#121520;color:#aab0c4;display:grid;place-items:center;cursor:pointer}
+.foot button.on{background:#13263a;color:var(--eye)}
+.foot svg{width:5.6cqw;height:5.6cqw}
+.ask{position:absolute;top:30cqw;left:15cqw;right:15cqw;text-align:center;display:flex;flex-direction:column;gap:2cqw;align-items:center}
+.ask b{font:700 6.4cqw/1.1 var(--display);color:#fecdd3}
+.ask span{font:500 5cqw/1.3 var(--body);color:#e4e7f0}
+.ask code{font:500 4.2cqw/1.3 var(--mono);background:#1c1014;color:#fda4af;border-radius:2cqw;padding:1.4cqw 2.4cqw;margin-top:1cqw}
+.choose{position:absolute;bottom:10cqw;left:0;right:0;display:flex;justify-content:center;gap:3cqw}
+.pill{padding:3.4cqw 6cqw;border-radius:99cqw;font:600 5cqw/1 var(--body);border:0;cursor:pointer}
+.pill.go{background:var(--ok);color:#03140a}.pill.stop{background:#24171b;color:#fda4af}
+.list{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.6cqw}
+.list button{width:74cqw;padding:3.6cqw 5cqw;border-radius:99cqw;border:0;background:#10131c;font:500 5cqw/1.15 var(--body);color:#aab0c4;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;transition:all .2s}
+.list .far{width:56cqw;opacity:.45;font-size:4.4cqw}
+.list .on{background:#1b2636;color:#fff;box-shadow:inset 0 0 0 .5cqw #335a85}
+.list .new{color:var(--eye)}
+.list .gone{display:none}
+.err{position:absolute;bottom:14cqw;left:17cqw;right:17cqw;text-align:center;display:flex;flex-direction:column;gap:1.6cqw}
+.err b{font:700 5.8cqw/1.1 var(--display);color:#f1f3f9}
+.err span{font:500 4.4cqw/1.3 var(--body);color:#8e95ad}
+.notif{position:absolute;top:16cqw;left:9cqw;right:9cqw;bottom:16cqw;border-radius:9cqw;background:#121520;padding:7cqw 7cqw;display:flex;flex-direction:column;gap:3cqw;animation:rise .35s cubic-bezier(.3,.8,.3,1)}
+.notif .app{display:flex;align-items:center;gap:2.6cqw;font:500 4.2cqw/1 var(--body);color:#8e95ad}
+.notif .app i{width:6cqw;height:6cqw;border-radius:50%;background:#000;box-shadow:inset 0 0 0 .5cqw #2a3040;position:relative}
+.notif .app i::before,.notif .app i::after{content:"";position:absolute;top:1.6cqw;width:1.1cqw;height:2.8cqw;border-radius:1cqw;background:var(--eye)}
+.notif .app i::before{left:1.5cqw}.notif .app i::after{right:1.5cqw}
+.notif b{font:700 6cqw/1.15 var(--display)}
+.notif span{font:500 4.8cqw/1.35 var(--body);color:#cfd3e0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.notif .pill{margin-top:auto;align-self:center}
+.toast{position:absolute;bottom:22cqw;left:50%;transform:translateX(-50%);padding:2.4cqw 4.6cqw;border-radius:99cqw;background:#13202c;color:#9fd2ff;font:500 4.2cqw/1 var(--body);white-space:nowrap}
+@keyframes rise{from{transform:translateY(8cqw);opacity:0}}
+@keyframes pulse{50%{opacity:.25}}
+
+/* pannello */
+.side{display:flex;flex-direction:column;gap:18px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.card h3{display:flex;align-items:center;gap:8px}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px;font-size:13.5px;color:#c9cde0}
+.steps b{color:var(--fg)}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btn{font:500 13px var(--body);color:var(--fg);background:var(--raise);border:1px solid var(--line);border-radius:10px;padding:7px 11px;cursor:pointer}
+.btn:hover{border-color:#353a52}
+.btn.on{background:#13263a;border-color:#2d5a86;color:#cfe8ff}
+.btn:focus-visible{outline:2px solid var(--eye);outline-offset:1px}
+.log{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;max-height:270px;overflow:auto;font:12px/1.4 var(--mono)}
+.log li{display:grid;grid-template-columns:70px minmax(0,1fr);gap:8px;color:#b9bfd4}
+.log li em{font-style:normal;color:var(--dim)}
+.log li.w em{color:var(--eye)}.log li.p em{color:var(--gold)}.log li.h em{color:var(--ok)}
+.empty{color:var(--dim);font:12px var(--mono)}
+.facts{display:flex;flex-direction:column;gap:10px}
+.fact{border-left:2px solid var(--line);padding-left:11px;display:flex;flex-direction:column;gap:2px}
+.fact b{font-size:13.5px}.fact span{font-size:13px;color:var(--muted)}
+.fact.risk{border-color:var(--gold)}
+.fact code{font:500 11.5px var(--mono);color:#c7cbe0}
+@media (prefers-reduced-motion:reduce){.watch.buzz,.chip i,.caret,.notif{animation:none}.eyes,.read .txt{transition:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Iris Dial · prototipo da usare</span>
+    <h1>Prova Iris sul Balance 2</h1>
+    <p class="lede">Un orologio finto ma navigabile, con le risposte inventate. Tieni premuto sullo schermo per fare una domanda, gira la corona con la rotellina del mouse, premi la corona per tornare agli occhi e il pulsante sotto per le sessioni. A destra vedi cosa passa tra orologio, telefono e casa.</p>
+  </header>
+  <div class="main">
+    <div class="stage">
+      <div class="watch" id="watch">
+        <div class="case"></div><div class="bezel"></div><div class="ticks" id="ticks"></div>
+        <button class="crown" id="crown" aria-label="Corona: premi per tornare agli occhi, gira per scorrere"></button>
+        <button class="btn2" id="btn2" aria-label="Pulsante: sessioni"></button>
+        <div class="screen" id="screen">
+          <svg class="ring" id="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="47.5" fill="none" stroke="#1b2a3a" stroke-width="2"/><circle id="lv" cx="50" cy="50" r="47.5" fill="none" stroke="#7cc4ff" stroke-width="2.4" stroke-linecap="round" transform="rotate(-90 50 50)" stroke-dasharray="0 300"/></svg>
+          <div class="eyes" id="eyes"></div>
+          <div id="ui"></div>
+        </div>
+        <div class="offnote">schermo spento</div>
+      </div>
+      <div class="legend">
+        <span>tieni premuto = parla</span><span>rotellina o <kbd>↑</kbd><kbd>↓</kbd> = corona</span><span>clic corona o <kbd>Esc</kbd> = occhi</span><span>pulsante sotto o <kbd>S</kbd> = sessioni</span>
+      </div>
+    </div>
+    <div class="side">
+      <div class="card">
+        <h3>Cosa provare</h3>
+        <ol class="steps">
+          <li><b>Una domanda:</b> tieni premuto sugli occhi, lascia, conferma con ✓. Poi gira la corona sulla risposta.</li>
+          <li><b>Un permesso:</b> scegli «Manda una mail» qui sotto e chiedila: l'orologio vibra e chiede <i>una volta</i> o <i>nega</i>.</li>
+          <li><b>Polso giù:</b> fai una domanda e premi «Abbassa il polso» mentre pensa. Alla risposta arriva la notifica.</li>
+          <li><b>Le sessioni:</b> pulsante sotto la corona, scorri, tocca quella da aprire.</li>
+        </ol>
+        <div class="btns" id="qs"></div>
+        <div class="btns">
+          <button class="btn" id="wrist">Abbassa il polso</button>
+          <button class="btn on" id="prev">Anteprima: accesa</button>
+          <button class="btn" id="tunnel">Spegni il tunnel di casa</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Cosa succede dietro</h3>
+        <ul class="log" id="log"><li class="empty">Fai una domanda: qui compaiono i passaggi.</li></ul>
+      </div>
+      <div class="card">
+        <h3>Schermo e notifiche</h3>
+        <div class="facts">
+          <div class="fact"><b>Mentre aspetti, lo schermo resta acceso</b><span>Durante una domanda l'app allunga il tempo di schermo acceso (<code>setPageBrightTime</code>) fino alla risposta, poi torna normale per la batteria.</span></div>
+          <div class="fact"><b>Se lo schermo si spegne, riapri dove eri</b><span>Con <code>setWakeUpRelaunch</code> alzando il polso torni nella stessa pagina di Iris Dial, non sul quadrante.</span></div>
+          <div class="fact"><b>Risposta pronta: notifica</b><span>Un servizio in sottofondo sull'orologio (<i>App Service</i>, Zepp OS 3 e oltre) resta collegato al telefono anche ad app chiusa e, quando Hermes finisce, manda una notifica con «Leggi» che apre la risposta.</span></div>
+          <div class="fact risk"><b>Da verificare sul Balance 2 vero</b><span>Quanto a lungo il telefono tiene viva la parte di Iris Dial dentro l'app Zepp con lo schermo spento (Android a volte la ferma per la batteria) e quanto consuma lo schermo acceso.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/*EYES*/
+</script>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const I = {
+    x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+    vol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
+    mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/></svg>',
+    list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h9"/></svg>',
+  };
+  // domande d'esempio (risposte inventate)
+  const QS = [
+    { key: "cal", label: "Impegni di domani", q: "Che impegni ho domani mattina?", tool: "calendario · leggi", title: "Impegni di domani",
+      a: "Domani mattina hai **due impegni**: alle 9:30 il dentista in via Roma, e alle 11 la call con Luca per il preventivo. Dalle 12 sei libero, e nel pomeriggio c'è solo la palestra alle 18. Vuoi che ti ricordi del dentista un'ora prima?" },
+    { key: "mail", label: "Manda una mail", q: "Scrivi a Paola che arrivo alle 8", tool: "posta · scrivi", title: "Mail a Paola", ask: { what: "Mandare una mail a Paola", detail: "«Arrivo alle 8, ciao!»" },
+      a: "Fatto: ho mandato la mail a **Paola** con scritto «Arrivo alle 8, ciao!». Se risponde te lo dico.", no: "Va bene, non la mando. Se vuoi cambio il testo e te la ripropongo." },
+    { key: "luce", label: "Accendi una luce", q: "Accendi la luce del soggiorno", tool: "casa · luci", title: "Luci del soggiorno",
+      a: "Ho acceso la **luce del soggiorno** al 70%. Fuori sta facendo buio: vuoi che accenda anche quella dell'ingresso?" },
+  ];
+  const SESS = ["Bollette di ottobre", "Impegni di domani", "Luci del soggiorno", "Ricetta del ragù", "Regalo per la mamma"];
+  let qi = 0, preview = true, tunnelOff = false, wristDown = false, pendingNotif = null;
+  let page = "home", cur = null, timers = [];
+  const eyes = Iris.createEyes($("eyes"), { island: true, idleLife: true });
+  const ui = $("ui"), log = $("log");
+  const md = (s) => s.replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+  const later = (ms, f) => timers.push(setTimeout(f, ms));
+  const clear = () => { timers.forEach(clearTimeout); timers = []; };
+  const now = () => { const d = new Date(); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); };
+
+  function trace(who, text) {
+    const e = log.querySelector(".empty"); if (e) e.remove();
+    const li = document.createElement("li"); li.className = who;
+    li.innerHTML = `<em>${{ w: "orologio", p: "telefono", h: "casa" }[who]}</em><span>${text}</span>`;
+    log.appendChild(li); log.scrollTop = log.scrollHeight;
+  }
+  function buzz() { const w = $("watch"); w.classList.remove("buzz"); void w.offsetWidth; if (!reduce) w.classList.add("buzz"); }
+  function eyesAt(small, state) { $("eyes").classList.toggle("small", !!small); $("eyes").classList.remove("hide"); if (state) eyes.setState(state); }
+
+  /* ---------- le pagine ---------- */
+  function go(p, data) {
+    page = p; $("ring").classList.toggle("on", p === "listen");
+    if (p === "home") { eyesAt(false, "idle"); ui.innerHTML = `<div class="time">${now()}</div><div class="hint" id="hint">Tieni premuto per parlare</div>`; }
+    if (p === "listen") { eyesAt(false, "listening"); ui.innerHTML = `<div class="status">Ti ascolto…</div><div class="hint">Lascia per inviare</div>`; }
+    if (p === "preview") {
+      eyesAt(true, "idle");
+      ui.innerHTML = `<div class="bubble">${cur.q}</div><div class="pair"><button class="rb no" id="redo" aria-label="Rifai">${I.x}</button><button class="rb yes" id="send" aria-label="Invia">${I.ok}</button></div>`;
+      $("redo").onclick = (e) => { e.stopPropagation(); trace("w", "domanda scartata: si riprova"); go("home"); };
+      $("send").onclick = (e) => { e.stopPropagation(); ask(); };
+    }
+    if (p === "think") { eyesAt(false, "thinking"); ui.innerHTML = `<div class="status">Sto pensando…</div>`; }
+    if (p === "tool") { eyesAt(false, "tool"); ui.innerHTML = `<div class="chip"><i></i>${cur.tool}</div>`; }
+    if (p === "approval") {
+      eyesAt(true, "approval");
+      ui.innerHTML = `<div class="ask"><b>Posso farlo?</b><span>${cur.ask.what}</span><code>${cur.ask.detail}</code></div><div class="choose"><button class="pill stop" id="deny">Nega</button><button class="pill go" id="once">Una volta</button></div>`;
+      $("deny").onclick = (e) => { e.stopPropagation(); trace("w", "scelta: <b>nega</b>"); trace("p", "Hermes ← run_approval: deny"); reply(cur.no); };
+      $("once").onclick = (e) => { e.stopPropagation(); trace("w", "scelta: <b>una volta</b>"); trace("p", "Hermes ← run_approval: once"); trace("h", "Hermes: mail inviata"); reply(cur.a); };
+    }
+    if (p === "reply") {
+      eyesAt(true, data && data.streaming ? "replying" : "idle");
+      ui.innerHTML = `<div class="read" id="read"><div class="txt" id="txt"><span class="you">«${cur.q}»</span><span class="tool">${cur.tool}</span><span id="ans"></span></div></div>
+        <div class="foot"><button id="fVol" aria-label="Leggi ad alta voce">${I.vol}</button><button id="fMic" aria-label="Nuova domanda">${I.mic}</button><button id="fList" aria-label="Sessioni">${I.list}</button></div>`;
+      $("ans").innerHTML = data && data.text != null ? data.text : "";
+      $("fVol").onclick = (e) => { e.stopPropagation(); const b = $("fVol"); b.classList.add("on"); eyes.setState("replying"); trace("w", "lettura ad alta voce (da verificare sull'altoparlante)"); later(3500, () => { b.classList.remove("on"); eyes.setState("idle"); }); };
+      $("fMic").onclick = (e) => { e.stopPropagation(); go("home"); };
+      $("fList").onclick = (e) => { e.stopPropagation(); go("sessions"); };
+      scrollY = 0;
+    }
+    if (p === "sessions") {
+      $("eyes").classList.add("hide");
+      ui.innerHTML = `<div class="list" id="list">${["+ Nuova chat", ...SESS].map((s, i) => `<button data-i="${i}" class="${i === 0 ? "new" : ""}">${s}</button>`).join("")}</div>`;
+      sel = 1; paintList();
+      ui.querySelectorAll(".list button").forEach((b) => (b.onclick = (e) => { e.stopPropagation(); const i = +b.dataset.i; if (i !== sel) { sel = i; paintList(); return; } openSession(i); }));
+    }
+    if (p === "error") { eyesAt(false, "sleep"); ui.innerHTML = `<div class="err"><b>Non trovo Hermes</b><span>Il telefono è vicino? Il tunnel di casa è acceso?</span></div>`; }
+    if (p === "notif") {
+      eyesAt(false); $("eyes").classList.add("hide");
+      ui.innerHTML = `<div class="notif"><div class="app"><i></i>Iris Dial · ora</div><b>Iris ha risposto</b><span>${cur.title}: ${pendingNotif.replace(/\*\*/g, "")}</span><button class="pill go" id="readN">Leggi</button></div>`;
+      $("readN").onclick = (e) => { e.stopPropagation(); trace("w", "notifica toccata: si apre la risposta"); pendingNotif = null; go("reply", { text: md(cur.answer) }); };
+    }
+  }
+  let sel = 1, scrollY = 0;
+  function paintList() {
+    const bs = [...ui.querySelectorAll(".list button")];
+    bs.forEach((b, i) => { const d = Math.abs(i - sel); b.classList.toggle("on", d === 0); b.classList.toggle("far", d === 2); b.classList.toggle("gone", d > 2); });
+  }
+  function openSession(i) {
+    if (i === 0) { trace("p", "Hermes: nuova sessione"); go("home"); return; }
+    const q = QS.find((x) => x.title === SESS[i - 1]) || { q: "…", tool: "", title: SESS[i - 1], a: "Qui c'è l'ultima risposta di questa sessione. Gira la corona per leggere tutta la conversazione." };
+    cur = Object.assign({}, q, { answer: q.a }); trace("p", `Hermes: carico la sessione «${SESS[i - 1]}»`);
+    go("reply", { text: md(cur.answer) });
+  }
+
+  /* ---------- una domanda ---------- */
+  function ask() {
+    clear();
+    trace("w", "testo confermato");
+    if (tunnelOff) { trace("p", "tunnel di casa: nessuna risposta"); go("error"); buzz(); return; }
+    trace("p", "Hermes ← nuova run (chiave Hermes + service token Cloudflare)");
+    trace("w", "schermo: resta acceso finché non arriva la risposta");
+    go("think");
+    later(1600, () => { trace("h", `Hermes usa ${cur.tool}`); if (!wristDown) go("tool"); });
+    later(3300, () => {
+      if (cur.ask) {
+        trace("h", "Hermes chiede il permesso"); trace("p", "→ orologio: richiesta di via libera");
+        if (wristDown) { wake(true); } go("approval"); buzz(); return;
+      }
+      reply(cur.a);
+    });
+  }
+  function reply(text) {
+    cur.answer = text;
+    trace("h", "Hermes risponde"); trace("p", "→ orologio: testo, a pezzi mentre arriva");
+    if (wristDown) {
+      later(1500, () => { trace("w", "app chiusa: il servizio in sottofondo manda la notifica"); pendingNotif = text; buzz(); wake(false); go("notif"); });
+      return;
+    }
+    const plain = md(text); let n = 0;
+    go("reply", { text: "", streaming: true });
+    const step = () => {
+      if (page !== "reply") return;
+      n = Math.min(plain.length, n + 3);
+      let s = plain.slice(0, n); if (/<[^>]*$/.test(s)) s = s.replace(/<[^>]*$/, "");
+      $("ans").innerHTML = s + (n < plain.length ? '<span class="caret"></span>' : "");
+      if (n < plain.length) later(reduce ? 0 : 28, step);
+      else { eyes.setState("done"); later(1600, () => page === "reply" && eyes.setState("idle")); trace("w", "risposta completa · schermo di nuovo normale"); }
+    };
+    step();
+  }
+
+  /* ---------- polso, notifiche, tunnel ---------- */
+  function wake(silent) {
+    if (!wristDown) return;
+    wristDown = false; $("wrist").textContent = "Abbassa il polso"; $("wrist").classList.remove("on");
+    $("screen").classList.remove("off"); $("watch").classList.remove("isoff");
+    if (!silent) trace("w", "polso alzato");
+  }
+  $("wrist").onclick = () => {
+    if (wristDown) { wake(); if (page === "think" || page === "tool") trace("w", "riaperta Iris Dial dove eri (setWakeUpRelaunch)"); return; }
+    wristDown = true; $("wrist").textContent = "Alza il polso"; $("wrist").classList.add("on");
+    $("screen").classList.add("off"); $("watch").classList.add("isoff");
+    trace("w", page === "think" || page === "tool" ? "polso giù: schermo spento, la domanda continua in sottofondo" : "polso giù: schermo spento");
+  };
+  $("prev").onclick = () => { preview = !preview; $("prev").textContent = "Anteprima: " + (preview ? "accesa" : "spenta"); $("prev").classList.toggle("on", preview); };
+  $("tunnel").onclick = () => { tunnelOff = !tunnelOff; $("tunnel").textContent = tunnelOff ? "Riaccendi il tunnel" : "Spegni il tunnel di casa"; $("tunnel").classList.toggle("on", tunnelOff); if (!tunnelOff && page === "error") go("home"); };
+  // scelta della prossima domanda
+  QS.forEach((q, i) => { const b = document.createElement("button"); b.className = "btn" + (i === 0 ? " on" : ""); b.textContent = q.label; b.onclick = () => { qi = i; [...$("qs").children].forEach((c, j) => c.classList.toggle("on", j === i)); if (page !== "listen") { clear(); go("home"); } }; $("qs").appendChild(b); });
+
+  /* ---------- gesti sullo schermo ---------- */
+  let hold = null, sx = null, lvRaf = 0;
+  $("screen").addEventListener("pointerdown", (e) => {
+    if (wristDown) return;
+    sx = e.clientX;
+    if (page !== "home") return;
+    hold = setTimeout(() => { hold = "on"; go("listen"); trace("w", "registro la voce (Opus)"); meter(); }, 250);
+  });
+  addEventListener("pointerup", (e) => {
+    if (hold === "on") {
+      hold = null; cancelAnimationFrame(lvRaf); eyes.setLevel(null);
+      cur = Object.assign({}, QS[qi]);
+      trace("w", "→ telefono: audio, 9 KB via Bluetooth");
+      trace("p", "Whisper ← audio · trascrizione pronta");
+      if (preview) go("preview"); else ask();
+      return;
+    }
+    if (hold) { clearTimeout(hold); hold = null; if (page === "home") { const h = $("hint"); h && h.classList.add("flash"); setTimeout(() => h && h.classList.remove("flash"), 600); } }
+    // scorrimento verso destra partito dallo schermo = indietro (come in Zepp OS)
+    if (sx != null && e.clientX - sx > 70 && !["home", "listen"].includes(page)) back();
+    sx = null;
+  });
+  function meter() {
+    let v = 0; const lv = $("lv");
+    const tick = () => { const t = performance.now(); v = v * 0.7 + 0.3 * Math.max(0, Math.sin(t / 170) * Math.sin(t / 530) + Math.random() * 0.35); eyes.setLevel(Math.min(1, v)); lv.setAttribute("stroke-dasharray", `${(v * 300).toFixed(1)} 300`); lvRaf = requestAnimationFrame(tick); };
+    tick();
+  }
+  function back() { if (["sessions", "reply", "error", "notif", "preview"].includes(page)) { clear(); go("home"); } }
+  function crown(dir) {
+    if (page === "reply") { const t = $("txt"), r = $("read"); const max = Math.max(0, t.scrollHeight - r.clientHeight); scrollY = Math.min(max, Math.max(0, scrollY + dir * 42)); t.style.transform = `translateY(${-scrollY}px)`; }
+    if (page === "sessions") { sel = Math.min(SESS.length, Math.max(0, sel + dir)); paintList(); }
+  }
+  $("watch").addEventListener("wheel", (e) => { e.preventDefault(); crown(e.deltaY > 0 ? 1 : -1); }, { passive: false });
+  $("crown").onclick = () => { if (wristDown) return wake(); clear(); go("home"); };
+  $("btn2").onclick = () => { if (wristDown) return wake(); clear(); go("sessions"); };
+  addEventListener("keydown", (e) => {
+    if (e.target.closest && e.target.closest("button") && e.key === "Enter") return;
+    if (e.key === "ArrowDown") { e.preventDefault(); crown(1); }
+    if (e.key === "ArrowUp") { e.preventDefault(); crown(-1); }
+    if (e.key === "Escape") { clear(); go("home"); }
+    if (e.key === "s" || e.key === "S") { clear(); go("sessions"); }
+    if (e.key === "Enter" && page === "sessions") openSession(sel);
+  });
+
+  // lunetta
+  let s = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">';
+  for (let i = 0; i < 60; i++) { const a = i * 6 * Math.PI / 180, big = i % 5 === 0, r1 = 49.2, r2 = big ? 46.6 : 47.8; s += `<line x1="${50 + Math.sin(a) * r1}" y1="${50 - Math.cos(a) * r1}" x2="${50 + Math.sin(a) * r2}" y2="${50 - Math.cos(a) * r2}" stroke="${big ? "#8a8f9c" : "#4a4e59"}" stroke-width="${big ? 0.7 : 0.35}"/>`; }
+  $("ticks").innerHTML = s + "</svg>";
+  setInterval(() => { const t = ui.querySelector(".time"); if (t) t.textContent = now(); }, 15000);
+  go("home");
+})();
+</script>

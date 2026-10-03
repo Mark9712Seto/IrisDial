@@ -25,7 +25,15 @@ Orologio e telefono si parlano via Bluetooth con i messaggi di Zepp OS (`shared/
 - Le quattro informazioni stanno nell'archivio impostazioni dell'app Zepp; l'orologio non le riceve mai.
 - Il service token di Cloudflare ha una scadenza (si sceglie quando lo crei, di solito un anno): va rinnovato e reincollato.
 
+## Schermo acceso e notifiche
+
+- **Durante una domanda** la pagina allunga il tempo di schermo acceso (`setPageBrightTime` di `@zos/display`) fino alla risposta, poi lo rimette normale.
+- **Se lo schermo si spegne** comunque (polso giù), `setWakeUpRelaunch({ relaunch: true })` fa riaprire Iris Dial nella stessa pagina quando alzi il polso, invece del quadrante.
+- **Risposta pronta ad app chiusa:** un *App Service* sull'orologio (Zepp OS 3+, avviato con `@zos/app-service` `start`) resta in ascolto del telefono anche dopo l'uscita dalla pagina; quando Hermes finisce chiama `notify()` di `@zos/notification` (permesso `device:os.notification`) con il pulsante «Leggi» che apre `page/risposta`.
+
 ## Da verificare sull'orologio vero
+
+- Quanto a lungo l'app Zepp sul telefono tiene viva la parte di Iris Dial con lo schermo spento (ottimizzazione batteria di Android).
 
 - Batteria con lo schermo acceso durante risposte lunghe.
 - Lettura ad alta voce dall'altoparlante del Balance 2 (se le app possono usarlo).
