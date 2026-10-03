@@ -1,0 +1,235 @@
+<title>Iris Dial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una colonna. In alto il percorso orologio → telefono → casa; poi le schermate, ognuna su un Balance 2
+   disegnato (schermo rotondo 480×480, corona a destra) con sotto cosa la fa comparire; in fondo la struttura dei file.
+   Un solo look scuro, come lo schermo AMOLED. */
+:root{
+  --ink:#06070b; --panel:#0e1017; --raise:#151823; --line:#222637;
+  --fg:#e9ebf3; --muted:#959cb3; --dim:#626984;
+  --eye:#7cc4ff; --ok:#4ade80; --warn:#fb7185; --gold:#fbbf24;
+  --display:"Bricolage Grotesque",ui-rounded,"Segoe UI",system-ui,sans-serif;
+  --body:"Figtree","Segoe UI",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--ink);color:var(--fg);font:15px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:18px;padding-block:28px 72px;display:flex;flex-direction:column;gap:48px}
+h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.01em;text-wrap:balance}
+h1{font-size:clamp(30px,5.4vw,46px);line-height:1.05;font-weight:700}
+h2{font-size:clamp(20px,3vw,26px);font-weight:700}
+h3{font-size:16px;font-weight:700}
+p{margin:0;max-width:68ch}
+.lede{color:var(--muted)}
+.eyebrow{font:500 12px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--eye)}
+header,section{display:flex;flex-direction:column;gap:14px}
+code{font:500 12.5px var(--mono);background:var(--raise);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+
+/* percorso */
+.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:stretch}
+.hop{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:6px;position:relative;min-width:0}
+.hop b{font-family:var(--display);font-size:15px}
+.hop span{font-size:13px;color:var(--muted)}
+.hop small{font:500 11px var(--mono);color:var(--eye);letter-spacing:.04em}
+.hop:not(:last-child)::after{content:"";position:absolute;right:-9px;top:50%;width:8px;height:8px;border-top:2px solid var(--dim);border-right:2px solid var(--dim);transform:translate(0,-50%) rotate(45deg)}
+@media (max-width:760px){.flow{grid-template-columns:1fr}.hop:not(:last-child)::after{right:50%;top:auto;bottom:-9px;transform:translate(50%,0) rotate(135deg)}}
+
+/* griglia delle schermate */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:28px 22px}
+.shot{display:flex;flex-direction:column;gap:12px;min-width:0}
+.cap{display:flex;flex-direction:column;gap:4px}
+.cap .when{font:500 11.5px var(--mono);color:var(--dim)}
+.cap p{font-size:13.5px;color:var(--muted)}
+
+/* l'orologio: cassa, lunetta con le tacche, corona e pulsante a destra */
+.watch{position:relative;width:min(250px,100%);aspect-ratio:1;align-self:center;max-width:100%}
+.case{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 25%,#5b5f6b,#2a2c33 45%,#14151a 75%);box-shadow:0 18px 40px -18px #000,inset 0 1px 1px #8a8f9c}
+.bezel{position:absolute;inset:3.5%;border-radius:50%;background:#0b0c10}
+.ticks{position:absolute;inset:3.5%;border-radius:50%}
+.crown{position:absolute;right:-3.2%;top:33%;width:5%;height:12%;border-radius:3px;background:linear-gradient(90deg,#30333b,#6b707c,#30333b);box-shadow:inset 0 0 0 1px #1a1b20}
+.btn2{position:absolute;right:-2.4%;top:58%;width:3.6%;height:9%;border-radius:3px;background:linear-gradient(90deg,#2a2c33,#555a65)}
+.screen{position:absolute;inset:8.5%;border-radius:50%;background:#000;overflow:hidden;container-type:inline-size;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#f1f3f9}
+
+/* contenuto dentro lo schermo: misure in cqw, così vale per qualsiasi grandezza (100cqw = 480 px veri) */
+.eyes{width:150cqw;flex:none;aspect-ratio:178.4/38}
+.eyes.small{width:80cqw}
+.time{position:absolute;top:9cqw;font:600 7.5cqw/1 var(--body);font-variant-numeric:tabular-nums;color:#cfd3e0}
+.hint{position:absolute;bottom:13cqw;font:500 4.6cqw/1.25 var(--body);color:#8e95ad;text-align:center;width:62cqw}
+.status{position:absolute;bottom:20cqw;font:600 5.2cqw/1.2 var(--body);color:var(--eye);text-align:center}
+.chip{position:absolute;bottom:17cqw;display:flex;align-items:center;gap:2cqw;padding:2.2cqw 4.4cqw;border-radius:99cqw;background:#13202c;color:#9fd2ff;font:500 4.4cqw/1 var(--mono)}
+.chip i{width:2.4cqw;height:2.4cqw;border-radius:50%;background:var(--eye);animation:pulse 1s ease-in-out infinite}
+.ring{position:absolute;inset:0}
+.top{position:absolute;top:8cqw;display:flex;justify-content:center;width:100%}
+.bubble{width:70cqw;margin-top:10cqw;padding:5cqw 6cqw;border-radius:6cqw;background:#141824;font:500 6cqw/1.3 var(--body);text-align:center}
+.pair{position:absolute;bottom:9cqw;display:flex;gap:6cqw}
+.rb{width:17cqw;height:17cqw;border-radius:50%;display:grid;place-items:center}
+.rb svg{width:8cqw;height:8cqw}
+.rb.no{background:#24171b;color:#fda4af}.rb.yes{background:var(--eye);color:#04121f}
+.read{position:absolute;top:24cqw;bottom:16cqw;left:12cqw;right:12cqw;overflow:hidden;-webkit-mask:linear-gradient(transparent,#000 12%,#000 85%,transparent);mask:linear-gradient(transparent,#000 12%,#000 85%,transparent)}
+.read div{font:500 5.6cqw/1.42 var(--body);color:#e4e7f0;animation:scroll 11s ease-in-out infinite alternate}
+.read b{color:#fff}
+.read .tool{display:block;font:500 3.8cqw/1.3 var(--mono);color:#7d849c;margin-bottom:2cqw}
+.foot{position:absolute;bottom:6.5cqw;display:flex;gap:5cqw;color:#8e95ad}
+.foot svg{width:6cqw;height:6cqw}
+.ask{position:absolute;top:30cqw;width:70cqw;text-align:center;display:flex;flex-direction:column;gap:2cqw}
+.ask b{font:700 6.4cqw/1.1 var(--display);color:#fecdd3}
+.ask span{font:500 5cqw/1.3 var(--body);color:#e4e7f0}
+.ask code{font:500 4.2cqw/1.3 var(--mono);background:#1c1014;border:0;color:#fda4af;border-radius:2cqw;padding:1.4cqw 2.4cqw;margin-top:1cqw}
+.choose{position:absolute;bottom:10cqw;display:flex;gap:3cqw}
+.pill{padding:3.4cqw 6cqw;border-radius:99cqw;font:600 5cqw/1 var(--body)}
+.pill.go{background:var(--ok);color:#03140a}.pill.stop{background:#24171b;color:#fda4af}
+.list{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.6cqw}
+.list div{width:74cqw;padding:3.6cqw 5cqw;border-radius:99cqw;background:#10131c;font:500 5cqw/1.15 var(--body);color:#aab0c4;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list .far{width:56cqw;opacity:.45;font-size:4.4cqw}
+.list .on{background:#1b2636;color:#fff;box-shadow:inset 0 0 0 .5cqw #335a85}
+.list .new{color:var(--eye)}
+.err{position:absolute;bottom:14cqw;width:66cqw;text-align:center;display:flex;flex-direction:column;gap:1.6cqw}
+.err b{font:700 5.8cqw/1.1 var(--display);color:#f1f3f9}
+.err span{font:500 4.4cqw/1.3 var(--body);color:#8e95ad}
+
+/* il telefono, per la schermata delle impostazioni nell'app Zepp */
+.phone{width:min(230px,100%);align-self:center;aspect-ratio:9/18.5;border-radius:30px;background:#0b0c10;border:6px solid #2a2c33;box-shadow:0 18px 40px -18px #000;padding:26px 14px 14px;display:flex;flex-direction:column;gap:9px;font-size:11.5px;overflow:hidden}
+.phone h4{margin:0 0 2px;font:700 14px var(--display)}
+.phone label{display:flex;flex-direction:column;gap:3px;color:#9aa1b8;font-size:10.5px}
+.phone .f{background:#151823;border:1px solid #262a3b;border-radius:8px;padding:6px 8px;color:#e6e8f0;font:500 10.5px var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.phone .t{margin-top:auto;background:var(--eye);color:#04121f;border-radius:9px;padding:8px;text-align:center;font-weight:600}
+.phone .ok{color:var(--ok);font-size:10.5px;text-align:center}
+
+/* struttura */
+.cols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px}
+@media (max-width:760px){.cols{grid-template-columns:1fr}}
+.tree{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;overflow-x:auto;font:12.5px/1.65 var(--mono);color:#c7cbe0;white-space:pre;margin:0}
+.tree em{font-style:normal;color:var(--dim)}
+.notes{display:flex;flex-direction:column;gap:12px}
+.note{border-left:2px solid var(--line);padding-left:12px;display:flex;flex-direction:column;gap:3px}
+.note b{font-size:14px}
+.note span{font-size:13.5px;color:var(--muted)}
+.note.risk{border-color:var(--gold)}
+@keyframes pulse{50%{opacity:.25}}
+@keyframes scroll{0%,12%{transform:translateY(0)}88%,100%{transform:translateY(-38%)}}
+@media (prefers-reduced-motion:reduce){.read div,.chip i{animation:none}}
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Iris Dial · bozza delle schermate</span>
+    <h1>Iris al polso, sull'Amazfit Balance 2</h1>
+    <p class="lede">Gli stessi occhi dell'isola, sullo schermo rotondo da 480×480 dell'orologio. Tieni premuto per parlare, giri la corona per leggere la risposta, dai il via libera con un tocco. Gli occhi sono vivi: è lo stesso motore dell'app per Windows. Qui sotto ogni schermata con quello che la fa comparire.</p>
+  </header>
+
+  <section>
+    <span class="eyebrow">Il percorso di una domanda</span>
+    <div class="flow">
+      <div class="hop"><small>OROLOGIO</small><b>Iris Dial</b><span>Registra la voce, mostra gli occhi e la risposta. Non va mai su internet da solo.</span></div>
+      <div class="hop"><small>BLUETOOTH → TELEFONO</small><b>App Zepp</b><span>La parte "lato telefono" del programma: riceve l'audio e fa le chiamate. Lì incolli le chiavi.</span></div>
+      <div class="hop"><small>INTERNET → CLOUDFLARE</small><b>Tunnel con doppia chiave</b><span>Passa solo chi ha il service token di Cloudflare. Nessuna porta aperta sul router.</span></div>
+      <div class="hop"><small>CASA</small><b>Hermes e Whisper</b><span>Whisper trascrive la voce, Hermes risponde con la chiave API. Gli stessi dell'isola.</span></div>
+    </div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Le schermate</span>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section>
+    <span class="eyebrow">Come sarà fatto il progetto</span>
+    <div class="cols">
+<pre class="tree">IrisDial/
+├── app.json            <em># nome, permessi, Balance 2 (480×480)</em>
+├── app.js
+├── page/               <em># sull'orologio</em>
+│   ├── faccia.js       <em># occhi, premi e parla</em>
+│   ├── risposta.js     <em># testo che scorre con la corona</em>
+│   ├── via-libera.js   <em># una volta / nega</em>
+│   └── sessioni.js     <em># elenco con la corona</em>
+├── app-side/
+│   └── index.js        <em># sul telefono: Hermes, Whisper, tunnel</em>
+├── setting/
+│   └── index.js        <em># impostazioni nell'app Zepp</em>
+├── shared/
+│   ├── occhi.js        <em># il motore degli occhi, ridotto</em>
+│   └── messaggi.js     <em># orologio ⇄ telefono</em>
+├── assets/             <em># icone e suoni</em>
+├── docs/
+│   ├── architettura.md
+│   └── cloudflare-tunnel.md
+└── design/             <em># queste demo</em></pre>
+      <div class="notes">
+        <div class="note"><b>Tre pezzi in un solo programma</b><span>Zepp OS divide ogni app in tre: la parte sull'orologio, la parte che gira dentro l'app Zepp del telefono e la pagina delle impostazioni. Si installano insieme.</span></div>
+        <div class="note"><b>Le chiavi restano sul telefono</b><span>Indirizzo del tunnel, i due codici del service token e la chiave di Hermes stanno nell'archivio delle impostazioni dell'app Zepp. L'orologio non le vede mai.</span></div>
+        <div class="note"><b>La voce</b><span>L'orologio registra in Opus, il file passa al telefono via Bluetooth e il telefono lo manda a Whisper. Una frase di 5 secondi è circa 10 KB.</span></div>
+        <div class="note risk"><b>Da provare sull'orologio vero</b><span>La durata della batteria con lo schermo acceso durante la risposta. La lettura ad alta voce dall'altoparlante del Balance 2: se le app possono usarlo, altrimenti solo testo. La fluidità degli occhi, che sull'orologio vanno disegnati con meno dettagli.</span></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+/*EYES*/
+</script>
+<script>
+(function () {
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const I = {
+    x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    ok: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
+    vol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
+    mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/></svg>',
+    list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h9"/></svg>',
+  };
+  const SHOTS = [
+    { name: "A riposo", when: "quando apri l'app", desc: "Solo gli occhi, che si guardano intorno e ogni tanto fanno uno dei loro scherzi. In alto l'ora.", state: "idle",
+      html: '<div class="time">21:47</div><div class="eyes"></div><div class="hint">Tieni premuto per parlare</div>' },
+    { name: "Ti ascolto", when: "dito premuto sullo schermo", desc: "L'anello sul bordo segue la tua voce. Lasci il dito e la frase parte.", state: "listening", ring: true,
+      html: '<svg class="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="47.5" fill="none" stroke="#1b2a3a" stroke-width="2"/><circle class="lv" cx="50" cy="50" r="47.5" fill="none" stroke="#7cc4ff" stroke-width="2.4" stroke-linecap="round" transform="rotate(-90 50 50)" stroke-dasharray="0 300"/></svg><div class="eyes"></div><div class="status">Ti ascolto…</div><div class="hint">Lascia per inviare</div>' },
+    { name: "Ho capito bene?", when: "subito dopo, se l'anteprima è accesa", desc: "La trascrizione da controllare: ✓ la manda, ✕ fa riprovare. Si può spegnere per mandare tutto subito.", state: "idle",
+      html: '<div class="top"><div class="eyes small"></div></div><div class="bubble">Che impegni ho domani mattina?</div><div class="pair"><div class="rb no">' + I.x + '</div><div class="rb yes">' + I.ok + '</div></div>' },
+    { name: "Ci penso", when: "mentre Hermes lavora", desc: "Come sull'isola: i puntini vicino all'occhio destro.", state: "thinking",
+      html: '<div class="eyes"></div><div class="status">Sto pensando…</div>' },
+    { name: "Uso uno strumento", when: "quando apre calendario, posta, casa…", desc: "Il nome dello strumento in piccolo, così sai cosa sta guardando.", state: "tool",
+      html: '<div class="eyes"></div><div class="chip"><i></i>calendario · leggi</div>' },
+    { name: "La risposta", when: "quando arriva", desc: "Il testo scorre con la corona. Sotto: rileggi ad alta voce, nuova domanda, sessioni.", state: "replying",
+      html: '<div class="top"><div class="eyes small"></div></div><div class="read"><div><span class="tool">calendario · leggi</span>Domani mattina hai <b>due impegni</b>: alle 9:30 il dentista in via Roma, e alle 11 la call con Luca per il preventivo. Dalle 12 sei libero. Vuoi che ti ricordi del dentista un\'ora prima?</div></div><div class="foot">' + I.vol + I.mic + I.list + '</div>' },
+    { name: "Posso farlo?", when: "quando un'azione chiede il permesso", desc: "Come nell'isola, solo due scelte: una volta o nega. Vibra per avvisarti.", state: "approval",
+      html: '<div class="top"><div class="eyes small"></div></div><div class="ask"><b>Posso farlo?</b><span>Mandare una mail a Paola</span><code>«Arrivo alle 8, ciao!»</code></div><div class="choose"><div class="pill stop">Nega</div><div class="pill go">Una volta</div></div>' },
+    { name: "Le sessioni", when: "dall'icona elenco, si scorre con la corona", desc: "In cima la chat nuova, poi le ultime. Quella al centro è quella che si apre.", state: null,
+      html: '<div class="list"><div class="far new">+ Nuova chat</div><div>Bollette di ottobre</div><div class="on">Impegni di domani</div><div>Luci del soggiorno</div><div class="far">Ricetta del ragù</div></div>' },
+    { name: "Non trovo Hermes", when: "telefono lontano o tunnel spento", desc: "Gli occhi dormono e dice cosa controllare, senza codici d'errore.", state: "sleep",
+      html: '<div class="eyes"></div><div class="err"><b>Non trovo Hermes</b><span>Il telefono è vicino? Il tunnel di casa è acceso?</span></div>' },
+  ];
+  const grid = document.getElementById("grid");
+  const ticks = (() => { // le 60 tacche della lunetta, una volta sola come immagine
+    let s = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">';
+    for (let i = 0; i < 60; i++) { const a = i * 6 * Math.PI / 180, big = i % 5 === 0, r1 = 49.2, r2 = big ? 46.6 : 47.8; s += `<line x1="${50 + Math.sin(a) * r1}" y1="${50 - Math.cos(a) * r1}" x2="${50 + Math.sin(a) * r2}" y2="${50 - Math.cos(a) * r2}" stroke="${big ? "#8a8f9c" : "#4a4e59"}" stroke-width="${big ? 0.7 : 0.35}"/>`; }
+    return s + "</svg>";
+  })();
+  SHOTS.forEach((sh) => {
+    const el = document.createElement("article"); el.className = "shot";
+    el.innerHTML = `<div class="watch"><div class="case"></div><div class="bezel"></div><div class="ticks">${ticks}</div><div class="crown"></div><div class="btn2"></div><div class="screen">${sh.html}</div></div>
+      <div class="cap"><h3>${sh.name}</h3><span class="when">${sh.when}</span><p>${sh.desc}</p></div>`;
+    grid.appendChild(el);
+    const box = el.querySelector(".eyes"); if (!box) return;
+    const eyes = Iris.createEyes(box, { island: true, idleLife: sh.state === "idle" });
+    eyes.setState(sh.state);
+    if (sh.ring) {
+      const lv = el.querySelector(".lv"); let v = 0;
+      const tick = () => { const t = performance.now(); v = v * 0.7 + 0.3 * Math.max(0, Math.sin(t / 170) * Math.sin(t / 530) + Math.random() * 0.35); eyes.setLevel(Math.min(1, v)); lv.setAttribute("stroke-dasharray", `${(v * 300).toFixed(1)} 300`); if (!reduce) requestAnimationFrame(tick); };
+      tick();
+    }
+  });
+  // la schermata del telefono
+  const ph = document.createElement("article"); ph.className = "shot";
+  ph.innerHTML = `<div class="phone"><h4>Iris Dial</h4>
+    <label>Indirizzo del tunnel<div class="f">https://iris.tuodominio.it</div></label>
+    <label>Cloudflare · Client ID<div class="f">3f9a1c…e2.access</div></label>
+    <label>Cloudflare · Client Secret<div class="f">••••••••••••••••</div></label>
+    <label>Chiave di Hermes<div class="f">••••••••••••••••</div></label>
+    <div class="t">Prova il collegamento</div><div class="ok">Collegata · Hermes e Whisper rispondono</div></div>
+    <div class="cap"><h3>Sul telefono: le chiavi</h3><span class="when">app Zepp → Iris Dial → Impostazioni</span><p>Si incollano una volta. Due barriere: senza il service token Cloudflare non fa passare nessuno, senza la chiave Hermes non risponde.</p></div>`;
+  grid.appendChild(ph);
+})();
+</script>
