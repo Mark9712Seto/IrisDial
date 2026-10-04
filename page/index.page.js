@@ -1,5 +1,8 @@
-// Pagina principale: la conversazione in corso in alto, gli occhi, cosa sta facendo Iris e il pulsante per
-// fare una domanda (dettata o scritta con la tastiera di sistema). Sotto: le conversazioni e l'ultima risposta.
+// Pagina principale: gli occhi, cosa sta facendo Iris e tre tasti:
+//   Chiedi a Iris  → chat nuova, con la tastiera di sistema (dettatura o lettere)
+//   Cronologia     → le ultime conversazioni, per continuarne una
+//   chat fissata   → la conversazione fissata dalla cronologia, per riprenderla al volo
+// Per continuare la chat appena fatta c'è "Continua" in fondo alla risposta.
 import * as hmUI from '@zos/ui'
 import { px } from '@zos/utils'
 import { push } from '@zos/router'
@@ -19,74 +22,65 @@ Page(
       this.state.apri = params === 'tastiera'
     },
 
+
     build() {
       setWakeUpRelaunch({ relaunch: true }) // a schermo riacceso si torna qui, non sul quadrante
-      this.state.titolo = hmUI.createWidget(hmUI.widget.TEXT, {
-        x: px(110), y: px(40), w: px(260), h: px(36), text: '', text_size: px(21), color: 0x7d849c,
-        align_h: hmUI.align.CENTER_H, align_v: hmUI.align.CENTER_V, text_style: hmUI.text_style.ELLIPSIS,
-      })
-      this.state.occhi = creaOcchi({ cx: C, cy: px(142), scala: 0.85 })
+      this.state.occhi = creaOcchi({ cx: C, cy: px(132), scala: 0.9 })
       this.state.testo = hmUI.createWidget(hmUI.widget.TEXT, {
-        x: px(60), y: px(204), w: px(360), h: px(64),
+        x: px(60), y: px(198), w: px(360), h: px(64),
         text: 'Tocca per chiedere', text_size: px(26), color: 0x8e95ad,
         align_h: hmUI.align.CENTER_H, align_v: hmUI.align.CENTER_V, text_style: hmUI.text_style.WRAP,
       })
       hmUI.createWidget(hmUI.widget.BUTTON, {
-        x: px(110), y: px(276), w: px(260), h: px(74), radius: px(37),
+        x: px(100), y: px(272), w: px(280), h: px(80), radius: px(40),
         normal_color: 0x7cc4ff, press_color: 0x5aa6e6, color: 0x04121f, text_size: px(30),
-        text: 'Chiedi a Iris', click_func: () => this.chiedi(),
+        text: 'Chiedi a Iris', click_func: () => this.nuovaChat(),
       })
       hmUI.createWidget(hmUI.widget.BUTTON, {
-        x: px(96), y: px(360), w: px(140), h: px(50), radius: px(25),
-        normal_color: 0x141824, press_color: 0x1f2433, color: 0xaab0c4, text_size: px(22),
-        text: 'Nuova chat', click_func: () => this.nuovaChat(),
-      })
-      hmUI.createWidget(hmUI.widget.BUTTON, {
-        x: px(244), y: px(360), w: px(140), h: px(50), radius: px(25),
+        x: px(84), y: px(366), w: px(152), h: px(58), radius: px(29),
         normal_color: 0x141824, press_color: 0x1f2433, color: 0xaab0c4, text_size: px(22),
         text: 'Cronologia', click_func: () => !this.state.busy && push({ url: 'page/sessioni.page' }),
       })
-      // la chat fissata (dalla cronologia) per riprenderla al volo; se non ce n'è una, l'ultima risposta
       this.state.fissa = hmUI.createWidget(hmUI.widget.BUTTON, {
-        x: px(140), y: px(418), w: px(200), h: px(44), radius: px(22),
+        x: px(244), y: px(366), w: px(152), h: px(58), radius: px(29),
         normal_color: 0x13202c, press_color: 0x1b3550, color: 0x9fd2ff, text_size: px(20),
-        text: 'Ultima risposta', click_func: () => this.tastoFissato(),
+        text: 'Fissata', click_func: () => this.tastoFissato(),
       })
       this.aggiornaTitolo()
-      if (this.state.apri) setTimeout(() => this.chiedi(), 300)
+      if (this.state.apri) setTimeout(() => this.tastiera(), 300)
     },
 
     // tornando qui da un'altra pagina: titolo aggiornato, e se si è scelto "Continua" / "Nuova chat" si riapre la tastiera
     onResume() {
       const g = dati()
-      if (g.nuovaChat) { g.nuovaChat = false; this.request({ method: 'new' }).finally(() => { this.aggiornaTitolo(); this.chiedi() }); return }
       this.aggiornaTitolo()
-      if (g.continua) { g.continua = false; setTimeout(() => this.chiedi(), 300) }
+      if (g.nuovaChat) { g.nuovaChat = false; this.nuovaChat() }
+      else if (g.continua) { g.continua = false; setTimeout(() => this.tastiera(), 300) }
     },
 
     aggiornaTitolo() {
       this.request({ method: 'current' }, { timeout: 20000 })
         .then((c) => {
-          if (!this.state.titolo) return
-          this.state.titolo.setProperty(hmUI.prop.MORE, { text: (c && c.title) || '' })
+          if (!this.state.fissa) return
           this.state.pin = (c && c.pinned) || null
-          const t = this.state.pin ? this.state.pin.title : 'Ultima risposta'
-          this.state.fissa.setProperty(hmUI.prop.MORE, { text: t.length > 16 ? t.slice(0, 15) + '…' : t })
+          const t = this.state.pin ? this.state.pin.title : 'Fissata'
+          this.state.fissa.setProperty(hmUI.prop.MORE, { text: t.length > 12 ? t.slice(0, 11) + '…' : t })
         })
         .catch(() => {})
     },
 
+    // Chiedi a Iris: conversazione nuova (si crea su Hermes alla prima domanda) e tastiera
     nuovaChat() {
       if (this.state.busy) return
-      this.request({ method: 'new' }).finally(() => { this.aggiornaTitolo(); this.chiedi() })
+      this.request({ method: 'new' }).finally(() => this.tastiera())
     },
 
     // la chat fissata: ci si sposta lì e si apre subito la tastiera
     tastoFissato() {
       if (this.state.busy) return
       const p = this.state.pin
-      if (!p) return this.ultima()
-      this.request({ method: 'use', params: { id: p.id } }).finally(() => { this.aggiornaTitolo(); this.chiedi() })
+      if (!p) return this.scrivi('Nessuna chat fissata: scegline una in Cronologia → Fissa')
+      this.request({ method: 'use', params: { id: p.id } }).finally(() => this.tastiera())
     },
 
     scrivi(t, colore = 0x8e95ad) {
@@ -101,7 +95,8 @@ Page(
       else if (p.stato === 'pensa') { this.state.occhi.stato('pensa'); this.scrivi('Sto pensando…', 0xa78bfa) }
     },
 
-    chiedi() {
+    // la tastiera di sistema: dettatura se c'è, altrimenti lettere; la domanda va nella conversazione in corso
+    tastiera() {
       if (this.state.busy) return
       const tastiera = hmUI.inputType && typeof hmUI.createKeyboard === 'function'
       if (!tastiera) return this.scrivi('Su questo orologio non c\'è la tastiera di sistema', 0xf87171)
@@ -137,12 +132,6 @@ Page(
           }, 900)
         })
         .catch(() => { this.fine(); this.errore('Il telefono non risponde. L\'app Zepp è aperta e vicina?') })
-    },
-
-    ultima() {
-      const u = dati().last
-      if (u) push({ url: 'page/risposta.page', params: JSON.stringify(u) })
-      else this.scrivi('Ancora nessuna risposta da rileggere')
     },
 
     errore(t) {

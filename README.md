@@ -13,10 +13,10 @@ Progetto gemello di [Iris Notch](https://github.com/Mark9712Seto/IrisNotch), l'i
 
 | | Sull'orologio |
 |---|---|
-| ![](docs/immagini/2-dettatura.png) | Premi **Chiedi a Iris** e detti: *«Che impegni ho domani mattina?»*, poi ✓. |
+| ![](docs/immagini/2-dettatura.png) | Premi **Chiedi a Iris** (chat nuova) e detti: *«Che impegni ho domani mattina?»*, poi ✓. |
 | ![](docs/immagini/3-strumento.png) | Gli occhi diventano arancioni e sotto compare lo strumento che Iris sta usando: *calendario*. |
 | ![](docs/immagini/4-risposta.png) | L'orologio vibra e mostra la risposta: *«Domani mattina hai due impegni: alle 9:30 il dentista, e alle 11 la call con Luca per il preventivo…»*. Si legge girando la corona; in fondo **Continua** e **Nuova chat**. |
-| ![](docs/immagini/5-cronologia.png) | **Cronologia**: le ultime conversazioni di Hermes, anche quelle iniziate su Telegram o sul PC. Toccane una per continuarla, oppure **Fissa** per averla sempre nella prima schermata. |
+| ![](docs/immagini/5-cronologia.png) | **Cronologia**: le ultime conversazioni di Hermes, anche quelle iniziate su Telegram o sul PC. Toccane una per continuarla, oppure **Fissa** per averla nel tasto accanto a *Cronologia*. |
 
 Le risposte vere le scrive il tuo Hermes Agent, con i suoi strumenti (calendario, posta, casa…).
 
@@ -24,7 +24,7 @@ Le risposte vere le scrive il tuo Hermes Agent, con i suoi strumenti (calendario
 
 - Gli occhi di Iris, che sbattono le palpebre e cambiano colore mentre pensa.
 - **Chiedi a Iris:** detti la domanda con la tastiera vocale dell'orologio o la scrivi.
-- **Conversazioni:** nuova chat, cronologia (anche quelle di Telegram e dell'isola) e una chat fissata nella prima schermata per riprenderla al volo.
+- **Tre tasti:** *Chiedi a Iris* (chat nuova), *Cronologia* (anche le conversazioni di Telegram e dell'isola) e la *chat fissata*, per riprenderla al volo. In fondo a ogni risposta, *Continua* resta nella stessa conversazione.
 - **Occhi animati** che seguono il lavoro di Iris: pensa, usa uno strumento (col nome), risponde, errore.
 - Lo schermo resta acceso finché arriva la risposta, che si legge scorrendo con la corona.
 - **Prova collegamento** dall'orologio e dalle impostazioni nell'app Zepp, con errori spiegati (token Cloudflare, chiave di Hermes, Hermes da aggiornare).

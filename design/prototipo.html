@@ -103,15 +103,14 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
 .toast{position:absolute;bottom:22cqw;left:50%;transform:translateX(-50%);padding:2.4cqw 4.6cqw;border-radius:99cqw;background:#13202c;color:#9fd2ff;font:500 4.2cqw/1 var(--body);white-space:nowrap}
 @keyframes rise{from{transform:translateY(8cqw);opacity:0}}
 /* schermate della 0.1.2 (coordinate dell'app vera: 480 px = 100cqw) */
-.eyes.mid{top:29.6%;width:128cqw}
+.eyes.mid{top:27.5%;width:135cqw}
 .ttl{position:absolute;top:8.3cqw;left:22cqw;right:22cqw;height:7.5cqw;display:flex;align-items:center;justify-content:center;font:500 4.4cqw/1 var(--body);color:#7d849c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.st{position:absolute;top:42.5cqw;left:12cqw;right:12cqw;height:13.3cqw;display:flex;align-items:center;justify-content:center;text-align:center;font:500 5.4cqw/1.25 var(--body);color:#8e95ad}
+.st{position:absolute;top:41.2cqw;left:12cqw;right:12cqw;height:13.3cqw;display:flex;align-items:center;justify-content:center;text-align:center;font:500 5.4cqw/1.25 var(--body);color:#8e95ad}
 .zb{position:absolute;border:0;border-radius:99cqw;cursor:pointer;font:600 4.6cqw/1.1 var(--body);background:#141824;color:#aab0c4;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 2cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .zb:active{filter:brightness(1.3)}
-.zb.big{left:22.9cqw;top:57.5cqw;width:54.2cqw;height:15.4cqw;background:var(--eye);color:#04121f;font-size:6.2cqw}
-.zb.l{left:20cqw;top:75cqw;width:29.2cqw;height:10.4cqw}
-.zb.r{left:50.8cqw;top:75cqw;width:29.2cqw;height:10.4cqw}
-.zb.pin{left:29.2cqw;top:87.1cqw;width:41.7cqw;height:9.2cqw;background:#13202c;color:#9fd2ff;font-size:4.2cqw}
+.zb.big{left:20.8cqw;top:56.7cqw;width:58.3cqw;height:16.7cqw;background:var(--eye);color:#04121f;font-size:6.2cqw}
+.zb.l{left:17.5cqw;top:76.2cqw;width:31.7cqw;height:12.1cqw}
+.zb.r{left:50.8cqw;top:76.2cqw;width:31.7cqw;height:12.1cqw;background:#13202c;color:#9fd2ff;font-size:4.2cqw}
 .kb{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4cqw}
 .kb .micb{width:24cqw;height:24cqw;border-radius:50%;background:#13263a;color:var(--eye);display:grid;place-items:center;animation:pulse 1.2s ease-in-out infinite}
 .kb .micb svg{width:11cqw;height:11cqw}
@@ -191,9 +190,9 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
       <div class="card">
         <h3>Cosa provare (versione 0.1.2)</h3>
         <ol class="steps">
-          <li><b>Una domanda:</b> premi <b>Chiedi a Iris</b>, si apre la dettatura dell'orologio, poi ✓. Gli occhi mostrano cosa fa Iris; la risposta si legge con la corona, con gli occhi piccoli in alto.</li>
+          <li><b>Chiedi a Iris</b> apre una chat nuova con la dettatura dell'orologio, poi ✓. Gli occhi mostrano cosa fa Iris; la risposta si legge con la corona, con gli occhi piccoli in alto.</li>
           <li><b>Continua</b> (in fondo alla risposta) riapre la dettatura nella stessa conversazione; <b>Nuova chat</b> ne apre una nuova.</li>
-          <li><b>Cronologia:</b> tocca una conversazione per continuarla, oppure <b>Fissa</b> per metterla nel tasto in basso della prima schermata.</li>
+          <li><b>Cronologia:</b> tocca una conversazione per continuarla, oppure <b>Fissa</b> per metterla nel tasto accanto (una sola fissata).</li>
           <li>Scegli qui sotto la prossima domanda da "dettare".</li>
         </ol>
         <div class="btns" id="qs"></div>
@@ -1020,14 +1019,13 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
     if (sideEyes && p !== "reply") sideEyes = null;
     if (p === "home") {
       showEyes(true, data && data.state || "idle");
-      ui.innerHTML = `<div class="ttl">${esc(curTitle)}</div><div class="st" id="st">${data && data.msg || "Tocca per chiedere"}</div>
-        <button class="zb big" id="ask">Chiedi a Iris</button><button class="zb l" id="new">Nuova chat</button><button class="zb r" id="hist">Cronologia</button>
-        <button class="zb pin" id="pin">${esc(short(pinned ? pinned : "Ultima risposta", 17))}</button>`;
+      ui.innerHTML = `<div class="st" id="st">${data && data.msg || "Tocca per chiedere"}</div>
+        <button class="zb big" id="ask">Chiedi a Iris</button><button class="zb l" id="hist">Cronologia</button>
+        <button class="zb r" id="pin">${esc(short(pinned ? pinned : "Fissata", 12))}</button>`;
       if (data && data.color) $("st").style.color = data.color;
-      btn("ask", dettatura);
-      btn("new", () => { curTitle = "Nuova conversazione"; trace("p", "nuova conversazione (si crea alla prima domanda)"); dettatura(); });
+      btn("ask", () => { curTitle = "Nuova conversazione"; trace("p", "chat nuova (si crea su Hermes alla prima domanda)"); dettatura(); });
       btn("hist", () => go("sessions"));
-      btn("pin", () => { if (pinned) { curTitle = pinned; trace("p", `riprendo la chat fissata «${pinned}»`); dettatura(); } else if (last) go("reply", { text: md(last.answer), q: last }); else { $("st").textContent = "Ancora nessuna risposta da rileggere"; } });
+      btn("pin", () => { if (pinned) { curTitle = pinned; trace("p", `riprendo la chat fissata «${pinned}»`); dettatura(); } else { $("st").textContent = "Nessuna chat fissata: scegline una in Cronologia → Fissa"; } });
     }
     if (p === "kb") {
       showEyes(false);
@@ -1036,8 +1034,8 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
       later(900, function type() { if (page !== "kb") return; n = Math.min(q.length, n + 2); $("said").textContent = q.slice(0, n); if (n < q.length) later(45, type); else { $("hk").textContent = "Tocca ✓ per inviare"; $("okk").style.visibility = "visible"; } });
       btn("okk", () => { cur = Object.assign({}, QS[qi]); trace("w", `dettatura: «${cur.q}»`); ask(); });
     }
-    if (p === "think") { showEyes(true, "thinking"); ui.innerHTML = `<div class="ttl">${esc(curTitle)}</div><div class="st" style="color:#a78bfa">Sto pensando…</div>`; }
-    if (p === "tool") { showEyes(true, "tool"); ui.innerHTML = `<div class="ttl">${esc(curTitle)}</div><div class="st" style="color:#f59e0b">Uso: ${esc(cur.tool)}</div>`; }
+    if (p === "think") { showEyes(true, "thinking"); ui.innerHTML = `<div class="st" style="color:#a78bfa">Sto pensando…</div>`; }
+    if (p === "tool") { showEyes(true, "tool"); ui.innerHTML = `<div class="st" style="color:#f59e0b">Uso: ${esc(cur.tool)}</div>`; }
     if (p === "reply") {
       showEyes(false);
       const q = (data && data.q) || cur;
@@ -1063,7 +1061,7 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
       ui.querySelectorAll("[data-f]").forEach((b) => (b.onclick = (e) => { e.stopPropagation(); const s = all[+b.dataset.f]; pinned = pinned === s.title ? null : s.title; trace("p", pinned ? `fissata «${s.title}» nella prima schermata` : "tolta la chat fissata"); const y = scrollY; go("sessions"); scrollY = y; $("txt").style.transform = `translateY(${-scrollY}px)`; }));
       scrollY = 0;
     }
-    if (p === "error") { showEyes(true, "sleep"); ui.innerHTML = `<div class="ttl">${esc(curTitle)}</div><div class="st" style="color:#f87171">Prova: la rete non risponde. Il tunnel di casa è acceso?</div><button class="zb big" id="ask">Chiedi a Iris</button>`; btn("ask", dettatura); }
+    if (p === "error") { showEyes(true, "sleep"); ui.innerHTML = `<div class="st" style="color:#f87171">Prova: la rete non risponde. Il tunnel di casa è acceso?</div><button class="zb big" id="ask">Chiedi a Iris</button>`; btn("ask", () => { curTitle = "Nuova conversazione"; dettatura(); }); }
   }
   function dettatura() { clear(); trace("w", "si apre la tastiera di sistema con il microfono"); go("kb"); }
 

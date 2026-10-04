@@ -51,11 +51,9 @@ Apri **Iris Dial** e premi **Chiedi a Iris**: detta (col microfono della tastier
 
 | Sulla prima schermata | |
 |---|---|
-| in alto | il titolo della conversazione in corso |
-| **Chiedi a Iris** | una domanda nella conversazione in corso |
-| **Nuova chat** | apre una conversazione nuova e la tastiera |
-| **Cronologia** | le ultime conversazioni di Hermes (anche di Telegram e dell'isola): toccandone una si continua lì; **Fissa** la mette nella prima schermata |
-| tasto in basso | la conversazione fissata, per riprenderla al volo (se non ce n'è una: l'ultima risposta) |
+| **Chiedi a Iris** | apre una chat nuova e la tastiera (dettatura o lettere) |
+| **Cronologia** | le ultime conversazioni di Hermes (anche di Telegram e dell'isola): toccandone una si continua lì; **Fissa** la mette nel tasto accanto |
+| tasto **fissata** | la conversazione fissata (una sola), per riprenderla al volo |
 
 Nella risposta: si scorre con la corona; in fondo **Continua** (stessa conversazione) e **Nuova chat**.
 
