@@ -1,11 +1,16 @@
 name: Build
 
 # Compila l'app per l'orologio (pacchetto .zab) con lo strumento ufficiale di Zepp (zeus).
-# Su ogni push il pacchetto si scarica dagli Artifacts della run; con un tag v* (es. v0.1.0)
-# viene allegato anche a una Release.
+# Su ogni push il pacchetto si scarica dagli Artifacts della run. Avviato a mano (Actions → Build → Run workflow)
+# con "release" acceso, pubblica una Release con il numero di versione di app.json (es. v0.1.0) e il .zab allegato.
 on:
   push:
   workflow_dispatch:
+    inputs:
+      release:
+        description: "Pubblica una Release con la versione di app.json"
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -41,10 +46,11 @@ jobs:
         with:
           name: Iris-Dial-zab
           path: dist/*.zab
-      - name: Release (solo con un tag v*)
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Release
+        if: github.event_name == 'workflow_dispatch' && inputs.release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" dist/*.zab --title "Iris Dial $GITHUB_REF_NAME" --notes-file docs/installazione.md --prerelease || \
-          gh release upload "$GITHUB_REF_NAME" dist/*.zab --clobber
+          V="v$(node -p "require('./app.json').app.version.name")"
+          gh release create "$V" dist/*.zab --target "$GITHUB_SHA" --title "Iris Dial $V" --notes-file docs/installazione.md --prerelease || \
+          gh release upload "$V" dist/*.zab --clobber
