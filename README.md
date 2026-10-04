@@ -3,7 +3,7 @@
 Iris al polso: gli occhi di Iris e la chat con [Hermes Agent](https://github.com/NousResearch/hermes-agent) sull'**Amazfit Balance 2** (Zepp OS, schermo rotondo 480×480).
 Progetto gemello di [Iris Notch](https://github.com/Mark9712Seto/IrisNotch), l'isola per Windows.
 
-> **Stato: versione di prova 0.1.2.** Serve a verificare che l'idea funzioni: domanda dall'orologio → telefono → tunnel → Hermes → risposta sul polso.
+> **Stato: versione di prova 0.1.3.** Serve a verificare che l'idea funzioni: domanda dall'orologio → telefono → tunnel → Hermes → risposta sul polso.
 
 ![Le schermate di Iris Dial sul Balance 2](docs/immagini/schermate.png)
 
@@ -26,7 +26,7 @@ Le risposte vere le scrive il tuo Hermes Agent, con i suoi strumenti (calendario
 - **Chiedi a Iris:** detti la domanda con la tastiera vocale dell'orologio o la scrivi.
 - **Tre tasti:** *Chiedi a Iris* (chat nuova), la *chat fissata* per riprenderla al volo e, accanto, il tasto tondo della *cronologia* (anche le conversazioni di Telegram e dell'isola). In fondo a ogni risposta, *Continua* resta nella stessa conversazione.
 - **Occhi animati** che seguono il lavoro di Iris: pensa, usa uno strumento (col nome), risponde, errore.
-- Lo schermo resta acceso finché arriva la risposta, che si legge scorrendo con la corona.
+- Mentre Iris lavora, **occhi a tutto schermo** e schermo acceso fino alla risposta (anche diversi minuti, con *Aspetta ancora*); la risposta si legge scorrendo con la corona.
 - **Prova collegamento** dall'orologio e dalle impostazioni nell'app Zepp, con errori spiegati (token Cloudflare, chiave di Hermes, Hermes da aggiornare).
 
 ## Come è collegato

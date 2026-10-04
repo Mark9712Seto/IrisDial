@@ -25,7 +25,7 @@ export function spiega(status, body) {
   return 'Risposta inattesa (' + status + ')'
 }
 
-export function createHermes({ fetch, get, set, intervallo = 2000, attesaMax = 115000 }) {
+export function createHermes({ fetch, get, set, intervallo = 2000, attesaMax = 270000 }) {
   const val = (k) => String(get(k) || '').trim()
 
   function conf() {
@@ -73,8 +73,8 @@ export function createHermes({ fetch, get, set, intervallo = 2000, attesaMax = 1
   }
 
   // onStato({ stato, tool }) avvisa l'orologio mentre Iris lavora (pensa / usa uno strumento)
+  let ultima = null // l'ultima richiesta, per "Aspetta ancora" se Iris ci mette tanto
   async function chiedi(text, onStato) {
-    const avvisa = (s) => { try { onStato && onStato(s) } catch (e) {} }
     let sid = await sessione()
     let prima
     try { prima = (await messaggi(sid)).length } catch (e) {
@@ -85,6 +85,18 @@ export function createHermes({ fetch, get, set, intervallo = 2000, attesaMax = 1
     const run = await http('Invio la domanda', 'POST', '/v1/runs', { input: text, session_id: sid })
     const rid = run && run.run_id
     if (!rid) throw new Error('Invio la domanda: Hermes non ha avviato la richiesta')
+    ultima = { rid, sid, prima }
+    return attendi(ultima, onStato)
+  }
+
+  // riprende ad aspettare l'ultima richiesta (la domanda non viene rifatta)
+  async function aspettaAncora(onStato) {
+    if (!ultima) throw new Error('Non c\'è una richiesta da aspettare')
+    return attendi(ultima, onStato)
+  }
+
+  async function attendi({ rid, sid, prima }, onStato) {
+    const avvisa = (s) => { try { onStato && onStato(s) } catch (e) {} }
     avvisa({ stato: 'pensa' })
     const fine = Date.now() + attesaMax
     let conStato = true, ultimoStrumento = ''
@@ -98,9 +110,9 @@ export function createHermes({ fetch, get, set, intervallo = 2000, attesaMax = 1
           if (/non conosce/.test(e.message)) conStato = false // Hermes vecchio: si guardano solo i messaggi
           else throw e
         }
-        if (r && r.status === 'completed' && r.output) return { text: String(r.output).trim(), tools }
-        if (r && (r.status === 'failed' || r.status === 'interrupted')) throw new Error(r.error || 'La richiesta non è andata a buon fine')
-        if (r && r.status === 'cancelled') throw new Error('La richiesta è stata fermata')
+        if (r && r.status === 'completed' && r.output) { ultima = null; return { text: String(r.output).trim(), tools } }
+        if (r && (r.status === 'failed' || r.status === 'interrupted')) { ultima = null; throw new Error(r.error || 'La richiesta non è andata a buon fine') }
+        if (r && r.status === 'cancelled') { ultima = null; throw new Error('La richiesta è stata fermata') }
       }
       // 2. i messaggi della sessione: quale strumento sta usando e, con Hermes vecchi, la risposta
       const m = (await messaggi(sid)).slice(prima)
@@ -113,11 +125,14 @@ export function createHermes({ fetch, get, set, intervallo = 2000, attesaMax = 1
       const chiamaStrumenti = ultimo && ultimo.tool_calls && ultimo.tool_calls.length
       if (!conStato && ultimo && ultimo.role === 'assistant' && ultimo.content && !chiamaStrumenti) {
         const testo = typeof ultimo.content === 'string' ? ultimo.content : JSON.stringify(ultimo.content)
+        ultima = null
         return { text: testo.trim(), tools }
       }
       if (ultimo && ultimo.role === 'tool') avvisa({ stato: 'pensa' })
     }
-    throw new Error('Iris ci sta mettendo troppo, o aspetta un permesso: guarda sull\'isola del PC')
+    const e = new Error('Iris ci sta mettendo tanto (o aspetta un permesso dall\'isola). La risposta arriva comunque nella conversazione.')
+    e.lento = true
+    throw e
   }
 
   function fa(ts) {
@@ -173,5 +188,5 @@ export function createHermes({ fetch, get, set, intervallo = 2000, attesaMax = 1
     return { ok: true, message: 'Collegata: tunnel e Hermes rispondono' }
   }
 
-  return { chiedi, prova, sessione, sessioni, corrente, usa, nuova, fissata, fissa }
+  return { chiedi, aspettaAncora, prova, sessione, sessioni, corrente, usa, nuova, fissata, fissa }
 }

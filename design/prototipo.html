@@ -104,6 +104,8 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
 @keyframes rise{from{transform:translateY(8cqw);opacity:0}}
 /* schermate della 0.1.2 (coordinate dell'app vera: 480 px = 100cqw) */
 .eyes.mid{top:31.25%;width:142cqw}
+.eyes.full{top:41.7%;width:180cqw}
+.st.full{top:61.7cqw;height:16.7cqw;font-size:5.8cqw}
 .ttl{position:absolute;top:8.3cqw;left:22cqw;right:22cqw;height:7.5cqw;display:flex;align-items:center;justify-content:center;font:500 4.4cqw/1 var(--body);color:#7d849c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .st{position:absolute;top:44.6cqw;left:12cqw;right:12cqw;height:12.1cqw;display:flex;align-items:center;justify-content:center;text-align:center;font:500 5.4cqw/1.25 var(--body);color:#8e95ad}
 .zb{position:absolute;border:0;border-radius:99cqw;cursor:pointer;font:600 4.6cqw/1.1 var(--body);background:#141824;color:#aab0c4;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 2cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -210,7 +212,7 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
         <div class="facts">
           <div class="fact"><b>Dettatura dell'orologio</b><span>La tastiera di sistema con il microfono: provata da Marco, funziona bene. A Hermes arriva il testo.</span></div>
           <div class="fact"><b>Schermo acceso durante l'attesa</b><span>Fino alla risposta (al massimo 2 minuti); se si spegne, alzando il polso si torna dentro Iris Dial.</span></div>
-          <div class="fact"><b>Cosa vede l'orologio mentre aspetta</b><span>Il telefono chiede a Hermes ogni 2 secondi lo stato della richiesta e gli strumenti in uso, e li passa agli occhi.</span></div>
+          <div class="fact"><b>Mentre aspetti: occhi a tutto schermo</b><span>Una schermata solo per l'attesa: occhi grandi e cosa sta facendo Iris. Il telefono chiede a Hermes ogni 2 secondi lo stato e gli strumenti in uso. Se ci mette più di 4-5 minuti, "Aspetta ancora" riprende la stessa risposta.</span></div>
           <div class="fact risk"><b>Non ancora</b><span>Via libera dal polso, notifica a risposta pronta con lo schermo spento, risposta letta a voce (con Piper, Paola, di casa).</span></div>
         </div>
       </div>
@@ -1012,7 +1014,7 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
     log.appendChild(li); log.scrollTop = log.scrollHeight;
   }
   function buzz() { const w = $("watch"); w.classList.remove("buzz"); void w.offsetWidth; if (!reduce) w.classList.add("buzz"); }
-  function showEyes(on, state) { $("eyes").classList.toggle("hide", !on); $("eyes").classList.remove("small"); $("eyes").classList.add("mid"); if (state) eyes.setState(state); }
+  function showEyes(on, state, full) { const e = $("eyes"); e.classList.toggle("hide", !on); e.classList.remove("small"); e.classList.toggle("mid", !full); e.classList.toggle("full", !!full); if (state) eyes.setState(state); }
   const btn = (id, f) => { const b = $(id); if (b) b.onclick = (e) => { e.stopPropagation(); f(); }; };
 
   /* ---------- le pagine ---------- */
@@ -1037,8 +1039,9 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
       later(900, function type() { if (page !== "kb") return; n = Math.min(q.length, n + 2); $("said").textContent = q.slice(0, n); if (n < q.length) later(45, type); else { $("hk").textContent = "Tocca ✓ per inviare"; $("okk").style.visibility = "visible"; } });
       btn("okk", () => { cur = Object.assign({}, QS[qi]); trace("w", `dettatura: «${cur.q}»`); ask(); });
     }
-    if (p === "think") { showEyes(true, "thinking"); ui.innerHTML = `<div class="st" style="color:#a78bfa">Sto pensando…</div>`; }
-    if (p === "tool") { showEyes(true, "tool"); ui.innerHTML = `<div class="st" style="color:#f59e0b">Uso: ${esc(cur.tool)}</div>`; }
+    if (p === "think") { showEyes(true, "thinking", true); ui.innerHTML = `<div class="st full" style="color:#a78bfa">Sto pensando…</div>`; }
+    if (p === "tool") { showEyes(true, "tool", true); ui.innerHTML = `<div class="st full" style="color:#f59e0b">Uso: ${esc(cur.tool)}</div>`; }
+    if (p === "ready") { showEyes(true, "done", true); ui.innerHTML = `<div class="st full" style="color:#5eead4">Risposta pronta</div>`; }
     if (p === "reply") {
       showEyes(false);
       const q = (data && data.q) || cur;
@@ -1082,7 +1085,7 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
   function reply(text) {
     cur.answer = text; last = cur;
     buzz();
-    go("home", { state: "done", msg: "Risposta pronta", color: "#5eead4" });
+    go("ready");
     later(900, () => go("reply", { text: md(text), q: cur }));
   }
 

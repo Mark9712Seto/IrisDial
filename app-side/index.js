@@ -18,10 +18,13 @@ AppSideService(
     onRequest(req, res) {
       const fail = (e) => (e && e.message) || String(e)
       const p = req.params || {}
+      // mentre Iris lavora, l'orologio riceve lo stato (pensa / strumento) per animare gli occhi
+      const stato = (st) => this.call({ method: 'stato', params: st })
+      const errore = (e) => res(null, { error: fail(e), lento: !!(e && e.lento) })
       if (req.method === 'ask') {
-        // mentre Iris lavora, l'orologio riceve lo stato (pensa / strumento) per animare gli occhi
-        const stato = (st) => this.call({ method: 'stato', params: st })
-        this.h().chiedi(String(p.text || ''), stato).then((r) => res(null, r), (e) => res(null, { error: fail(e) }))
+        this.h().chiedi(String(p.text || ''), stato).then((r) => res(null, r), errore)
+      } else if (req.method === 'wait') {
+        this.h().aspettaAncora(stato).then((r) => res(null, r), errore)
       } else if (req.method === 'sessions') {
         this.h().sessioni(10).then((l) => res(null, { list: l }), (e) => res(null, { error: fail(e) }))
       } else if (req.method === 'current') {

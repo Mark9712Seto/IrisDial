@@ -47,7 +47,7 @@ Poi **Prova il collegamento**: deve dire "Collegata".
 
 ## 4. Prova sull'orologio
 
-Apri **Iris Dial** e premi **Chiedi a Iris**: detta (col microfono della tastiera) o scrivi la domanda e aspetta. Lo schermo resta acceso fino alla risposta, e gli occhi mostrano cosa sta facendo Iris (pensa, usa uno strumento).
+Apri **Iris Dial** e premi **Chiedi a Iris**: detta (col microfono della tastiera) o scrivi la domanda e aspetta. Si passa a una schermata d'attesa a tutto schermo: gli occhi grandi mostrano cosa sta facendo Iris (pensa, usa uno strumento) e lo schermo resta acceso fino alla risposta, al massimo circa 5 minuti. Se Iris ci mette di più, **Aspetta ancora** riprende ad aspettare la stessa risposta senza rifare la domanda.
 
 | Sulla prima schermata | |
 |---|---|

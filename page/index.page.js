@@ -2,13 +2,13 @@
 //   Chiedi a Iris        → chat nuova, con la tastiera di sistema (dettatura o lettere)
 //   chat fissata         → la conversazione fissata dalla cronologia, per riprenderla al volo
 //   tondo a destra       → la cronologia delle conversazioni (icona orologio con freccia)
-// La riga di testo sotto gli occhi compare solo mentre Iris lavora (pensa, strumento) o per un errore.
+// Dopo la domanda si passa alla pagina dell'attesa (page/attesa), a tutto schermo; qui la riga sotto gli
+// occhi serve solo per qualche avviso.
 // Per continuare la chat appena fatta c'è "Continua" in fondo alla risposta.
 import * as hmUI from '@zos/ui'
 import { px } from '@zos/utils'
 import { push } from '@zos/router'
-import { setWakeUpRelaunch, setPageBrightTime, resetPageBrightTime, pauseDropWristScreenOff, resetDropWristScreenOff } from '@zos/display'
-import { Vibrator } from '@zos/sensor'
+import { setWakeUpRelaunch } from '@zos/display'
 import { BasePage } from '@zeppos/zml/base-page'
 import { creaOcchi } from './occhi'
 
@@ -88,14 +88,6 @@ Page(
       this.state.testo.setProperty(hmUI.prop.MORE, { text: t, color: colore })
     },
 
-    // stato mandato dal telefono mentre Iris lavora
-    onCall(d) {
-      const p = (d && d.params) || {}
-      if (!d || d.method !== 'stato' || !this.state.busy) return
-      if (p.stato === 'strumento') { this.state.occhi.stato('strumento'); this.scrivi(p.tool ? 'Uso: ' + p.tool : 'Uso uno strumento…', 0xf59e0b) }
-      else if (p.stato === 'pensa') { this.state.occhi.stato('pensa'); this.scrivi('Sto pensando…', 0xa78bfa) }
-    },
-
     // la tastiera di sistema: dettatura se c'è, altrimenti lettere; la domanda va nella conversazione in corso
     tastiera() {
       if (this.state.busy) return
@@ -106,54 +98,13 @@ Page(
       hmUI.createKeyboard({
         inputType: tipo,
         text: '',
-        onComplete: (_, r) => { hmUI.deleteKeyboard(); const t = (r && r.data || '').trim(); if (t) this.invia(t) },
+        onComplete: (_, r) => { hmUI.deleteKeyboard(); const t = (r && r.data || '').trim(); if (t) push({ url: 'page/attesa.page', params: JSON.stringify({ text: t }) }) },
         onCancel: () => hmUI.deleteKeyboard(),
       })
     },
 
-    invia(domanda) {
-      this.state.busy = true
-      this.state.occhi.stato('pensa')
-      this.scrivi('Sto pensando…', 0xa78bfa)
-      // durante l'attesa lo schermo resta acceso e non si spegne abbassando il polso (al massimo 2 minuti)
-      setPageBrightTime({ brightTime: 125000 })
-      pauseDropWristScreenOff({ duration: 125000 })
-      this.request({ method: 'ask', params: { text: domanda } }, { timeout: 130000 })
-        .then((r) => {
-          this.fine()
-          if (r && r.error) return this.errore(r.error)
-          this.state.occhi.stato('risponde')
-          this.scrivi('Risposta pronta', 0x5eead4)
-          this.vibra()
-          const ultima = { q: domanda, a: r.text, tools: r.tools || [] }
-          dati().last = ultima
-          setTimeout(() => {
-            push({ url: 'page/risposta.page', params: JSON.stringify(ultima) })
-            this.state.occhi.stato('riposo'); this.scrivi('')
-          }, 900)
-        })
-        .catch(() => { this.fine(); this.errore('Il telefono non risponde. L\'app Zepp è aperta e vicina?') })
-    },
-
-    errore(t) {
-      this.state.occhi.stato('errore')
-      this.scrivi(t, 0xf87171)
-      this.vibra()
-      setTimeout(() => !this.state.busy && this.state.occhi.stato('dorme'), 2300)
-    },
-
-    fine() {
-      this.state.busy = false
-      try { resetPageBrightTime(); resetDropWristScreenOff() } catch (e) {}
-    },
-
-    vibra() {
-      try { const v = new Vibrator(); v.start(); setTimeout(() => v.stop(), 350) } catch (e) {}
-    },
-
     onDestroy() {
       this.state.occhi && this.state.occhi.ferma()
-      this.fine()
     },
   }),
 )
