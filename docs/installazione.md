@@ -12,7 +12,9 @@ Prima versione per verificare che l'idea funzioni: dall'orologio fai una domanda
 
 ## 1. Accendi la modalità sviluppatore nell'app Zepp
 
-App Zepp → **Profilo** → **Impostazioni** → **Informazioni** → tocca **7 volte** l'icona o il numero di versione, finché compare "Modalità sviluppatore attivata". Nella pagina del tuo orologio compare la voce **Modalità sviluppatore**.
+1. App Zepp → **Profilo** (in basso a destra) → **Impostazioni** → **Informazioni** (quelle dell'app Zepp, non quelle dell'orologio).
+2. Tocca **7 volte di fila l'icona di Zepp** in alto, finché compare un messaggio.
+3. Da quel momento in **Profilo → Impostazioni** c'è la voce **Modalità sviluppatore**: lì c'è l'icona per scansionare il QR.
 
 ## 2. Installa dal PC
 
@@ -20,7 +22,7 @@ App Zepp → **Profilo** → **Impostazioni** → **Informazioni** → tocca **7
 2. Tasto destro su `tools\installa-sul-telefono.ps1` → **Esegui con PowerShell**.
    - La prima volta prepara lo strumento di Zepp e ti fa accedere al tuo account nel browser.
    - Alla fine compare un **QR** nella finestra.
-3. Sul telefono: app Zepp → il tuo orologio → **Modalità sviluppatore** → icona **Scansiona** in alto → inquadra il QR. L'app passa all'orologio via Bluetooth.
+3. Sul telefono: app Zepp → **Profilo → Impostazioni → Modalità sviluppatore** → icona **Scansiona** in alto → inquadra il QR. L'app passa all'orologio via Bluetooth.
 
 Il file `.zab` allegato alla Release è lo stesso pacchetto: l'app Zepp non lo apre direttamente, serve il QR del passo 2.
 

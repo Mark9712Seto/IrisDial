@@ -3,7 +3,7 @@
 #   1. prepara lo strumento ufficiale di Zepp (zeus) in una cartella sua, %LOCALAPPDATA%\IrisDial\zeus;
 #   2. installa le dipendenze del progetto;
 #   3. ti fa accedere al tuo account Zepp (si apre il browser, solo la prima volta);
-#   4. compila e mostra un QR: inquadralo con l'app Zepp → profilo → il tuo orologio → Modalità sviluppatore → Scansiona.
+#   4. compila e mostra un QR: inquadralo con l'app Zepp → Profilo → Impostazioni → Modalità sviluppatore → Scansiona.
 # Uso: tasto destro su questo file → "Esegui con PowerShell", oppure da PowerShell:  .\tools\installa-sul-telefono.ps1
 $ErrorActionPreference = "Stop"
 $progetto = Split-Path -Parent $PSScriptRoot
