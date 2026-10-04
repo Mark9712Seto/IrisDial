@@ -5,6 +5,21 @@ Progetto gemello di [Iris Notch](https://github.com/Mark9712Seto/IrisNotch), l'i
 
 > **Stato: versione di prova 0.1.2.** Serve a verificare che l'idea funzioni: domanda dall'orologio → telefono → tunnel → Hermes → risposta sul polso.
 
+![Le schermate di Iris Dial sul Balance 2](docs/immagini/schermate.png)
+
+*Dalla prima schermata alla risposta: dettatura, Iris che usa uno strumento, risposta da leggere con la corona, cronologia con la chat fissata. Immagini dal [prototipo](design/prototipo.html) con risposte d'esempio.*
+
+## Una conversazione d'esempio
+
+| | Sull'orologio |
+|---|---|
+| ![](docs/immagini/2-dettatura.png) | Premi **Chiedi a Iris** e detti: *«Che impegni ho domani mattina?»*, poi ✓. |
+| ![](docs/immagini/3-strumento.png) | Gli occhi diventano arancioni e sotto compare lo strumento che Iris sta usando: *calendario*. |
+| ![](docs/immagini/4-risposta.png) | L'orologio vibra e mostra la risposta: *«Domani mattina hai due impegni: alle 9:30 il dentista, e alle 11 la call con Luca per il preventivo…»*. Si legge girando la corona; in fondo **Continua** e **Nuova chat**. |
+| ![](docs/immagini/5-cronologia.png) | **Cronologia**: le ultime conversazioni di Hermes, anche quelle iniziate su Telegram o sul PC. Toccane una per continuarla, oppure **Fissa** per averla sempre nella prima schermata. |
+
+Le risposte vere le scrive il tuo Hermes Agent, con i suoi strumenti (calendario, posta, casa…).
+
 ## Cosa fa la 0.1
 
 - Gli occhi di Iris, che sbattono le palpebre e cambiano colore mentre pensa.

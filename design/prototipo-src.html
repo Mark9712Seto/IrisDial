@@ -102,6 +102,42 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
 .notif .pill{margin-top:auto;align-self:center}
 .toast{position:absolute;bottom:22cqw;left:50%;transform:translateX(-50%);padding:2.4cqw 4.6cqw;border-radius:99cqw;background:#13202c;color:#9fd2ff;font:500 4.2cqw/1 var(--body);white-space:nowrap}
 @keyframes rise{from{transform:translateY(8cqw);opacity:0}}
+/* schermate della 0.1.2 (coordinate dell'app vera: 480 px = 100cqw) */
+.eyes.mid{top:29.6%;width:128cqw}
+.ttl{position:absolute;top:8.3cqw;left:22cqw;right:22cqw;height:7.5cqw;display:flex;align-items:center;justify-content:center;font:500 4.4cqw/1 var(--body);color:#7d849c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st{position:absolute;top:42.5cqw;left:12cqw;right:12cqw;height:13.3cqw;display:flex;align-items:center;justify-content:center;text-align:center;font:500 5.4cqw/1.25 var(--body);color:#8e95ad}
+.zb{position:absolute;border:0;border-radius:99cqw;cursor:pointer;font:600 4.6cqw/1.1 var(--body);background:#141824;color:#aab0c4;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 2cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zb:active{filter:brightness(1.3)}
+.zb.big{left:22.9cqw;top:57.5cqw;width:54.2cqw;height:15.4cqw;background:var(--eye);color:#04121f;font-size:6.2cqw}
+.zb.l{left:20cqw;top:75cqw;width:29.2cqw;height:10.4cqw}
+.zb.r{left:50.8cqw;top:75cqw;width:29.2cqw;height:10.4cqw}
+.zb.pin{left:29.2cqw;top:87.1cqw;width:41.7cqw;height:9.2cqw;background:#13202c;color:#9fd2ff;font-size:4.2cqw}
+.kb{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4cqw}
+.kb .micb{width:24cqw;height:24cqw;border-radius:50%;background:#13263a;color:var(--eye);display:grid;place-items:center;animation:pulse 1.2s ease-in-out infinite}
+.kb .micb svg{width:11cqw;height:11cqw}
+.kb .said{min-height:14cqw;max-width:66cqw;text-align:center;font:500 5.6cqw/1.3 var(--body);color:#e4e7f0}
+.kb .hintk{font:500 4.2cqw/1 var(--body);color:#8e95ad}
+.kb .okk{width:15cqw;height:15cqw;border-radius:50%;border:0;background:var(--eye);color:#04121f;display:grid;place-items:center;cursor:pointer}
+.kb .okk svg{width:7cqw;height:7cqw}
+.col{position:absolute;inset:0;overflow:hidden}
+.col .in{position:absolute;left:0;right:0;top:0;transition:transform .25s ease-out}
+.col .ey{position:relative;height:13cqw;margin-top:5cqw}
+.col .ey > div{position:absolute;left:50%;top:50%;width:63cqw;aspect-ratio:178.4/38;transform:translate(-50%,-50%)}
+.col .q{margin:2cqw 15cqw 0;text-align:center;font:500 4.6cqw/1.3 var(--body);color:#8e95ad;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.col .tl{margin:1.5cqw 15cqw 0;text-align:center;font:500 3.8cqw/1.3 var(--mono);color:#f59e0b}
+.col .a{margin:3cqw 15.6cqw 0;font:500 5.8cqw/1.42 var(--body);color:#e4e7f0}
+.col .btns{display:flex;flex-direction:column;align-items:center;gap:3cqw;margin:5cqw 0 30cqw}
+.col .btns .zb{position:static}
+.col .hd{margin-top:8cqw;text-align:center;font:700 5.8cqw/1 var(--display);color:#e4e7f0}
+.col .rows{display:flex;flex-direction:column;gap:2.5cqw;margin:4cqw 10cqw 30cqw}
+.col .rw{display:flex;gap:1.6cqw;align-items:center}
+.col .rw .zb{position:static;height:15.8cqw;white-space:normal;line-height:1.2}
+.col .rw .o{flex:1;justify-content:flex-start;text-align:left;padding:0 5cqw;flex-direction:column;align-items:flex-start}
+.col .rw .o small{font:500 3.6cqw/1.2 var(--body);color:#7d849c}
+.col .rw .o.cur{background:#1b2636;color:#fff}
+.col .rw .f{width:20cqw;height:12.5cqw;font-size:3.9cqw;color:#7d849c}
+.col .rw .f.on{background:#13263a;color:var(--eye)}
+.col .newb{position:static;height:14.6cqw;width:100%;background:#13263a;color:var(--eye)}
 @keyframes pulse{50%{opacity:.25}}
 
 /* pannello */
@@ -132,7 +168,7 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
   <header>
     <span class="eyebrow">Iris Dial · prototipo da usare</span>
     <h1>Prova Iris sul Balance 2</h1>
-    <p class="lede">Un orologio finto ma navigabile, con le risposte inventate. Tieni premuto sullo schermo per fare una domanda, gira la corona con la rotellina del mouse, premi la corona per tornare agli occhi e il pulsante sotto per le sessioni. A destra vedi cosa passa tra orologio, telefono e casa.</p>
+    <p class="lede">Un orologio finto ma navigabile, con le risposte inventate. Com'è la versione 0.1.2: dettatura, conversazioni con la chat fissata, occhi animati anche sulla risposta. Gira la corona con la rotellina del mouse. A destra vedi cosa passa tra orologio, telefono e casa.</p>
   </header>
   <div class="main">
     <div class="stage">
@@ -148,22 +184,20 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
         <div class="offnote">schermo spento</div>
       </div>
       <div class="legend">
-        <span>tieni premuto = parla</span><span>rotellina o <kbd>↑</kbd><kbd>↓</kbd> = corona</span><span>clic corona o <kbd>Esc</kbd> = occhi</span><span>pulsante sotto o <kbd>S</kbd> = sessioni</span>
+        <span>tocca i pulsanti sullo schermo</span><span>rotellina o <kbd>↑</kbd><kbd>↓</kbd> = corona</span><span>clic corona o <kbd>Esc</kbd> = indietro</span><span>pulsante sotto o <kbd>S</kbd> = cronologia</span>
       </div>
     </div>
     <div class="side">
       <div class="card">
-        <h3>Cosa provare</h3>
+        <h3>Cosa provare (versione 0.1.2)</h3>
         <ol class="steps">
-          <li><b>Una domanda:</b> tieni premuto sugli occhi, lascia, conferma con ✓. Poi gira la corona sulla risposta.</li>
-          <li><b>Un permesso:</b> scegli «Manda una mail» qui sotto e chiedila: l'orologio vibra e chiede <i>una volta</i> o <i>nega</i>.</li>
-          <li><b>Polso giù:</b> fai una domanda e premi «Abbassa il polso» mentre pensa. Alla risposta arriva la notifica.</li>
-          <li><b>Le sessioni:</b> pulsante sotto la corona, scorri, tocca quella da aprire.</li>
+          <li><b>Una domanda:</b> premi <b>Chiedi a Iris</b>, si apre la dettatura dell'orologio, poi ✓. Gli occhi mostrano cosa fa Iris; la risposta si legge con la corona, con gli occhi piccoli in alto.</li>
+          <li><b>Continua</b> (in fondo alla risposta) riapre la dettatura nella stessa conversazione; <b>Nuova chat</b> ne apre una nuova.</li>
+          <li><b>Cronologia:</b> tocca una conversazione per continuarla, oppure <b>Fissa</b> per metterla nel tasto in basso della prima schermata.</li>
+          <li>Scegli qui sotto la prossima domanda da "dettare".</li>
         </ol>
         <div class="btns" id="qs"></div>
         <div class="btns">
-          <button class="btn" id="wrist">Abbassa il polso</button>
-          <button class="btn on" id="prev">Anteprima: accesa</button>
           <button class="btn" id="tunnel">Spegni il tunnel di casa</button>
         </div>
       </div>
@@ -172,12 +206,12 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
         <ul class="log" id="log"><li class="empty">Fai una domanda: qui compaiono i passaggi.</li></ul>
       </div>
       <div class="card">
-        <h3>Schermo e notifiche</h3>
+        <h3>Com'è nella 0.1.2</h3>
         <div class="facts">
-          <div class="fact"><b>Mentre aspetti, lo schermo resta acceso</b><span>Durante una domanda l'app allunga il tempo di schermo acceso (<code>setPageBrightTime</code>) fino alla risposta, poi torna normale per la batteria.</span></div>
-          <div class="fact"><b>Se lo schermo si spegne, riapri dove eri</b><span>Con <code>setWakeUpRelaunch</code> alzando il polso torni nella stessa pagina di Iris Dial, non sul quadrante.</span></div>
-          <div class="fact"><b>Risposta pronta: notifica</b><span>Un servizio in sottofondo sull'orologio (<i>App Service</i>, Zepp OS 3 e oltre) resta collegato al telefono anche ad app chiusa e, quando Hermes finisce, manda una notifica con «Leggi» che apre la risposta.</span></div>
-          <div class="fact risk"><b>Da verificare sul Balance 2 vero</b><span>Quanto a lungo il telefono tiene viva la parte di Iris Dial dentro l'app Zepp con lo schermo spento (Android a volte la ferma per la batteria) e quanto consuma lo schermo acceso.</span></div>
+          <div class="fact"><b>Dettatura dell'orologio</b><span>La tastiera di sistema con il microfono: provata da Marco, funziona bene. A Hermes arriva il testo.</span></div>
+          <div class="fact"><b>Schermo acceso durante l'attesa</b><span>Fino alla risposta (al massimo 2 minuti); se si spegne, alzando il polso si torna dentro Iris Dial.</span></div>
+          <div class="fact"><b>Cosa vede l'orologio mentre aspetta</b><span>Il telefono chiede a Hermes ogni 2 secondi lo stato della richiesta e gli strumenti in uso, e li passa agli occhi.</span></div>
+          <div class="fact risk"><b>Non ancora</b><span>Via libera dal polso, notifica a risposta pronta con lo schermo spento, risposta letta a voce (con Piper, Paola, di casa).</span></div>
         </div>
       </div>
     </div>
@@ -200,22 +234,26 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
   };
   // domande d'esempio (risposte inventate)
   const QS = [
-    { key: "cal", label: "Impegni di domani", q: "Che impegni ho domani mattina?", tool: "calendario · leggi", title: "Impegni di domani",
+    { label: "Impegni di domani", q: "Che impegni ho domani mattina?", tool: "calendario leggi", title: "Impegni di domani",
       a: "Domani mattina hai **due impegni**: alle 9:30 il dentista in via Roma, e alle 11 la call con Luca per il preventivo. Dalle 12 sei libero, e nel pomeriggio c'è solo la palestra alle 18. Vuoi che ti ricordi del dentista un'ora prima?" },
-    { key: "mail", label: "Manda una mail", q: "Scrivi a Paola che arrivo alle 8", tool: "posta · scrivi", title: "Mail a Paola", ask: { what: "Mandare una mail a Paola", detail: "«Arrivo alle 8, ciao!»" },
-      a: "Fatto: ho mandato la mail a **Paola** con scritto «Arrivo alle 8, ciao!». Se risponde te lo dico.", no: "Va bene, non la mando. Se vuoi cambio il testo e te la ripropongo." },
-    { key: "luce", label: "Accendi una luce", q: "Accendi la luce del soggiorno", tool: "casa · luci", title: "Luci del soggiorno",
+    { label: "Che tempo fa", q: "Che tempo fa domani?", tool: "meteo previsioni", title: "Meteo di domani",
+      a: "Domani **sereno** la mattina, nuvoloso dal pomeriggio. Massima 21°, minima 12°, vento debole. Niente pioggia prevista: puoi lasciare l'ombrello a casa." },
+    { label: "Accendi una luce", q: "Accendi la luce del soggiorno", tool: "homeassistant luci", title: "Luci del soggiorno",
       a: "Ho acceso la **luce del soggiorno** al 70%. Fuori sta facendo buio: vuoi che accenda anche quella dell'ingresso?" },
   ];
-  const SESS = ["Bollette di ottobre", "Impegni di domani", "Luci del soggiorno", "Ricetta del ragù", "Regalo per la mamma"];
-  let qi = 0, preview = true, tunnelOff = false, wristDown = false, pendingNotif = null;
-  let page = "home", cur = null, timers = [];
+  let sessions = [
+    { title: "Bollette di ottobre", ago: "2 h" }, { title: "Ricetta del ragù", ago: "1 g" },
+    { title: "Regalo per la mamma", ago: "3 g" }, { title: "Clima camera", ago: "5 g" },
+  ];
+  let qi = 0, tunnelOff = false, curTitle = "Nuova conversazione", pinned = null, last = null;
+  let page = "home", cur = null, timers = [], scrollY = 0, sideEyes = null;
   const eyes = Iris.createEyes($("eyes"), { island: true, idleLife: true });
   const ui = $("ui"), log = $("log");
   const md = (s) => s.replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
   const later = (ms, f) => timers.push(setTimeout(f, ms));
   const clear = () => { timers.forEach(clearTimeout); timers = []; };
-  const now = () => { const d = new Date(); return String(d.getHours()).padStart(2, "0") + ":" + String(d.getMinutes()).padStart(2, "0"); };
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const short = (s, n) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
 
   function trace(who, text) {
     const e = log.querySelector(".empty"); if (e) e.remove();
@@ -224,166 +262,108 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
     log.appendChild(li); log.scrollTop = log.scrollHeight;
   }
   function buzz() { const w = $("watch"); w.classList.remove("buzz"); void w.offsetWidth; if (!reduce) w.classList.add("buzz"); }
-  function eyesAt(small, state) { $("eyes").classList.toggle("small", !!small); $("eyes").classList.remove("hide"); if (state) eyes.setState(state); }
+  function showEyes(on, state) { $("eyes").classList.toggle("hide", !on); $("eyes").classList.remove("small"); $("eyes").classList.add("mid"); if (state) eyes.setState(state); }
+  const btn = (id, f) => { const b = $(id); if (b) b.onclick = (e) => { e.stopPropagation(); f(); }; };
 
   /* ---------- le pagine ---------- */
   function go(p, data) {
-    page = p; $("ring").classList.toggle("on", p === "listen");
-    if (p === "home") { eyesAt(false, "idle"); ui.innerHTML = `<div class="time">${now()}</div><div class="hint" id="hint">Tieni premuto per parlare</div>`; }
-    if (p === "listen") { eyesAt(false, "listening"); ui.innerHTML = `<div class="status">Ti ascolto…</div><div class="hint">Lascia per inviare</div>`; }
-    if (p === "preview") {
-      eyesAt(true, "idle");
-      ui.innerHTML = `<div class="bubble">${cur.q}</div><div class="pair"><button class="rb no" id="redo" aria-label="Rifai">${I.x}</button><button class="rb yes" id="send" aria-label="Invia">${I.ok}</button></div>`;
-      $("redo").onclick = (e) => { e.stopPropagation(); trace("w", "domanda scartata: si riprova"); go("home"); };
-      $("send").onclick = (e) => { e.stopPropagation(); ask(); };
+    page = p; $("ring").classList.remove("on");
+    if (sideEyes && p !== "reply") sideEyes = null;
+    if (p === "home") {
+      showEyes(true, data && data.state || "idle");
+      ui.innerHTML = `<div class="ttl">${esc(curTitle)}</div><div class="st" id="st">${data && data.msg || "Tocca per chiedere"}</div>
+        <button class="zb big" id="ask">Chiedi a Iris</button><button class="zb l" id="new">Nuova chat</button><button class="zb r" id="hist">Cronologia</button>
+        <button class="zb pin" id="pin">${esc(short(pinned ? pinned : "Ultima risposta", 17))}</button>`;
+      if (data && data.color) $("st").style.color = data.color;
+      btn("ask", dettatura);
+      btn("new", () => { curTitle = "Nuova conversazione"; trace("p", "nuova conversazione (si crea alla prima domanda)"); dettatura(); });
+      btn("hist", () => go("sessions"));
+      btn("pin", () => { if (pinned) { curTitle = pinned; trace("p", `riprendo la chat fissata «${pinned}»`); dettatura(); } else if (last) go("reply", { text: md(last.answer), q: last }); else { $("st").textContent = "Ancora nessuna risposta da rileggere"; } });
     }
-    if (p === "think") { eyesAt(false, "thinking"); ui.innerHTML = `<div class="status">Sto pensando…</div>`; }
-    if (p === "tool") { eyesAt(false, "tool"); ui.innerHTML = `<div class="chip"><i></i>${cur.tool}</div>`; }
-    if (p === "approval") {
-      eyesAt(true, "approval");
-      ui.innerHTML = `<div class="ask"><b>Posso farlo?</b><span>${cur.ask.what}</span><code>${cur.ask.detail}</code></div><div class="choose"><button class="pill stop" id="deny">Nega</button><button class="pill go" id="once">Una volta</button></div>`;
-      $("deny").onclick = (e) => { e.stopPropagation(); trace("w", "scelta: <b>nega</b>"); trace("p", "Hermes ← run_approval: deny"); reply(cur.no); };
-      $("once").onclick = (e) => { e.stopPropagation(); trace("w", "scelta: <b>una volta</b>"); trace("p", "Hermes ← run_approval: once"); trace("h", "Hermes: mail inviata"); reply(cur.a); };
+    if (p === "kb") {
+      showEyes(false);
+      ui.innerHTML = `<div class="kb"><div class="micb">${I.mic}</div><div class="said" id="said"></div><div class="hintk" id="hk">Parla ora…</div><button class="okk" id="okk" aria-label="Conferma" style="visibility:hidden">${I.ok}</button></div>`;
+      const q = QS[qi].q; let n = 0;
+      later(900, function type() { if (page !== "kb") return; n = Math.min(q.length, n + 2); $("said").textContent = q.slice(0, n); if (n < q.length) later(45, type); else { $("hk").textContent = "Tocca ✓ per inviare"; $("okk").style.visibility = "visible"; } });
+      btn("okk", () => { cur = Object.assign({}, QS[qi]); trace("w", `dettatura: «${cur.q}»`); ask(); });
     }
+    if (p === "think") { showEyes(true, "thinking"); ui.innerHTML = `<div class="ttl">${esc(curTitle)}</div><div class="st" style="color:#a78bfa">Sto pensando…</div>`; }
+    if (p === "tool") { showEyes(true, "tool"); ui.innerHTML = `<div class="ttl">${esc(curTitle)}</div><div class="st" style="color:#f59e0b">Uso: ${esc(cur.tool)}</div>`; }
     if (p === "reply") {
-      eyesAt(true, data && data.streaming ? "replying" : "idle");
-      ui.innerHTML = `<div class="read" id="read"><div class="txt" id="txt"><span class="you">«${cur.q}»</span><span class="tool">${cur.tool}</span><span id="ans"></span></div></div>
-        <div class="foot"><button id="fVol" aria-label="Leggi ad alta voce">${I.vol}</button><button id="fMic" aria-label="Nuova domanda">${I.mic}</button><button id="fList" aria-label="Sessioni">${I.list}</button></div>`;
+      showEyes(false);
+      const q = (data && data.q) || cur;
+      ui.innerHTML = `<div class="col" id="read"><div class="in" id="txt"><div class="ey"><div id="sey"></div></div>
+        <div class="q">«${esc(q.q)}»</div><div class="tl">${esc(q.tool)}</div><div class="a" id="ans"></div>
+        <div class="btns"><button class="zb big" id="cont" style="width:50cqw;height:14cqw">Continua</button><button class="zb" id="nw" style="width:42cqw;height:11.6cqw">Nuova chat</button></div></div></div>`;
+      sideEyes = Iris.createEyes($("sey"), { island: true, idleLife: true });
+      sideEyes.setState(data && data.streaming ? "replying" : "done"); later(2400, () => sideEyes && sideEyes.setState("idle"));
       $("ans").innerHTML = data && data.text != null ? data.text : "";
-      $("fVol").onclick = (e) => { e.stopPropagation(); const b = $("fVol"); b.classList.add("on"); eyes.setState("replying"); trace("w", "lettura ad alta voce (da verificare sull'altoparlante)"); later(3500, () => { b.classList.remove("on"); eyes.setState("idle"); }); };
-      $("fMic").onclick = (e) => { e.stopPropagation(); go("home"); };
-      $("fList").onclick = (e) => { e.stopPropagation(); go("sessions"); };
+      btn("cont", () => { trace("w", "Continua: stessa conversazione"); dettatura(); });
+      btn("nw", () => { curTitle = "Nuova conversazione"; trace("p", "nuova conversazione"); dettatura(); });
       scrollY = 0;
     }
     if (p === "sessions") {
-      $("eyes").classList.add("hide");
-      ui.innerHTML = `<div class="list" id="list">${["+ Nuova chat", ...SESS].map((s, i) => `<button data-i="${i}" class="${i === 0 ? "new" : ""}">${s}</button>`).join("")}</div>`;
-      sel = 1; paintList();
-      ui.querySelectorAll(".list button").forEach((b) => (b.onclick = (e) => { e.stopPropagation(); const i = +b.dataset.i; if (i !== sel) { sel = i; paintList(); return; } openSession(i); }));
+      showEyes(false);
+      const all = [{ title: curTitle === "Nuova conversazione" ? null : curTitle, ago: "ora", cur: true }, ...sessions.filter((s) => s.title !== curTitle)].filter((s) => s.title);
+      ui.innerHTML = `<div class="col" id="read"><div class="in" id="txt"><div class="hd">Conversazioni</div><div class="rows">
+        <button class="zb newb" id="nwc">+ Nuova chat</button>
+        ${all.map((s, i) => `<div class="rw"><button class="zb o${s.cur ? " cur" : ""}" data-i="${i}">${esc(short(s.title, 18))}<small>${s.cur ? "in corso · " : ""}${s.ago}</small></button><button class="zb f${pinned === s.title ? " on" : ""}" data-f="${i}">${pinned === s.title ? "Fissata" : "Fissa"}</button></div>`).join("")}
+      </div></div></div>`;
+      btn("nwc", () => { curTitle = "Nuova conversazione"; dettatura(); });
+      ui.querySelectorAll("[data-i]").forEach((b) => (b.onclick = (e) => { e.stopPropagation(); const s = all[+b.dataset.i]; if (curTitle !== s.title && curTitle !== "Nuova conversazione") sessions.unshift({ title: curTitle, ago: "ora" }); curTitle = s.title; sessions = sessions.filter((x) => x.title !== s.title); trace("p", `continuo «${s.title}»`); dettatura(); }));
+      ui.querySelectorAll("[data-f]").forEach((b) => (b.onclick = (e) => { e.stopPropagation(); const s = all[+b.dataset.f]; pinned = pinned === s.title ? null : s.title; trace("p", pinned ? `fissata «${s.title}» nella prima schermata` : "tolta la chat fissata"); const y = scrollY; go("sessions"); scrollY = y; $("txt").style.transform = `translateY(${-scrollY}px)`; }));
+      scrollY = 0;
     }
-    if (p === "error") { eyesAt(false, "sleep"); ui.innerHTML = `<div class="err"><b>Non trovo Hermes</b><span>Il telefono è vicino? Il tunnel di casa è acceso?</span></div>`; }
-    if (p === "notif") {
-      eyesAt(false); $("eyes").classList.add("hide");
-      ui.innerHTML = `<div class="notif"><div class="app"><i></i>Iris Dial · ora</div><b>Iris ha risposto</b><span>${cur.title}: ${pendingNotif.replace(/\*\*/g, "")}</span><button class="pill go" id="readN">Leggi</button></div>`;
-      $("readN").onclick = (e) => { e.stopPropagation(); trace("w", "notifica toccata: si apre la risposta"); pendingNotif = null; go("reply", { text: md(cur.answer) }); };
-    }
+    if (p === "error") { showEyes(true, "sleep"); ui.innerHTML = `<div class="ttl">${esc(curTitle)}</div><div class="st" style="color:#f87171">Prova: la rete non risponde. Il tunnel di casa è acceso?</div><button class="zb big" id="ask">Chiedi a Iris</button>`; btn("ask", dettatura); }
   }
-  let sel = 1, scrollY = 0;
-  function paintList() {
-    const bs = [...ui.querySelectorAll(".list button")];
-    bs.forEach((b, i) => { const d = Math.abs(i - sel); b.classList.toggle("on", d === 0); b.classList.toggle("far", d === 2); b.classList.toggle("gone", d > 2); });
-  }
-  function openSession(i) {
-    if (i === 0) { trace("p", "Hermes: nuova sessione"); go("home"); return; }
-    const q = QS.find((x) => x.title === SESS[i - 1]) || { q: "…", tool: "", title: SESS[i - 1], a: "Qui c'è l'ultima risposta di questa sessione. Gira la corona per leggere tutta la conversazione." };
-    cur = Object.assign({}, q, { answer: q.a }); trace("p", `Hermes: carico la sessione «${SESS[i - 1]}»`);
-    go("reply", { text: md(cur.answer) });
-  }
+  function dettatura() { clear(); trace("w", "si apre la tastiera di sistema con il microfono"); go("kb"); }
 
   /* ---------- una domanda ---------- */
   function ask() {
     clear();
-    trace("w", "testo confermato");
-    if (tunnelOff) { trace("p", "tunnel di casa: nessuna risposta"); go("error"); buzz(); return; }
-    trace("p", "Hermes ← nuova run (chiave Hermes + service token Cloudflare)");
+    if (tunnelOff) { trace("p", "il tunnel di casa non risponde"); go("error"); buzz(); return; }
+    trace("p", "Hermes ← nuova run (service token Cloudflare + chiave di Hermes)");
     trace("w", "schermo: resta acceso finché non arriva la risposta");
+    if (curTitle === "Nuova conversazione") curTitle = cur.title;
     go("think");
-    later(1600, () => { trace("h", `Hermes usa ${cur.tool}`); if (!wristDown) go("tool"); });
-    later(3300, () => {
-      if (cur.ask) {
-        trace("h", "Hermes chiede il permesso"); trace("p", "→ orologio: richiesta di via libera");
-        if (wristDown) { wake(true); } go("approval"); buzz(); return;
-      }
-      reply(cur.a);
-    });
+    later(1600, () => { trace("p", `ogni 2 s: stato della run · strumento in uso: ${cur.tool}`); trace("w", "occhi: strumento"); go("tool"); });
+    later(3400, () => { trace("h", "Hermes ha finito"); trace("p", "→ orologio: la risposta"); reply(cur.a); });
   }
   function reply(text) {
-    cur.answer = text;
-    trace("h", "Hermes risponde"); trace("p", "→ orologio: testo, a pezzi mentre arriva");
-    if (wristDown) {
-      later(1500, () => { trace("w", "app chiusa: il servizio in sottofondo manda la notifica"); pendingNotif = text; buzz(); wake(false); go("notif"); });
-      return;
-    }
-    const plain = md(text); let n = 0;
-    go("reply", { text: "", streaming: true });
-    const step = () => {
-      if (page !== "reply") return;
-      n = Math.min(plain.length, n + 3);
-      let s = plain.slice(0, n); if (/<[^>]*$/.test(s)) s = s.replace(/<[^>]*$/, "");
-      $("ans").innerHTML = s + (n < plain.length ? '<span class="caret"></span>' : "");
-      if (n < plain.length) later(reduce ? 0 : 28, step);
-      else { eyes.setState("done"); later(1600, () => page === "reply" && eyes.setState("idle")); trace("w", "risposta completa · schermo di nuovo normale"); }
-    };
-    step();
+    cur.answer = text; last = cur;
+    buzz();
+    go("home", { state: "done", msg: "Risposta pronta", color: "#5eead4" });
+    later(900, () => go("reply", { text: md(text), q: cur }));
   }
 
-  /* ---------- polso, notifiche, tunnel ---------- */
-  function wake(silent) {
-    if (!wristDown) return;
-    wristDown = false; $("wrist").textContent = "Abbassa il polso"; $("wrist").classList.remove("on");
-    $("screen").classList.remove("off"); $("watch").classList.remove("isoff");
-    if (!silent) trace("w", "polso alzato");
-  }
-  $("wrist").onclick = () => {
-    if (wristDown) { wake(); if (page === "think" || page === "tool") trace("w", "riaperta Iris Dial dove eri (setWakeUpRelaunch)"); return; }
-    wristDown = true; $("wrist").textContent = "Alza il polso"; $("wrist").classList.add("on");
-    $("screen").classList.add("off"); $("watch").classList.add("isoff");
-    trace("w", page === "think" || page === "tool" ? "polso giù: schermo spento, la domanda continua in sottofondo" : "polso giù: schermo spento");
-  };
-  $("prev").onclick = () => { preview = !preview; $("prev").textContent = "Anteprima: " + (preview ? "accesa" : "spenta"); $("prev").classList.toggle("on", preview); };
-  $("tunnel").onclick = () => { tunnelOff = !tunnelOff; $("tunnel").textContent = tunnelOff ? "Riaccendi il tunnel" : "Spegni il tunnel di casa"; $("tunnel").classList.toggle("on", tunnelOff); if (!tunnelOff && page === "error") go("home"); };
   // scelta della prossima domanda
-  QS.forEach((q, i) => { const b = document.createElement("button"); b.className = "btn" + (i === 0 ? " on" : ""); b.textContent = q.label; b.onclick = () => { qi = i; [...$("qs").children].forEach((c, j) => c.classList.toggle("on", j === i)); if (page !== "listen") { clear(); go("home"); } }; $("qs").appendChild(b); });
+  QS.forEach((q, i) => { const b = document.createElement("button"); b.className = "btn" + (i === 0 ? " on" : ""); b.textContent = q.label; b.onclick = () => { qi = i; [...$("qs").children].forEach((c, j) => c.classList.toggle("on", j === i)); }; $("qs").appendChild(b); });
+  $("tunnel").onclick = () => { tunnelOff = !tunnelOff; $("tunnel").textContent = tunnelOff ? "Riaccendi il tunnel" : "Spegni il tunnel di casa"; $("tunnel").classList.toggle("on", tunnelOff); if (!tunnelOff && page === "error") go("home"); };
 
-  /* ---------- gesti sullo schermo ---------- */
-  let hold = null, sx = null, lvRaf = 0;
-  $("screen").addEventListener("pointerdown", (e) => {
-    if (wristDown) return;
-    sx = e.clientX;
-    if (page !== "home") return;
-    hold = setTimeout(() => { hold = "on"; go("listen"); trace("w", "registro la voce (Opus)"); meter(); }, 250);
-  });
-  addEventListener("pointerup", (e) => {
-    if (hold === "on") {
-      hold = null; cancelAnimationFrame(lvRaf); eyes.setLevel(null);
-      cur = Object.assign({}, QS[qi]);
-      trace("w", "→ telefono: audio, 9 KB via Bluetooth");
-      trace("p", "Whisper ← audio · trascrizione pronta");
-      if (preview) go("preview"); else ask();
-      return;
-    }
-    if (hold) { clearTimeout(hold); hold = null; if (page === "home") { const h = $("hint"); h && h.classList.add("flash"); setTimeout(() => h && h.classList.remove("flash"), 600); } }
-    // scorrimento verso destra partito dallo schermo = indietro (come in Zepp OS)
-    if (sx != null && e.clientX - sx > 70 && !["home", "listen"].includes(page)) back();
-    sx = null;
-  });
-  function meter() {
-    let v = 0; const lv = $("lv");
-    const tick = () => { const t = performance.now(); v = v * 0.7 + 0.3 * Math.max(0, Math.sin(t / 170) * Math.sin(t / 530) + Math.random() * 0.35); eyes.setLevel(Math.min(1, v)); lv.setAttribute("stroke-dasharray", `${(v * 300).toFixed(1)} 300`); lvRaf = requestAnimationFrame(tick); };
-    tick();
-  }
-  function back() { if (["sessions", "reply", "error", "notif", "preview"].includes(page)) { clear(); go("home"); } }
+  /* ---------- gesti, corona, pulsanti ---------- */
+  let sx = null;
+  $("screen").addEventListener("pointerdown", (e) => { sx = e.clientX; });
+  addEventListener("pointerup", (e) => { if (sx != null && e.clientX - sx > 70 && page !== "home") back(); sx = null; });
+  function back() { clear(); go("home"); }
   function crown(dir) {
-    if (page === "reply") { const t = $("txt"), r = $("read"); const max = Math.max(0, t.scrollHeight - r.clientHeight); scrollY = Math.min(max, Math.max(0, scrollY + dir * 42)); t.style.transform = `translateY(${-scrollY}px)`; }
-    if (page === "sessions") { sel = Math.min(SESS.length, Math.max(0, sel + dir)); paintList(); }
+    if (page !== "reply" && page !== "sessions") return;
+    const t = $("txt"), r = $("read"); const max = Math.max(0, t.scrollHeight - r.clientHeight);
+    scrollY = Math.min(max, Math.max(0, scrollY + dir * 42)); t.style.transform = `translateY(${-scrollY}px)`;
   }
   $("watch").addEventListener("wheel", (e) => { e.preventDefault(); crown(e.deltaY > 0 ? 1 : -1); }, { passive: false });
-  $("crown").onclick = () => { if (wristDown) return wake(); clear(); go("home"); };
-  $("btn2").onclick = () => { if (wristDown) return wake(); clear(); go("sessions"); };
+  $("crown").onclick = () => back();
+  $("btn2").onclick = () => { clear(); go("sessions"); };
   addEventListener("keydown", (e) => {
-    if (e.target.closest && e.target.closest("button") && e.key === "Enter") return;
     if (e.key === "ArrowDown") { e.preventDefault(); crown(1); }
     if (e.key === "ArrowUp") { e.preventDefault(); crown(-1); }
-    if (e.key === "Escape") { clear(); go("home"); }
+    if (e.key === "Escape") back();
     if (e.key === "s" || e.key === "S") { clear(); go("sessions"); }
-    if (e.key === "Enter" && page === "sessions") openSession(sel);
   });
 
   // lunetta
   let s = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">';
   for (let i = 0; i < 60; i++) { const a = i * 6 * Math.PI / 180, big = i % 5 === 0, r1 = 49.2, r2 = big ? 46.6 : 47.8; s += `<line x1="${50 + Math.sin(a) * r1}" y1="${50 - Math.cos(a) * r1}" x2="${50 + Math.sin(a) * r2}" y2="${50 - Math.cos(a) * r2}" stroke="${big ? "#8a8f9c" : "#4a4e59"}" stroke-width="${big ? 0.7 : 0.35}"/>`; }
   $("ticks").innerHTML = s + "</svg>";
-  setInterval(() => { const t = ui.querySelector(".time"); if (t) t.textContent = now(); }, 15000);
   go("home");
 })();
 </script>
