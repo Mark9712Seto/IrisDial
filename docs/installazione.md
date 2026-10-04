@@ -1,4 +1,4 @@
-# Installare Iris Dial (versione di prova 0.1)
+# Installare Iris Dial (versione di prova 0.1.x)
 
 Prima versione per verificare che l'idea funzioni: dall'orologio fai una domanda (a voce, se l'orologio lo permette, o scritta), il telefono la porta a Hermes attraverso il tunnel e la risposta torna sul polso.
 
@@ -46,5 +46,9 @@ Apri **Iris Dial** → **Prova collegamento**, poi **Chiedi a Iris**: detta (o s
 ## Cosa non c'è ancora
 
 - **Via libera dal polso:** se Iris chiede un permesso, per ora va dato dall'isola sul PC.
-- **Risposta che arriva mentre scrive:** per ora arriva tutta insieme, alla fine.
+- **Risposta che arriva mentre scrive:** per ora arriva tutta insieme, alla fine (il telefono controlla ogni 2 secondi se Iris ha finito).
+
+## Per chi sviluppa
+
+`node tools/prova-hermes.mjs <indirizzo> [chiave] ["domanda"]` prova la parte telefono contro un Hermes (anche quello finto di Iris Notch, `tools/mock_hermes.py`), senza orologio né app Zepp.
 - **Notifica a schermo spento** e **sessioni**: nelle prossime versioni.

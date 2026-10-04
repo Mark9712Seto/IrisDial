@@ -4,7 +4,7 @@
     "appId": 1098714,
     "appName": "Iris Dial",
     "appType": "app",
-    "version": { "code": 1, "name": "0.1.0" },
+    "version": { "code": 2, "name": "0.1.1" },
     "icon": "icon.png",
     "vender": "Variety Project",
     "description": "Iris al polso: chat con Hermes Agent"
