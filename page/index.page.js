@@ -1,7 +1,8 @@
-// Pagina principale: gli occhi, cosa sta facendo Iris e tre tasti:
-//   Chiedi a Iris  → chat nuova, con la tastiera di sistema (dettatura o lettere)
-//   Cronologia     → le ultime conversazioni, per continuarne una
-//   chat fissata   → la conversazione fissata dalla cronologia, per riprenderla al volo
+// Pagina principale: gli occhi e, sotto, tre tasti:
+//   Chiedi a Iris        → chat nuova, con la tastiera di sistema (dettatura o lettere)
+//   chat fissata         → la conversazione fissata dalla cronologia, per riprenderla al volo
+//   tondo a destra       → la cronologia delle conversazioni (icona orologio con freccia)
+// La riga di testo sotto gli occhi compare solo mentre Iris lavora (pensa, strumento) o per un errore.
 // Per continuare la chat appena fatta c'è "Continua" in fondo alla risposta.
 import * as hmUI from '@zos/ui'
 import { px } from '@zos/utils'
@@ -25,26 +26,26 @@ Page(
 
     build() {
       setWakeUpRelaunch({ relaunch: true }) // a schermo riacceso si torna qui, non sul quadrante
-      this.state.occhi = creaOcchi({ cx: C, cy: px(132), scala: 0.9 })
+      this.state.occhi = creaOcchi({ cx: C, cy: px(150), scala: 0.95 })
       this.state.testo = hmUI.createWidget(hmUI.widget.TEXT, {
-        x: px(60), y: px(198), w: px(360), h: px(64),
-        text: 'Tocca per chiedere', text_size: px(26), color: 0x8e95ad,
+        x: px(60), y: px(214), w: px(360), h: px(58),
+        text: '', text_size: px(25), color: 0x8e95ad,
         align_h: hmUI.align.CENTER_H, align_v: hmUI.align.CENTER_V, text_style: hmUI.text_style.WRAP,
       })
       hmUI.createWidget(hmUI.widget.BUTTON, {
-        x: px(100), y: px(272), w: px(280), h: px(80), radius: px(40),
-        normal_color: 0x7cc4ff, press_color: 0x5aa6e6, color: 0x04121f, text_size: px(30),
+        x: px(120), y: px(282), w: px(240), h: px(70), radius: px(35),
+        normal_color: 0x7cc4ff, press_color: 0x5aa6e6, color: 0x04121f, text_size: px(28),
         text: 'Chiedi a Iris', click_func: () => this.nuovaChat(),
       })
-      hmUI.createWidget(hmUI.widget.BUTTON, {
-        x: px(84), y: px(366), w: px(152), h: px(58), radius: px(29),
-        normal_color: 0x141824, press_color: 0x1f2433, color: 0xaab0c4, text_size: px(22),
-        text: 'Cronologia', click_func: () => !this.state.busy && push({ url: 'page/sessioni.page' }),
-      })
       this.state.fissa = hmUI.createWidget(hmUI.widget.BUTTON, {
-        x: px(244), y: px(366), w: px(152), h: px(58), radius: px(29),
-        normal_color: 0x13202c, press_color: 0x1b3550, color: 0x9fd2ff, text_size: px(20),
-        text: 'Fissata', click_func: () => this.tastoFissato(),
+        x: px(108), y: px(368), w: px(196), h: px(58), radius: px(29),
+        normal_color: 0x13202c, press_color: 0x1b3550, color: 0x9fd2ff, text_size: px(21),
+        text: 'Chat fissata', click_func: () => this.tastoFissato(),
+      })
+      hmUI.createWidget(hmUI.widget.BUTTON, {
+        x: px(314), y: px(368), w: px(58), h: px(58),
+        normal_src: 'image/cronologia.png', press_src: 'image/cronologia-premuto.png',
+        click_func: () => !this.state.busy && push({ url: 'page/sessioni.page' }),
       })
       this.aggiornaTitolo()
       if (this.state.apri) setTimeout(() => this.tastiera(), 300)
@@ -63,8 +64,8 @@ Page(
         .then((c) => {
           if (!this.state.fissa) return
           this.state.pin = (c && c.pinned) || null
-          const t = this.state.pin ? this.state.pin.title : 'Fissata'
-          this.state.fissa.setProperty(hmUI.prop.MORE, { text: t.length > 12 ? t.slice(0, 11) + '…' : t })
+          const t = this.state.pin ? this.state.pin.title : 'Chat fissata'
+          this.state.fissa.setProperty(hmUI.prop.MORE, { text: t.length > 15 ? t.slice(0, 14) + '…' : t })
         })
         .catch(() => {})
     },
@@ -79,7 +80,7 @@ Page(
     tastoFissato() {
       if (this.state.busy) return
       const p = this.state.pin
-      if (!p) return this.scrivi('Nessuna chat fissata: scegline una in Cronologia → Fissa')
+      if (!p) { this.scrivi('Nessuna chat fissata: scegline una dalla cronologia'); setTimeout(() => !this.state.busy && this.scrivi(''), 3500); return }
       this.request({ method: 'use', params: { id: p.id } }).finally(() => this.tastiera())
     },
 
@@ -128,7 +129,7 @@ Page(
           dati().last = ultima
           setTimeout(() => {
             push({ url: 'page/risposta.page', params: JSON.stringify(ultima) })
-            this.state.occhi.stato('riposo'); this.scrivi('Tocca per chiedere')
+            this.state.occhi.stato('riposo'); this.scrivi('')
           }, 900)
         })
         .catch(() => { this.fine(); this.errore('Il telefono non risponde. L\'app Zepp è aperta e vicina?') })

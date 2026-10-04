@@ -103,14 +103,15 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
 .toast{position:absolute;bottom:22cqw;left:50%;transform:translateX(-50%);padding:2.4cqw 4.6cqw;border-radius:99cqw;background:#13202c;color:#9fd2ff;font:500 4.2cqw/1 var(--body);white-space:nowrap}
 @keyframes rise{from{transform:translateY(8cqw);opacity:0}}
 /* schermate della 0.1.2 (coordinate dell'app vera: 480 px = 100cqw) */
-.eyes.mid{top:27.5%;width:135cqw}
+.eyes.mid{top:31.25%;width:142cqw}
 .ttl{position:absolute;top:8.3cqw;left:22cqw;right:22cqw;height:7.5cqw;display:flex;align-items:center;justify-content:center;font:500 4.4cqw/1 var(--body);color:#7d849c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.st{position:absolute;top:41.2cqw;left:12cqw;right:12cqw;height:13.3cqw;display:flex;align-items:center;justify-content:center;text-align:center;font:500 5.4cqw/1.25 var(--body);color:#8e95ad}
+.st{position:absolute;top:44.6cqw;left:12cqw;right:12cqw;height:12.1cqw;display:flex;align-items:center;justify-content:center;text-align:center;font:500 5.4cqw/1.25 var(--body);color:#8e95ad}
 .zb{position:absolute;border:0;border-radius:99cqw;cursor:pointer;font:600 4.6cqw/1.1 var(--body);background:#141824;color:#aab0c4;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 2cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .zb:active{filter:brightness(1.3)}
-.zb.big{left:20.8cqw;top:56.7cqw;width:58.3cqw;height:16.7cqw;background:var(--eye);color:#04121f;font-size:6.2cqw}
-.zb.l{left:17.5cqw;top:76.2cqw;width:31.7cqw;height:12.1cqw}
-.zb.r{left:50.8cqw;top:76.2cqw;width:31.7cqw;height:12.1cqw;background:#13202c;color:#9fd2ff;font-size:4.2cqw}
+.zb.big{left:25cqw;top:58.75cqw;width:50cqw;height:14.6cqw;background:var(--eye);color:#04121f;font-size:5.8cqw}
+.zb.fis{left:22.5cqw;top:76.7cqw;width:40.8cqw;height:12.1cqw;background:#13202c;color:#9fd2ff;font-size:4.4cqw}
+.zb.cro{left:65.4cqw;top:76.7cqw;width:12.1cqw;height:12.1cqw;padding:0;background:#141824;color:#aab0c4}
+.zb.cro svg{width:7cqw;height:7cqw}
 .kb{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4cqw}
 .kb .micb{width:24cqw;height:24cqw;border-radius:50%;background:#13263a;color:var(--eye);display:grid;place-items:center;animation:pulse 1.2s ease-in-out infinite}
 .kb .micb svg{width:11cqw;height:11cqw}
@@ -192,7 +193,7 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
         <ol class="steps">
           <li><b>Chiedi a Iris</b> apre una chat nuova con la dettatura dell'orologio, poi ✓. Gli occhi mostrano cosa fa Iris; la risposta si legge con la corona, con gli occhi piccoli in alto.</li>
           <li><b>Continua</b> (in fondo alla risposta) riapre la dettatura nella stessa conversazione; <b>Nuova chat</b> ne apre una nuova.</li>
-          <li><b>Cronologia:</b> tocca una conversazione per continuarla, oppure <b>Fissa</b> per metterla nel tasto accanto (una sola fissata).</li>
+          <li><b>Cronologia</b> (il tasto tondo con l'orologio, accanto alla chat fissata): tocca una conversazione per continuarla, oppure <b>Fissa</b> per metterla nel tasto "Chat fissata" (una sola).</li>
           <li>Scegli qui sotto la prossima domanda da "dettare".</li>
         </ol>
         <div class="btns" id="qs"></div>
@@ -979,6 +980,7 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
     vol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
     mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/></svg>',
     list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h9"/></svg>',
+    hist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3 3.5v4.5h4.5"/><path d="M12 7.5V12l3 2"/></svg>',
   };
   // domande d'esempio (risposte inventate)
   const QS = [
@@ -1019,13 +1021,14 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
     if (sideEyes && p !== "reply") sideEyes = null;
     if (p === "home") {
       showEyes(true, data && data.state || "idle");
-      ui.innerHTML = `<div class="st" id="st">${data && data.msg || "Tocca per chiedere"}</div>
-        <button class="zb big" id="ask">Chiedi a Iris</button><button class="zb l" id="hist">Cronologia</button>
-        <button class="zb r" id="pin">${esc(short(pinned ? pinned : "Fissata", 12))}</button>`;
+      ui.innerHTML = `<div class="st" id="st">${data && data.msg || ""}</div>
+        <button class="zb big" id="ask">Chiedi a Iris</button>
+        <button class="zb fis" id="pin">${esc(short(pinned ? pinned : "Chat fissata", 15))}</button>
+        <button class="zb cro" id="hist" aria-label="Cronologia">${I.hist}</button>`;
       if (data && data.color) $("st").style.color = data.color;
       btn("ask", () => { curTitle = "Nuova conversazione"; trace("p", "chat nuova (si crea su Hermes alla prima domanda)"); dettatura(); });
       btn("hist", () => go("sessions"));
-      btn("pin", () => { if (pinned) { curTitle = pinned; trace("p", `riprendo la chat fissata «${pinned}»`); dettatura(); } else { $("st").textContent = "Nessuna chat fissata: scegline una in Cronologia → Fissa"; } });
+      btn("pin", () => { if (pinned) { curTitle = pinned; trace("p", `riprendo la chat fissata «${pinned}»`); dettatura(); } else { $("st").textContent = "Nessuna chat fissata: scegline una dalla cronologia"; later(3500, () => $("st") && ($("st").textContent = "")); } });
     }
     if (p === "kb") {
       showEyes(false);
