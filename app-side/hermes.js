@@ -4,7 +4,7 @@
 // Niente flusso di eventi (SSE): l'app Zepp non regge una risposta che resta aperta e la chiude con un errore di rete.
 // Si avvia la run e poi, ogni 2 secondi, si leggono i messaggi della sessione finché arriva la risposta di Iris.
 
-export const K = { url: 'tunnel_url', id: 'cf_client_id', secret: 'cf_client_secret', key: 'hermes_key', session: 'session_id' }
+export const K = { url: 'tunnel_url', id: 'cf_client_id', secret: 'cf_client_secret', key: 'hermes_key', session: 'session_id', pin: 'pinned_session' }
 
 const pausa = (ms) => new Promise((r) => setTimeout(r, ms))
 
@@ -66,7 +66,15 @@ export function createHermes({ fetch, get, set, intervallo = 2000, attesaMax = 1
     return id
   }
 
-  async function chiedi(text) {
+  // nome leggibile di uno strumento: "mcp__calendari_casa__calendario_leggi" → "calendario leggi"
+  function nomeStrumento(n) {
+    const parti = String(n || '').replace(/^mcp__/, '').split('__')
+    return parti[parti.length - 1].replace(/[_-]+/g, ' ').trim()
+  }
+
+  // onStato({ stato, tool }) avvisa l'orologio mentre Iris lavora (pensa / usa uno strumento)
+  async function chiedi(text, onStato) {
+    const avvisa = (s) => { try { onStato && onStato(s) } catch (e) {} }
     let sid = await sessione()
     let prima
     try { prima = (await messaggi(sid)).length } catch (e) {
@@ -75,22 +83,89 @@ export function createHermes({ fetch, get, set, intervallo = 2000, attesaMax = 1
       set(K.session, ''); sid = await sessione(); prima = 0
     }
     const run = await http('Invio la domanda', 'POST', '/v1/runs', { input: text, session_id: sid })
-    if (!run || !run.run_id) throw new Error('Invio la domanda: Hermes non ha avviato la richiesta')
+    const rid = run && run.run_id
+    if (!rid) throw new Error('Invio la domanda: Hermes non ha avviato la richiesta')
+    avvisa({ stato: 'pensa' })
     const fine = Date.now() + attesaMax
+    let conStato = true, ultimoStrumento = ''
+    const tools = []
     while (Date.now() < fine) {
       await pausa(intervallo)
+      // 1. lo stato della run (GET /v1/runs/{id}): dice quando ha finito e con che testo
+      if (conStato) {
+        let r = null
+        try { r = await http('Leggo la risposta', 'GET', '/v1/runs/' + encodeURIComponent(rid), null, 15000) } catch (e) {
+          if (/non conosce/.test(e.message)) conStato = false // Hermes vecchio: si guardano solo i messaggi
+          else throw e
+        }
+        if (r && r.status === 'completed' && r.output) return { text: String(r.output).trim(), tools }
+        if (r && (r.status === 'failed' || r.status === 'interrupted')) throw new Error(r.error || 'La richiesta non è andata a buon fine')
+        if (r && r.status === 'cancelled') throw new Error('La richiesta è stata fermata')
+      }
+      // 2. i messaggi della sessione: quale strumento sta usando e, con Hermes vecchi, la risposta
       const m = (await messaggi(sid)).slice(prima)
-      const tools = []
-      m.forEach((x) => { const t = x.tool_name || x.name; if (x.role === 'tool' && t && tools.indexOf(t) < 0) tools.push(t) })
+      m.forEach((x) => {
+        const t = x.tool_name || x.name
+        if (x.role === 'tool' && t && tools.indexOf(nomeStrumento(t)) < 0) tools.push(nomeStrumento(t))
+        ;(x.tool_calls || []).forEach((c) => { const n = nomeStrumento((c.function && c.function.name) || c.name); if (n && n !== ultimoStrumento) { ultimoStrumento = n; avvisa({ stato: 'strumento', tool: n }) } })
+      })
       const ultimo = m[m.length - 1]
       const chiamaStrumenti = ultimo && ultimo.tool_calls && ultimo.tool_calls.length
-      if (ultimo && ultimo.role === 'assistant' && ultimo.content && !chiamaStrumenti) {
+      if (!conStato && ultimo && ultimo.role === 'assistant' && ultimo.content && !chiamaStrumenti) {
         const testo = typeof ultimo.content === 'string' ? ultimo.content : JSON.stringify(ultimo.content)
         return { text: testo.trim(), tools }
       }
+      if (ultimo && ultimo.role === 'tool') avvisa({ stato: 'pensa' })
     }
     throw new Error('Iris ci sta mettendo troppo, o aspetta un permesso: guarda sull\'isola del PC')
   }
+
+  function fa(ts) {
+    const d = Date.now() / 1000 - (ts || 0)
+    if (!ts) return ''
+    if (d < 3600) return Math.max(1, Math.round(d / 60)) + ' min'
+    if (d < 86400) return Math.round(d / 3600) + ' h'
+    return Math.round(d / 86400) + ' g'
+  }
+
+  // le ultime conversazioni (tutte: isola, Telegram, orologio…), la più recente prima
+  async function sessioni(n = 10) {
+    const v = await http('Carico le conversazioni', 'GET', '/api/sessions?limit=' + n)
+    const lista = (v && (v.data || v.sessions)) || (Array.isArray(v) ? v : [])
+    const cur = val(K.session), pin = fissata()
+    return lista.slice(0, n).map((s) => ({
+      id: s.id,
+      title: (s.title || s.preview || 'Senza titolo').replace(/\s+/g, ' ').slice(0, 60),
+      ago: fa(s.last_active || s.updated_at),
+      current: s.id === cur,
+      pinned: !!pin && pin.id === s.id,
+    }))
+  }
+
+  // la conversazione fissata nella prima schermata, per riprenderla al volo: { id, title } oppure null
+  function fissata() {
+    try { const v = JSON.parse(val(K.pin) || 'null'); return v && v.id ? v : null } catch (e) { return null }
+  }
+  // fissa (o toglie, se è già quella) una conversazione
+  function fissa(id, title) {
+    const p = fissata()
+    if (p && p.id === id) { set(K.pin, ''); return null }
+    const v = { id, title: String(title || 'Conversazione').slice(0, 60) }
+    set(K.pin, JSON.stringify(v))
+    return v
+  }
+
+  async function corrente() {
+    const cur = val(K.session), pin = fissata()
+    if (!cur) return { id: null, title: 'Nuova conversazione', pinned: pin }
+    try {
+      const s = (await sessioni(20)).find((x) => x.id === cur)
+      return { id: cur, title: s ? s.title : 'Conversazione', pinned: pin }
+    } catch (e) { return { id: cur, title: 'Conversazione', pinned: pin } }
+  }
+
+  const usa = (id) => set(K.session, id || '')
+  const nuova = () => set(K.session, '')
 
   async function prova() {
     await http('Prova', 'GET', '/health', null, 15000)
@@ -98,5 +173,5 @@ export function createHermes({ fetch, get, set, intervallo = 2000, attesaMax = 1
     return { ok: true, message: 'Collegata: tunnel e Hermes rispondono' }
   }
 
-  return { chiedi, prova, sessione }
+  return { chiedi, prova, sessione, sessioni, corrente, usa, nuova, fissata, fissa }
 }

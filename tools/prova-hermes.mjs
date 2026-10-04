@@ -6,8 +6,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 
 const dir = mkdtempSync(join(tmpdir(), 'irisdial-'))
-const src = readFileSync(new URL('../app-side/hermes.js', import.meta.url), 'utf8')
-writeFileSync(join(dir, 'hermes.mjs'), src)
+writeFileSync(join(dir, 'hermes.mjs'), readFileSync(new URL('../app-side/hermes.js', import.meta.url), 'utf8'))
 const { createHermes } = await import(join(dir, 'hermes.mjs'))
 
 const [url, key = '', domanda = 'Ciao Iris, come stai?'] = process.argv.slice(2)
@@ -19,8 +18,14 @@ const fetchZepp = async ({ method, url, headers, body, timeout }) => {
   return { status: r.status, body: b }
 }
 const h = createHermes({ fetch: fetchZepp, get: (k) => store[k], set: (k, v) => (store[k] = v), intervallo: 300 })
+const stati = []
 console.log('prova:', await h.prova())
 const t0 = Date.now()
-console.log('risposta:', await h.chiedi(domanda), `(${((Date.now() - t0) / 1000).toFixed(1)} s)`)
-console.log('seconda domanda nella stessa conversazione:', await h.chiedi('E adesso?'))
-console.log('sessione salvata:', store.session_id)
+console.log('risposta:', await h.chiedi(domanda, (s) => stati.push(s.stato + (s.tool ? ':' + s.tool : ''))), `(${((Date.now() - t0) / 1000).toFixed(1)} s)`, 'stati:', stati.join(' → '))
+console.log('conversazione in corso:', await h.corrente())
+console.log('seconda domanda, stessa conversazione:', (await h.chiedi('E adesso?')).text)
+console.log('elenco:', (await h.sessioni(5)).map((s) => `${s.current ? '▶ ' : ''}${s.title} (${s.ago})`).join(' | '))
+h.nuova()
+console.log('dopo "nuova chat":', await h.corrente())
+const prima = (await h.sessioni(5))[0]
+console.log('fisso:', h.fissa(prima.id, prima.title), '→ corrente:', (await h.corrente()).pinned, '→ di nuovo (toglie):', h.fissa(prima.id, prima.title))

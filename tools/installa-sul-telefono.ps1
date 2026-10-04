@@ -1,12 +1,28 @@
-# Iris Dial: installa l'app sull'orologio dal PC Windows.
+# Iris Dial: installa o AGGIORNA l'app sull'orologio dal PC Windows. Per aggiornare basta rilanciarlo.
 # Serve Node.js (https://nodejs.org, versione LTS). Lo script:
-#   1. prepara lo strumento ufficiale di Zepp (zeus) in una cartella sua, %LOCALAPPDATA%\IrisDial\zeus;
-#   2. installa le dipendenze del progetto;
+#   1. scarica da GitHub l'ultima versione di Iris Dial in %LOCALAPPDATA%\IrisDial\codice
+#      (con -QuestaCartella usa invece il codice della cartella in cui si trova, utile per chi lo modifica);
+#   2. prepara lo strumento ufficiale di Zepp (zeus) in una cartella sua, %LOCALAPPDATA%\IrisDial\zeus;
 #   3. ti fa accedere al tuo account Zepp (si apre il browser, solo la prima volta);
 #   4. compila e mostra un QR: inquadralo con l'app Zepp → Profilo → Impostazioni → Modalità sviluppatore → Scansiona.
 # Uso: tasto destro su questo file → "Esegui con PowerShell", oppure da PowerShell:  .\tools\installa-sul-telefono.ps1
+param([switch]$QuestaCartella)
 $ErrorActionPreference = "Stop"
 $progetto = Split-Path -Parent $PSScriptRoot
+if (-not $QuestaCartella) {
+  Write-Host "Scarico l'ultima versione di Iris Dial da GitHub…" -ForegroundColor Cyan
+  $base = Join-Path $env:LOCALAPPDATA "IrisDial"
+  New-Item -ItemType Directory -Force -Path $base | Out-Null
+  $zip = Join-Path $base "codice.zip"
+  Invoke-WebRequest -UseBasicParsing "https://github.com/Mark9712Seto/IrisDial/archive/refs/heads/main.zip" -OutFile $zip
+  $dest = Join-Path $base "codice"
+  if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
+  Expand-Archive -Path $zip -DestinationPath $dest
+  Remove-Item $zip
+  $progetto = (Get-ChildItem $dest -Directory | Select-Object -First 1).FullName
+  $versione = (Get-Content (Join-Path $progetto "app.json") -Raw | ConvertFrom-Json).app.version.name
+  Write-Host "Versione scaricata: $versione" -ForegroundColor Green
+}
 $zeusDir = Join-Path $env:LOCALAPPDATA "IrisDial\zeus"
 
 if (-not (Get-Command node -ErrorAction SilentlyContinue)) {

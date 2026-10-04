@@ -1,6 +1,6 @@
 {
   "name": "iris-dial",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "description": "Iris al polso: chat con Hermes Agent dall'Amazfit Balance 2 (Zepp OS)",
   "license": "SEE LICENSE IN LICENSE",
