@@ -52,5 +52,5 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           V="v$(node -p "require('./app.json').app.version.name")"
-          gh release create "$V" dist/*.zab --target "$GITHUB_SHA" --title "Iris Dial $V" --notes-file docs/installazione.md --prerelease || \
+          gh release create "$V" dist/*.zab --target "$GITHUB_SHA" --title "Iris Dial $V" --notes-file docs/install.md --prerelease || \
           gh release upload "$V" dist/*.zab --clobber

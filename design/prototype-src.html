@@ -1,11 +1,11 @@
-<title>Iris Dial, prototipo</title>
+<title>Iris Dial Prototype</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: a sinistra un Balance 2 grande e vero da usare (tieni premuto, corona, pulsante); a destra cosa provare
-   e il registro di quello che succede tra orologio, telefono e casa. Su telefono le due colonne si impilano.
-   Un solo look scuro, come lo schermo AMOLED. */
+/* Layout: on the left a large Balance 2 you can use (touch, crown, button); on the right what to try
+   and a log of what happens between watch, phone and home. On phones the two columns stack.
+   One dark look, like the AMOLED screen. */
 :root{
   --ink:#06070b; --panel:#0e1017; --raise:#151823; --line:#222637;
   --fg:#e9ebf3; --muted:#959cb3; --dim:#626984;
@@ -33,7 +33,7 @@ header{display:flex;flex-direction:column;gap:12px}
 .legend span{display:inline-flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:4px 10px}
 kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;color:var(--fg)}
 
-/* l'orologio */
+/* the watch */
 .watch{position:relative;width:min(430px,100%);aspect-ratio:1;user-select:none;-webkit-user-select:none;touch-action:none}
 .watch.buzz{animation:buzz .09s linear 6}
 @keyframes buzz{25%{transform:translateX(-3px) rotate(-.6deg)}75%{transform:translateX(3px) rotate(.6deg)}}
@@ -49,7 +49,7 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
 .offnote{position:absolute;inset:8.5%;border-radius:50%;display:grid;place-items:center;font:500 13px var(--mono);color:#3d4256;pointer-events:none;opacity:0;transition:opacity .4s}
 .watch.isoff .offnote{opacity:1}
 
-/* dentro lo schermo (100cqw = 480 px veri) */
+/* inside the screen (100cqw = 480 real px) */
 .eyes{position:absolute;left:50%;top:50%;width:150cqw;aspect-ratio:178.4/38;transform:translate(-50%,-50%);transition:top .45s cubic-bezier(.3,.8,.3,1),width .45s cubic-bezier(.3,.8,.3,1);pointer-events:none}
 .eyes.small{top:13cqw;width:80cqw}
 .eyes.hide{opacity:0}
@@ -102,7 +102,7 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
 .notif .pill{margin-top:auto;align-self:center}
 .toast{position:absolute;bottom:22cqw;left:50%;transform:translateX(-50%);padding:2.4cqw 4.6cqw;border-radius:99cqw;background:#13202c;color:#9fd2ff;font:500 4.2cqw/1 var(--body);white-space:nowrap}
 @keyframes rise{from{transform:translateY(8cqw);opacity:0}}
-/* schermate della 0.1.2 (coordinate dell'app vera: 480 px = 100cqw) */
+/* screens (real app coordinates: 480 px = 100cqw) */
 .eyes.mid{top:31.25%;width:142cqw}
 .eyes.full{top:41.7%;width:180cqw}
 .st.full{top:61.7cqw;height:16.7cqw;font-size:5.8cqw}
@@ -142,7 +142,7 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
 .col .newb{position:static;height:14.6cqw;width:100%;background:#13263a;color:var(--eye)}
 @keyframes pulse{50%{opacity:.25}}
 
-/* pannello */
+/* side panel */
 .side{display:flex;flex-direction:column;gap:18px;min-width:0}
 .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
 .card h3{display:flex;align-items:center;gap:8px}
@@ -168,52 +168,52 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
 
 <div class="wrap">
   <header>
-    <span class="eyebrow">Iris Dial · prototipo da usare</span>
-    <h1>Prova Iris sul Balance 2</h1>
-    <p class="lede">Un orologio finto ma navigabile, con le risposte inventate. Com'è la versione 0.1.2: dettatura, conversazioni con la chat fissata, occhi animati anche sulla risposta. Gira la corona con la rotellina del mouse. A destra vedi cosa passa tra orologio, telefono e casa.</p>
+    <span class="eyebrow">Iris Dial · interactive prototype</span>
+    <h1>Try Iris on the Balance 2</h1>
+    <p class="lede">A pretend watch you can actually use, with made-up answers. It works like the real app: dictation, a pinned chat, history, and animated eyes while Iris works. Turn the crown with your mouse wheel. On the right you can see what travels between watch, phone and home.</p>
   </header>
   <div class="main">
     <div class="stage">
       <div class="watch" id="watch">
         <div class="case"></div><div class="bezel"></div><div class="ticks" id="ticks"></div>
-        <button class="crown" id="crown" aria-label="Corona: premi per tornare agli occhi, gira per scorrere"></button>
-        <button class="btn2" id="btn2" aria-label="Pulsante: sessioni"></button>
+        <button class="crown" id="crown" aria-label="Crown: press to go back, turn to scroll"></button>
+        <button class="btn2" id="btn2" aria-label="Button: history"></button>
         <div class="screen" id="screen">
           <svg class="ring" id="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="47.5" fill="none" stroke="#1b2a3a" stroke-width="2"/><circle id="lv" cx="50" cy="50" r="47.5" fill="none" stroke="#7cc4ff" stroke-width="2.4" stroke-linecap="round" transform="rotate(-90 50 50)" stroke-dasharray="0 300"/></svg>
           <div class="eyes" id="eyes"></div>
           <div id="ui"></div>
         </div>
-        <div class="offnote">schermo spento</div>
+        <div class="offnote">screen off</div>
       </div>
       <div class="legend">
-        <span>tocca i pulsanti sullo schermo</span><span>rotellina o <kbd>↑</kbd><kbd>↓</kbd> = corona</span><span>clic corona o <kbd>Esc</kbd> = indietro</span><span>pulsante sotto o <kbd>S</kbd> = cronologia</span>
+        <span>tap the buttons on screen</span><span>wheel or <kbd>↑</kbd><kbd>↓</kbd> = crown</span><span>click the crown or <kbd>Esc</kbd> = back</span><span>lower button or <kbd>S</kbd> = history</span>
       </div>
     </div>
     <div class="side">
       <div class="card">
-        <h3>Cosa provare (versione 0.1.2)</h3>
+        <h3>What to try</h3>
         <ol class="steps">
-          <li><b>Chiedi a Iris</b> apre una chat nuova con la dettatura dell'orologio, poi ✓. Gli occhi mostrano cosa fa Iris; la risposta si legge con la corona, con gli occhi piccoli in alto.</li>
-          <li><b>Continua</b> (in fondo alla risposta) riapre la dettatura nella stessa conversazione; <b>Nuova chat</b> ne apre una nuova.</li>
-          <li><b>Cronologia</b> (il tasto tondo con l'orologio, accanto alla chat fissata): tocca una conversazione per continuarla, oppure <b>Fissa</b> per metterla nel tasto "Chat fissata" (una sola).</li>
-          <li>Scegli qui sotto la prossima domanda da "dettare".</li>
+          <li><b>Ask Iris</b> starts a new chat with the watch's dictation, then ✓. The eyes show what Iris is doing; read the reply with the crown, with small eyes on top.</li>
+          <li><b>Continue</b> (at the end of the reply) dictates again in the same conversation; <b>New chat</b> starts a new one.</li>
+          <li><b>History</b> (the round clock button next to the pinned chat): tap a conversation to continue it, or <b>Pin</b> to put it on the "Pinned chat" button (just one).</li>
+          <li>Pick the next question to "dictate" below.</li>
         </ol>
         <div class="btns" id="qs"></div>
         <div class="btns">
-          <button class="btn" id="tunnel">Spegni il tunnel di casa</button>
+          <button class="btn" id="tunnel">Turn off the home tunnel</button>
         </div>
       </div>
       <div class="card">
-        <h3>Cosa succede dietro</h3>
-        <ul class="log" id="log"><li class="empty">Fai una domanda: qui compaiono i passaggi.</li></ul>
+        <h3>Behind the scenes</h3>
+        <ul class="log" id="log"><li class="empty">Ask something: the steps show up here.</li></ul>
       </div>
       <div class="card">
-        <h3>Com'è nella 0.1.2</h3>
+        <h3>How it works</h3>
         <div class="facts">
-          <div class="fact"><b>Dettatura dell'orologio</b><span>La tastiera di sistema con il microfono: provata da Marco, funziona bene. A Hermes arriva il testo.</span></div>
-          <div class="fact"><b>Schermo acceso durante l'attesa</b><span>Fino alla risposta (al massimo 2 minuti); se si spegne, alzando il polso si torna dentro Iris Dial.</span></div>
-          <div class="fact"><b>Mentre aspetti: occhi a tutto schermo</b><span>Una schermata solo per l'attesa: occhi grandi e cosa sta facendo Iris. Il telefono chiede a Hermes ogni 2 secondi lo stato e gli strumenti in uso. Se ci mette più di 4-5 minuti, "Aspetta ancora" riprende la stessa risposta.</span></div>
-          <div class="fact risk"><b>Non ancora</b><span>Via libera dal polso, notifica a risposta pronta con lo schermo spento, risposta letta a voce (con Piper, Paola, di casa).</span></div>
+          <div class="fact"><b>The watch's own dictation</b><span>The system keyboard with the microphone. Hermes receives the text.</span></div>
+          <div class="fact"><b>Screen stays on while you wait</b><span>Until the reply arrives; if it goes off anyway, raising your wrist brings you back into Iris Dial.</span></div>
+          <div class="fact"><b>Full-screen eyes while you wait</b><span>Big eyes and what Iris is doing. Every 2 seconds the phone asks Hermes for the run's status and the tool in use. If it takes longer than about 5 minutes, "Keep waiting" resumes the same answer.</span></div>
+          <div class="fact risk"><b>Not yet</b><span>Approvals from the wrist, a notification when the reply is ready with the screen off, replies read aloud.</span></div>
         </div>
       </div>
     </div>
@@ -235,20 +235,20 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
     list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h9"/></svg>',
     hist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3 3.5v4.5h4.5"/><path d="M12 7.5V12l3 2"/></svg>',
   };
-  // domande d'esempio (risposte inventate)
+  // example questions (made-up answers)
   const QS = [
-    { label: "Impegni di domani", q: "Che impegni ho domani mattina?", tool: "calendario leggi", title: "Impegni di domani",
-      a: "Domani mattina hai **due impegni**: alle 9:30 il dentista in via Roma, e alle 11 la call con Luca per il preventivo. Dalle 12 sei libero, e nel pomeriggio c'è solo la palestra alle 18. Vuoi che ti ricordi del dentista un'ora prima?" },
-    { label: "Che tempo fa", q: "Che tempo fa domani?", tool: "meteo previsioni", title: "Meteo di domani",
-      a: "Domani **sereno** la mattina, nuvoloso dal pomeriggio. Massima 21°, minima 12°, vento debole. Niente pioggia prevista: puoi lasciare l'ombrello a casa." },
-    { label: "Accendi una luce", q: "Accendi la luce del soggiorno", tool: "homeassistant luci", title: "Luci del soggiorno",
-      a: "Ho acceso la **luce del soggiorno** al 70%. Fuori sta facendo buio: vuoi che accenda anche quella dell'ingresso?" },
+    { label: "Tomorrow's plans", q: "What do I have tomorrow morning?", tool: "calendar read", title: "Tomorrow's plans",
+      a: "Tomorrow morning you have **two things**: the dentist at 9:30, and a call with Luca about the quote at 11. You're free from noon, and in the afternoon there's just the gym at 6 pm. Want me to remind you about the dentist an hour before?" },
+    { label: "Weather", q: "What's the weather tomorrow?", tool: "weather forecast", title: "Tomorrow's weather",
+      a: "Tomorrow: **clear** in the morning, cloudy from the afternoon. High 21°, low 12°, light wind. No rain expected: you can leave the umbrella at home." },
+    { label: "Turn on a light", q: "Turn on the living room light", tool: "homeassistant lights", title: "Living room light",
+      a: "I turned on the **living room light** at 70%. It's getting dark outside: want me to turn on the hallway light too?" },
   ];
   let sessions = [
-    { title: "Bollette di ottobre", ago: "2 h" }, { title: "Ricetta del ragù", ago: "1 g" },
-    { title: "Regalo per la mamma", ago: "3 g" }, { title: "Clima camera", ago: "5 g" },
+    { title: "October bills", ago: "2 h" }, { title: "Lasagna recipe", ago: "1 d" },
+    { title: "Gift for mom", ago: "3 d" }, { title: "Bedroom AC", ago: "5 d" },
   ];
-  let qi = 0, tunnelOff = false, curTitle = "Nuova conversazione", pinned = null, last = null;
+  let qi = 0, tunnelOff = false, curTitle = "New conversation", pinned = null, last = null;
   let page = "home", cur = null, timers = [], scrollY = 0, sideEyes = null;
   const eyes = Iris.createEyes($("eyes"), { island: true, idleLife: true });
   const ui = $("ui"), log = $("log");
@@ -261,77 +261,77 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
   function trace(who, text) {
     const e = log.querySelector(".empty"); if (e) e.remove();
     const li = document.createElement("li"); li.className = who;
-    li.innerHTML = `<em>${{ w: "orologio", p: "telefono", h: "casa" }[who]}</em><span>${text}</span>`;
+    li.innerHTML = `<em>${{ w: "watch", p: "phone", h: "home" }[who]}</em><span>${text}</span>`;
     log.appendChild(li); log.scrollTop = log.scrollHeight;
   }
   function buzz() { const w = $("watch"); w.classList.remove("buzz"); void w.offsetWidth; if (!reduce) w.classList.add("buzz"); }
   function showEyes(on, state, full) { const e = $("eyes"); e.classList.toggle("hide", !on); e.classList.remove("small"); e.classList.toggle("mid", !full); e.classList.toggle("full", !!full); if (state) eyes.setState(state); }
   const btn = (id, f) => { const b = $(id); if (b) b.onclick = (e) => { e.stopPropagation(); f(); }; };
 
-  /* ---------- le pagine ---------- */
+  /* ---------- pages ---------- */
   function go(p, data) {
     page = p; $("ring").classList.remove("on");
     if (sideEyes && p !== "reply") sideEyes = null;
     if (p === "home") {
       showEyes(true, data && data.state || "idle");
       ui.innerHTML = `<div class="st" id="st">${data && data.msg || ""}</div>
-        <button class="zb big" id="ask">Chiedi a Iris</button>
-        <button class="zb fis" id="pin">${esc(short(pinned ? pinned : "Chat fissata", 15))}</button>
-        <button class="zb cro" id="hist" aria-label="Cronologia">${I.hist}</button>`;
+        <button class="zb big" id="ask">Ask Iris</button>
+        <button class="zb fis" id="pin">${esc(short(pinned ? pinned : "Pinned chat", 15))}</button>
+        <button class="zb cro" id="hist" aria-label="History">${I.hist}</button>`;
       if (data && data.color) $("st").style.color = data.color;
-      btn("ask", () => { curTitle = "Nuova conversazione"; trace("p", "chat nuova (si crea su Hermes alla prima domanda)"); dettatura(); });
+      btn("ask", () => { curTitle = "New conversation"; trace("p", "new chat (created on Hermes with the first question)"); dettatura(); });
       btn("hist", () => go("sessions"));
-      btn("pin", () => { if (pinned) { curTitle = pinned; trace("p", `riprendo la chat fissata «${pinned}»`); dettatura(); } else { $("st").textContent = "Nessuna chat fissata: scegline una dalla cronologia"; later(3500, () => $("st") && ($("st").textContent = "")); } });
+      btn("pin", () => { if (pinned) { curTitle = pinned; trace("p", `resuming the pinned chat “${pinned}”`); dettatura(); } else { $("st").textContent = "No pinned chat: pick one from the history"; later(3500, () => $("st") && ($("st").textContent = "")); } });
     }
     if (p === "kb") {
       showEyes(false);
-      ui.innerHTML = `<div class="kb"><div class="micb">${I.mic}</div><div class="said" id="said"></div><div class="hintk" id="hk">Parla ora…</div><button class="okk" id="okk" aria-label="Conferma" style="visibility:hidden">${I.ok}</button></div>`;
+      ui.innerHTML = `<div class="kb"><div class="micb">${I.mic}</div><div class="said" id="said"></div><div class="hintk" id="hk">Speak now…</div><button class="okk" id="okk" aria-label="Confirm" style="visibility:hidden">${I.ok}</button></div>`;
       const q = QS[qi].q; let n = 0;
-      later(900, function type() { if (page !== "kb") return; n = Math.min(q.length, n + 2); $("said").textContent = q.slice(0, n); if (n < q.length) later(45, type); else { $("hk").textContent = "Tocca ✓ per inviare"; $("okk").style.visibility = "visible"; } });
-      btn("okk", () => { cur = Object.assign({}, QS[qi]); trace("w", `dettatura: «${cur.q}»`); ask(); });
+      later(900, function type() { if (page !== "kb") return; n = Math.min(q.length, n + 2); $("said").textContent = q.slice(0, n); if (n < q.length) later(45, type); else { $("hk").textContent = "Tap ✓ to send"; $("okk").style.visibility = "visible"; } });
+      btn("okk", () => { cur = Object.assign({}, QS[qi]); trace("w", `dictation: “${cur.q}”`); ask(); });
     }
-    if (p === "think") { showEyes(true, "thinking", true); ui.innerHTML = `<div class="st full" style="color:#a78bfa">Sto pensando…</div>`; }
-    if (p === "tool") { showEyes(true, "tool", true); ui.innerHTML = `<div class="st full" style="color:#f59e0b">Uso: ${esc(cur.tool)}</div>`; }
-    if (p === "ready") { showEyes(true, "done", true); ui.innerHTML = `<div class="st full" style="color:#5eead4">Risposta pronta</div>`; }
+    if (p === "think") { showEyes(true, "thinking", true); ui.innerHTML = `<div class="st full" style="color:#a78bfa">Thinking…</div>`; }
+    if (p === "tool") { showEyes(true, "tool", true); ui.innerHTML = `<div class="st full" style="color:#f59e0b">Using: ${esc(cur.tool)}</div>`; }
+    if (p === "ready") { showEyes(true, "done", true); ui.innerHTML = `<div class="st full" style="color:#5eead4">Reply ready</div>`; }
     if (p === "reply") {
       showEyes(false);
       const q = (data && data.q) || cur;
       ui.innerHTML = `<div class="col" id="read"><div class="in" id="txt"><div class="ey"><div id="sey"></div></div>
-        <div class="q">«${esc(q.q)}»</div><div class="tl">${esc(q.tool)}</div><div class="a" id="ans"></div>
-        <div class="btns"><button class="zb big" id="cont" style="width:50cqw;height:14cqw">Continua</button><button class="zb" id="nw" style="width:42cqw;height:11.6cqw">Nuova chat</button></div></div></div>`;
+        <div class="q">“${esc(q.q)}”</div><div class="tl">${esc(q.tool)}</div><div class="a" id="ans"></div>
+        <div class="btns"><button class="zb big" id="cont" style="width:50cqw;height:14cqw">Continue</button><button class="zb" id="nw" style="width:42cqw;height:11.6cqw">New chat</button></div></div></div>`;
       sideEyes = Iris.createEyes($("sey"), { island: true, idleLife: true });
       sideEyes.setState(data && data.streaming ? "replying" : "done"); later(2400, () => sideEyes && sideEyes.setState("idle"));
       $("ans").innerHTML = data && data.text != null ? data.text : "";
-      btn("cont", () => { trace("w", "Continua: stessa conversazione"); dettatura(); });
-      btn("nw", () => { curTitle = "Nuova conversazione"; trace("p", "nuova conversazione"); dettatura(); });
+      btn("cont", () => { trace("w", "Continue: same conversation"); dettatura(); });
+      btn("nw", () => { curTitle = "New conversation"; trace("p", "new conversation"); dettatura(); });
       scrollY = 0;
     }
     if (p === "sessions") {
       showEyes(false);
-      const all = [{ title: curTitle === "Nuova conversazione" ? null : curTitle, ago: "ora", cur: true }, ...sessions.filter((s) => s.title !== curTitle)].filter((s) => s.title);
-      ui.innerHTML = `<div class="col" id="read"><div class="in" id="txt"><div class="hd">Conversazioni</div><div class="rows">
-        <button class="zb newb" id="nwc">+ Nuova chat</button>
-        ${all.map((s, i) => `<div class="rw"><button class="zb o${s.cur ? " cur" : ""}" data-i="${i}">${esc(short(s.title, 18))}<small>${s.cur ? "in corso · " : ""}${s.ago}</small></button><button class="zb f${pinned === s.title ? " on" : ""}" data-f="${i}">${pinned === s.title ? "Fissata" : "Fissa"}</button></div>`).join("")}
+      const all = [{ title: curTitle === "New conversation" ? null : curTitle, ago: "now", cur: true }, ...sessions.filter((s) => s.title !== curTitle)].filter((s) => s.title);
+      ui.innerHTML = `<div class="col" id="read"><div class="in" id="txt"><div class="hd">Conversations</div><div class="rows">
+        <button class="zb newb" id="nwc">+ New chat</button>
+        ${all.map((s, i) => `<div class="rw"><button class="zb o${s.cur ? " cur" : ""}" data-i="${i}">${esc(short(s.title, 18))}<small>${s.cur ? "current · " : ""}${s.ago}</small></button><button class="zb f${pinned === s.title ? " on" : ""}" data-f="${i}">${pinned === s.title ? "Pinned" : "Pin"}</button></div>`).join("")}
       </div></div></div>`;
-      btn("nwc", () => { curTitle = "Nuova conversazione"; dettatura(); });
-      ui.querySelectorAll("[data-i]").forEach((b) => (b.onclick = (e) => { e.stopPropagation(); const s = all[+b.dataset.i]; if (curTitle !== s.title && curTitle !== "Nuova conversazione") sessions.unshift({ title: curTitle, ago: "ora" }); curTitle = s.title; sessions = sessions.filter((x) => x.title !== s.title); trace("p", `continuo «${s.title}»`); dettatura(); }));
-      ui.querySelectorAll("[data-f]").forEach((b) => (b.onclick = (e) => { e.stopPropagation(); const s = all[+b.dataset.f]; pinned = pinned === s.title ? null : s.title; trace("p", pinned ? `fissata «${s.title}» nella prima schermata` : "tolta la chat fissata"); const y = scrollY; go("sessions"); scrollY = y; $("txt").style.transform = `translateY(${-scrollY}px)`; }));
+      btn("nwc", () => { curTitle = "New conversation"; dettatura(); });
+      ui.querySelectorAll("[data-i]").forEach((b) => (b.onclick = (e) => { e.stopPropagation(); const s = all[+b.dataset.i]; if (curTitle !== s.title && curTitle !== "New conversation") sessions.unshift({ title: curTitle, ago: "now" }); curTitle = s.title; sessions = sessions.filter((x) => x.title !== s.title); trace("p", `continuing “${s.title}”`); dettatura(); }));
+      ui.querySelectorAll("[data-f]").forEach((b) => (b.onclick = (e) => { e.stopPropagation(); const s = all[+b.dataset.f]; pinned = pinned === s.title ? null : s.title; trace("p", pinned ? `pinned “${s.title}” on the first screen` : "pinned chat removed"); const y = scrollY; go("sessions"); scrollY = y; $("txt").style.transform = `translateY(${-scrollY}px)`; }));
       scrollY = 0;
     }
-    if (p === "error") { showEyes(true, "sleep"); ui.innerHTML = `<div class="st" style="color:#f87171">Prova: la rete non risponde. Il tunnel di casa è acceso?</div><button class="zb big" id="ask">Chiedi a Iris</button>`; btn("ask", () => { curTitle = "Nuova conversazione"; dettatura(); }); }
+    if (p === "error") { showEyes(true, "sleep"); ui.innerHTML = `<div class="st" style="color:#f87171">Test: the network isn't answering. Is the home tunnel on?</div><button class="zb big" id="ask">Ask Iris</button>`; btn("ask", () => { curTitle = "New conversation"; dettatura(); }); }
   }
-  function dettatura() { clear(); trace("w", "si apre la tastiera di sistema con il microfono"); go("kb"); }
+  function dettatura() { clear(); trace("w", "the system keyboard opens with the microphone"); go("kb"); }
 
-  /* ---------- una domanda ---------- */
+  /* ---------- one question ---------- */
   function ask() {
     clear();
-    if (tunnelOff) { trace("p", "il tunnel di casa non risponde"); go("error"); buzz(); return; }
-    trace("p", "Hermes ← nuova run (service token Cloudflare + chiave di Hermes)");
-    trace("w", "schermo: resta acceso finché non arriva la risposta");
-    if (curTitle === "Nuova conversazione") curTitle = cur.title;
+    if (tunnelOff) { trace("p", "the home tunnel isn't answering"); go("error"); buzz(); return; }
+    trace("p", "Hermes ← new run (Cloudflare service token + Hermes key)");
+    trace("w", "screen: stays on until the reply arrives");
+    if (curTitle === "New conversation") curTitle = cur.title;
     go("think");
-    later(1600, () => { trace("p", `ogni 2 s: stato della run · strumento in uso: ${cur.tool}`); trace("w", "occhi: strumento"); go("tool"); });
-    later(3400, () => { trace("h", "Hermes ha finito"); trace("p", "→ orologio: la risposta"); reply(cur.a); });
+    later(1600, () => { trace("p", `every 2 s: run status · tool in use: ${cur.tool}`); trace("w", "eyes: tool"); go("tool"); });
+    later(3400, () => { trace("h", "Hermes is done"); trace("p", "→ watch: the reply"); reply(cur.a); });
   }
   function reply(text) {
     cur.answer = text; last = cur;
@@ -340,11 +340,11 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
     later(900, () => go("reply", { text: md(text), q: cur }));
   }
 
-  // scelta della prossima domanda
+  // choose the next question
   QS.forEach((q, i) => { const b = document.createElement("button"); b.className = "btn" + (i === 0 ? " on" : ""); b.textContent = q.label; b.onclick = () => { qi = i; [...$("qs").children].forEach((c, j) => c.classList.toggle("on", j === i)); }; $("qs").appendChild(b); });
-  $("tunnel").onclick = () => { tunnelOff = !tunnelOff; $("tunnel").textContent = tunnelOff ? "Riaccendi il tunnel" : "Spegni il tunnel di casa"; $("tunnel").classList.toggle("on", tunnelOff); if (!tunnelOff && page === "error") go("home"); };
+  $("tunnel").onclick = () => { tunnelOff = !tunnelOff; $("tunnel").textContent = tunnelOff ? "Turn the tunnel back on" : "Turn off the home tunnel"; $("tunnel").classList.toggle("on", tunnelOff); if (!tunnelOff && page === "error") go("home"); };
 
-  /* ---------- gesti, corona, pulsanti ---------- */
+  /* ---------- gestures, crown, buttons ---------- */
   let sx = null;
   $("screen").addEventListener("pointerdown", (e) => { sx = e.clientX; });
   addEventListener("pointerup", (e) => { if (sx != null && e.clientX - sx > 70 && page !== "home") back(); sx = null; });
@@ -364,7 +364,7 @@ kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--lin
     if (e.key === "s" || e.key === "S") { clear(); go("sessions"); }
   });
 
-  // lunetta
+  // bezel
   let s = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">';
   for (let i = 0; i < 60; i++) { const a = i * 6 * Math.PI / 180, big = i % 5 === 0, r1 = 49.2, r2 = big ? 46.6 : 47.8; s += `<line x1="${50 + Math.sin(a) * r1}" y1="${50 - Math.cos(a) * r1}" x2="${50 + Math.sin(a) * r2}" y2="${50 - Math.cos(a) * r2}" stroke="${big ? "#8a8f9c" : "#4a4e59"}" stroke-width="${big ? 0.7 : 0.35}"/>`; }
   $("ticks").innerHTML = s + "</svg>";

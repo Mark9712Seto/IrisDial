@@ -1,5 +1,7 @@
 # Installare Iris Dial (versione di prova 0.1.x)
 
+*[Read in English](install.md)*
+
 Prima versione per verificare che l'idea funzioni: dall'orologio fai una domanda (a voce, se l'orologio lo permette, o scritta), il telefono la porta a Hermes attraverso il tunnel e la risposta torna sul polso.
 
 ## Cosa serve
@@ -7,7 +9,7 @@ Prima versione per verificare che l'idea funzioni: dall'orologio fai una domanda
 - Un orologio Zepp OS 3 o più recente con schermo rotondo (pensato per **Amazfit Balance 2**).
 - L'app **Zepp** sul telefono, con l'orologio collegato.
 - **Hermes Agent** con l'API server acceso (vedi la guida di [Iris Notch](https://github.com/Mark9712Seto/IrisNotch)).
-- Un **tunnel Cloudflare** davanti a Hermes, protetto da un service token: [docs/cloudflare-tunnel.md](cloudflare-tunnel.md).
+- Un **tunnel Cloudflare** davanti a Hermes, protetto da un service token: [cloudflare-tunnel.it.md](cloudflare-tunnel.it.md).
 - Per installare: un PC Windows con **Node.js** (LTS) e un account Zepp (lo stesso dell'app).
 
 ## 1. Accendi la modalità sviluppatore nell'app Zepp
@@ -61,8 +63,8 @@ Nella risposta: si scorre con la corona; in fondo **Continua** (stessa conversaz
 
 - **Via libera dal polso:** se Iris chiede un permesso, per ora va dato dall'isola sul PC.
 - **Risposta che arriva mentre scrive:** per ora arriva tutta insieme, alla fine (il telefono controlla ogni 2 secondi se Iris ha finito).
+- **Notifica a schermo spento** e **risposta letta a voce**: nelle prossime versioni.
 
 ## Per chi sviluppa
 
 `node tools/prova-hermes.mjs <indirizzo> [chiave] ["domanda"]` prova la parte telefono contro un Hermes (anche quello finto di Iris Notch, `tools/mock_hermes.py`), senza orologio né app Zepp.
-- **Notifica a schermo spento** e **risposta letta a voce**: nelle prossime versioni.

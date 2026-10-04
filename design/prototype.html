@@ -1,11 +1,11 @@
-<title>Iris Dial</title>
+<title>Iris Dial Prototype</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: una colonna. In alto il percorso orologio → telefono → casa; poi le schermate, ognuna su un Balance 2
-   disegnato (schermo rotondo 480×480, corona a destra) con sotto cosa la fa comparire; in fondo la struttura dei file.
-   Un solo look scuro, come lo schermo AMOLED. */
+/* Layout: on the left a large Balance 2 you can use (touch, crown, button); on the right what to try
+   and a log of what happens between watch, phone and home. On phones the two columns stack.
+   One dark look, like the AMOLED screen. */
 :root{
   --ink:#06070b; --panel:#0e1017; --raise:#151823; --line:#222637;
   --fg:#e9ebf3; --muted:#959cb3; --dim:#626984;
@@ -17,155 +17,207 @@
 }
 *{box-sizing:border-box}
 body{background:var(--ink);color:var(--fg);font:15px/1.55 var(--body);-webkit-font-smoothing:antialiased}
-.wrap{max-width:1120px;margin:0 auto;padding-inline:18px;padding-block:28px 72px;display:flex;flex-direction:column;gap:48px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:18px;padding-block:26px 64px;display:flex;flex-direction:column;gap:26px}
 h1,h2,h3{font-family:var(--display);margin:0;letter-spacing:-.01em;text-wrap:balance}
-h1{font-size:clamp(30px,5.4vw,46px);line-height:1.05;font-weight:700}
-h2{font-size:clamp(20px,3vw,26px);font-weight:700}
-h3{font-size:16px;font-weight:700}
-p{margin:0;max-width:68ch}
+h1{font-size:clamp(28px,4.6vw,40px);line-height:1.06;font-weight:700}
+h3{font-size:15px;font-weight:700}
+p{margin:0;max-width:66ch}
 .lede{color:var(--muted)}
 .eyebrow{font:500 12px/1 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--eye)}
-header,section{display:flex;flex-direction:column;gap:14px}
-code{font:500 12.5px var(--mono);background:var(--raise);border:1px solid var(--line);border-radius:6px;padding:1px 6px}
+header{display:flex;flex-direction:column;gap:12px}
+.main{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:30px;align-items:start}
+@media (max-width:860px){.main{grid-template-columns:1fr}}
+.stage{display:flex;flex-direction:column;align-items:center;gap:14px;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+@media (max-width:860px){.stage{position:static}}
+.legend{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;font-size:12.5px;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:99px;padding:4px 10px}
+kbd{font:500 11px var(--mono);background:var(--raise);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:0 5px;color:var(--fg)}
 
-/* percorso */
-.flow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;align-items:stretch}
-.hop{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:6px;position:relative;min-width:0}
-.hop b{font-family:var(--display);font-size:15px}
-.hop span{font-size:13px;color:var(--muted)}
-.hop small{font:500 11px var(--mono);color:var(--eye);letter-spacing:.04em}
-.hop:not(:last-child)::after{content:"";position:absolute;right:-9px;top:50%;width:8px;height:8px;border-top:2px solid var(--dim);border-right:2px solid var(--dim);transform:translate(0,-50%) rotate(45deg)}
-@media (max-width:760px){.flow{grid-template-columns:1fr}.hop:not(:last-child)::after{right:50%;top:auto;bottom:-9px;transform:translate(50%,0) rotate(135deg)}}
-
-/* griglia delle schermate */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:28px 22px}
-.shot{display:flex;flex-direction:column;gap:12px;min-width:0}
-.cap{display:flex;flex-direction:column;gap:4px}
-.cap .when{font:500 11.5px var(--mono);color:var(--dim)}
-.cap p{font-size:13.5px;color:var(--muted)}
-
-/* l'orologio: cassa, lunetta con le tacche, corona e pulsante a destra */
-.watch{position:relative;width:min(250px,100%);aspect-ratio:1;align-self:center;max-width:100%}
-.case{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 25%,#5b5f6b,#2a2c33 45%,#14151a 75%);box-shadow:0 18px 40px -18px #000,inset 0 1px 1px #8a8f9c}
+/* the watch */
+.watch{position:relative;width:min(430px,100%);aspect-ratio:1;user-select:none;-webkit-user-select:none;touch-action:none}
+.watch.buzz{animation:buzz .09s linear 6}
+@keyframes buzz{25%{transform:translateX(-3px) rotate(-.6deg)}75%{transform:translateX(3px) rotate(.6deg)}}
+.case{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 30% 25%,#5b5f6b,#2a2c33 45%,#14151a 75%);box-shadow:0 26px 60px -24px #000,inset 0 1px 1px #8a8f9c}
 .bezel{position:absolute;inset:3.5%;border-radius:50%;background:#0b0c10}
 .ticks{position:absolute;inset:3.5%;border-radius:50%}
-.crown{position:absolute;right:-3.2%;top:33%;width:5%;height:12%;border-radius:3px;background:linear-gradient(90deg,#30333b,#6b707c,#30333b);box-shadow:inset 0 0 0 1px #1a1b20}
-.btn2{position:absolute;right:-2.4%;top:58%;width:3.6%;height:9%;border-radius:3px;background:linear-gradient(90deg,#2a2c33,#555a65)}
-.screen{position:absolute;inset:8.5%;border-radius:50%;background:#000;overflow:hidden;container-type:inline-size;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#f1f3f9}
+.crown,.btn2{position:absolute;border:0;padding:0;cursor:pointer}
+.crown{right:-3.4%;top:31%;width:5.6%;height:13%;border-radius:4px;background:repeating-linear-gradient(0deg,#3a3d46 0 2px,#6b707c 2px 4px);box-shadow:inset 0 0 0 1px #1a1b20}
+.btn2{right:-2.6%;top:58%;width:3.8%;height:9.5%;border-radius:4px;background:linear-gradient(90deg,#2a2c33,#5a5f6b)}
+.crown:focus-visible,.btn2:focus-visible{outline:2px solid var(--eye);outline-offset:2px}
+.screen{position:absolute;inset:8.5%;border-radius:50%;background:#000;overflow:hidden;container-type:inline-size;color:#f1f3f9;cursor:pointer;transition:filter .4s}
+.screen.off{filter:brightness(0)}
+.offnote{position:absolute;inset:8.5%;border-radius:50%;display:grid;place-items:center;font:500 13px var(--mono);color:#3d4256;pointer-events:none;opacity:0;transition:opacity .4s}
+.watch.isoff .offnote{opacity:1}
 
-/* contenuto dentro lo schermo: misure in cqw, così vale per qualsiasi grandezza (100cqw = 480 px veri) */
-.eyes{width:150cqw;flex:none;aspect-ratio:178.4/38}
-.eyes.small{width:80cqw}
-.time{position:absolute;top:9cqw;font:600 7.5cqw/1 var(--body);font-variant-numeric:tabular-nums;color:#cfd3e0}
-.hint{position:absolute;bottom:13cqw;font:500 4.6cqw/1.25 var(--body);color:#8e95ad;text-align:center;width:62cqw}
-.status{position:absolute;bottom:20cqw;font:600 5.2cqw/1.2 var(--body);color:var(--eye);text-align:center}
-.chip{position:absolute;bottom:17cqw;display:flex;align-items:center;gap:2cqw;padding:2.2cqw 4.4cqw;border-radius:99cqw;background:#13202c;color:#9fd2ff;font:500 4.4cqw/1 var(--mono)}
+/* inside the screen (100cqw = 480 real px) */
+.eyes{position:absolute;left:50%;top:50%;width:150cqw;aspect-ratio:178.4/38;transform:translate(-50%,-50%);transition:top .45s cubic-bezier(.3,.8,.3,1),width .45s cubic-bezier(.3,.8,.3,1);pointer-events:none}
+.eyes.small{top:13cqw;width:80cqw}
+.eyes.hide{opacity:0}
+.ring{position:absolute;inset:0;opacity:0;transition:opacity .2s;pointer-events:none}
+.ring.on{opacity:1}
+#ui{position:absolute;inset:0}
+.time{position:absolute;top:9cqw;width:100%;text-align:center;font:600 7.5cqw/1 var(--body);font-variant-numeric:tabular-nums;color:#cfd3e0}
+.hint{position:absolute;bottom:12cqw;left:19cqw;right:19cqw;font:500 4.6cqw/1.25 var(--body);color:#8e95ad;text-align:center;transition:color .2s}
+.hint.flash{color:var(--eye)}
+.status{position:absolute;bottom:21cqw;width:100%;font:600 5.2cqw/1.2 var(--body);color:var(--eye);text-align:center}
+.chip{position:absolute;bottom:17cqw;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:2cqw;padding:2.2cqw 4.4cqw;border-radius:99cqw;background:#13202c;color:#9fd2ff;font:500 4.4cqw/1 var(--mono);white-space:nowrap}
 .chip i{width:2.4cqw;height:2.4cqw;border-radius:50%;background:var(--eye);animation:pulse 1s ease-in-out infinite}
-.ring{position:absolute;inset:0}
-.top{position:absolute;top:8cqw;display:flex;justify-content:center;width:100%}
-.bubble{width:70cqw;margin-top:10cqw;padding:5cqw 6cqw;border-radius:6cqw;background:#141824;font:500 6cqw/1.3 var(--body);text-align:center}
-.pair{position:absolute;bottom:9cqw;display:flex;gap:6cqw}
-.rb{width:17cqw;height:17cqw;border-radius:50%;display:grid;place-items:center}
+.bubble{position:absolute;top:30cqw;left:15cqw;right:15cqw;padding:5cqw 6cqw;border-radius:6cqw;background:#141824;font:500 6cqw/1.3 var(--body);text-align:center}
+.pair{position:absolute;bottom:9cqw;left:0;right:0;display:flex;justify-content:center;gap:6cqw}
+.rb{width:17cqw;height:17cqw;border-radius:50%;display:grid;place-items:center;border:0;cursor:pointer}
 .rb svg{width:8cqw;height:8cqw}
 .rb.no{background:#24171b;color:#fda4af}.rb.yes{background:var(--eye);color:#04121f}
-.read{position:absolute;top:24cqw;bottom:16cqw;left:12cqw;right:12cqw;overflow:hidden;-webkit-mask:linear-gradient(transparent,#000 12%,#000 85%,transparent);mask:linear-gradient(transparent,#000 12%,#000 85%,transparent)}
-.read div{font:500 5.6cqw/1.42 var(--body);color:#e4e7f0;animation:scroll 11s ease-in-out infinite alternate}
-.read b{color:#fff}
+.read{position:absolute;top:24cqw;bottom:18cqw;left:12cqw;right:12cqw;overflow:hidden;-webkit-mask:linear-gradient(transparent,#000 10%,#000 86%,transparent);mask:linear-gradient(transparent,#000 10%,#000 86%,transparent)}
+.read .txt{font:500 5.6cqw/1.42 var(--body);color:#e4e7f0;padding-block:2cqw 10cqw;transition:transform .25s ease-out}
 .read .tool{display:block;font:500 3.8cqw/1.3 var(--mono);color:#7d849c;margin-bottom:2cqw}
-.foot{position:absolute;bottom:6.5cqw;display:flex;gap:5cqw;color:#8e95ad}
-.foot svg{width:6cqw;height:6cqw}
-.ask{position:absolute;top:30cqw;width:70cqw;text-align:center;display:flex;flex-direction:column;gap:2cqw}
+.read .you{display:block;font:500 4.4cqw/1.3 var(--body);color:#8e95ad;margin-bottom:3cqw}
+.caret{display:inline-block;width:1.2cqw;height:5cqw;background:var(--eye);vertical-align:-.6cqw;margin-left:.6cqw;animation:pulse .8s infinite}
+.foot{position:absolute;bottom:5.5cqw;left:0;right:0;display:flex;justify-content:center;gap:4cqw}
+.foot button{width:11cqw;height:11cqw;border-radius:50%;border:0;background:#121520;color:#aab0c4;display:grid;place-items:center;cursor:pointer}
+.foot button.on{background:#13263a;color:var(--eye)}
+.foot svg{width:5.6cqw;height:5.6cqw}
+.ask{position:absolute;top:30cqw;left:15cqw;right:15cqw;text-align:center;display:flex;flex-direction:column;gap:2cqw;align-items:center}
 .ask b{font:700 6.4cqw/1.1 var(--display);color:#fecdd3}
 .ask span{font:500 5cqw/1.3 var(--body);color:#e4e7f0}
-.ask code{font:500 4.2cqw/1.3 var(--mono);background:#1c1014;border:0;color:#fda4af;border-radius:2cqw;padding:1.4cqw 2.4cqw;margin-top:1cqw}
-.choose{position:absolute;bottom:10cqw;display:flex;gap:3cqw}
-.pill{padding:3.4cqw 6cqw;border-radius:99cqw;font:600 5cqw/1 var(--body)}
+.ask code{font:500 4.2cqw/1.3 var(--mono);background:#1c1014;color:#fda4af;border-radius:2cqw;padding:1.4cqw 2.4cqw;margin-top:1cqw}
+.choose{position:absolute;bottom:10cqw;left:0;right:0;display:flex;justify-content:center;gap:3cqw}
+.pill{padding:3.4cqw 6cqw;border-radius:99cqw;font:600 5cqw/1 var(--body);border:0;cursor:pointer}
 .pill.go{background:var(--ok);color:#03140a}.pill.stop{background:#24171b;color:#fda4af}
 .list{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.6cqw}
-.list div{width:74cqw;padding:3.6cqw 5cqw;border-radius:99cqw;background:#10131c;font:500 5cqw/1.15 var(--body);color:#aab0c4;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.list button{width:74cqw;padding:3.6cqw 5cqw;border-radius:99cqw;border:0;background:#10131c;font:500 5cqw/1.15 var(--body);color:#aab0c4;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;transition:all .2s}
 .list .far{width:56cqw;opacity:.45;font-size:4.4cqw}
 .list .on{background:#1b2636;color:#fff;box-shadow:inset 0 0 0 .5cqw #335a85}
 .list .new{color:var(--eye)}
-.err{position:absolute;bottom:14cqw;width:66cqw;text-align:center;display:flex;flex-direction:column;gap:1.6cqw}
+.list .gone{display:none}
+.err{position:absolute;bottom:14cqw;left:17cqw;right:17cqw;text-align:center;display:flex;flex-direction:column;gap:1.6cqw}
 .err b{font:700 5.8cqw/1.1 var(--display);color:#f1f3f9}
 .err span{font:500 4.4cqw/1.3 var(--body);color:#8e95ad}
-
-/* il telefono, per la schermata delle impostazioni nell'app Zepp */
-.phone{width:min(230px,100%);align-self:center;aspect-ratio:9/18.5;border-radius:30px;background:#0b0c10;border:6px solid #2a2c33;box-shadow:0 18px 40px -18px #000;padding:26px 14px 14px;display:flex;flex-direction:column;gap:9px;font-size:11.5px;overflow:hidden}
-.phone h4{margin:0 0 2px;font:700 14px var(--display)}
-.phone label{display:flex;flex-direction:column;gap:3px;color:#9aa1b8;font-size:10.5px}
-.phone .f{background:#151823;border:1px solid #262a3b;border-radius:8px;padding:6px 8px;color:#e6e8f0;font:500 10.5px var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.phone .t{margin-top:auto;background:var(--eye);color:#04121f;border-radius:9px;padding:8px;text-align:center;font-weight:600}
-.phone .ok{color:var(--ok);font-size:10.5px;text-align:center}
-
-/* struttura */
-.cols{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px}
-@media (max-width:760px){.cols{grid-template-columns:1fr}}
-.tree{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;overflow-x:auto;font:12.5px/1.65 var(--mono);color:#c7cbe0;white-space:pre;margin:0}
-.tree em{font-style:normal;color:var(--dim)}
-.notes{display:flex;flex-direction:column;gap:12px}
-.note{border-left:2px solid var(--line);padding-left:12px;display:flex;flex-direction:column;gap:3px}
-.note b{font-size:14px}
-.note span{font-size:13.5px;color:var(--muted)}
-.note.risk{border-color:var(--gold)}
+.notif{position:absolute;top:16cqw;left:9cqw;right:9cqw;bottom:16cqw;border-radius:9cqw;background:#121520;padding:7cqw 7cqw;display:flex;flex-direction:column;gap:3cqw;animation:rise .35s cubic-bezier(.3,.8,.3,1)}
+.notif .app{display:flex;align-items:center;gap:2.6cqw;font:500 4.2cqw/1 var(--body);color:#8e95ad}
+.notif .app i{width:6cqw;height:6cqw;border-radius:50%;background:#000;box-shadow:inset 0 0 0 .5cqw #2a3040;position:relative}
+.notif .app i::before,.notif .app i::after{content:"";position:absolute;top:1.6cqw;width:1.1cqw;height:2.8cqw;border-radius:1cqw;background:var(--eye)}
+.notif .app i::before{left:1.5cqw}.notif .app i::after{right:1.5cqw}
+.notif b{font:700 6cqw/1.15 var(--display)}
+.notif span{font:500 4.8cqw/1.35 var(--body);color:#cfd3e0;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.notif .pill{margin-top:auto;align-self:center}
+.toast{position:absolute;bottom:22cqw;left:50%;transform:translateX(-50%);padding:2.4cqw 4.6cqw;border-radius:99cqw;background:#13202c;color:#9fd2ff;font:500 4.2cqw/1 var(--body);white-space:nowrap}
+@keyframes rise{from{transform:translateY(8cqw);opacity:0}}
+/* screens (real app coordinates: 480 px = 100cqw) */
+.eyes.mid{top:31.25%;width:142cqw}
+.eyes.full{top:41.7%;width:180cqw}
+.st.full{top:61.7cqw;height:16.7cqw;font-size:5.8cqw}
+.ttl{position:absolute;top:8.3cqw;left:22cqw;right:22cqw;height:7.5cqw;display:flex;align-items:center;justify-content:center;font:500 4.4cqw/1 var(--body);color:#7d849c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.st{position:absolute;top:44.6cqw;left:12cqw;right:12cqw;height:12.1cqw;display:flex;align-items:center;justify-content:center;text-align:center;font:500 5.4cqw/1.25 var(--body);color:#8e95ad}
+.zb{position:absolute;border:0;border-radius:99cqw;cursor:pointer;font:600 4.6cqw/1.1 var(--body);background:#141824;color:#aab0c4;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 2cqw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zb:active{filter:brightness(1.3)}
+.zb.big{left:25cqw;top:58.75cqw;width:50cqw;height:14.6cqw;background:var(--eye);color:#04121f;font-size:5.8cqw}
+.zb.fis{left:22.5cqw;top:76.7cqw;width:40.8cqw;height:12.1cqw;background:#13202c;color:#9fd2ff;font-size:4.4cqw}
+.zb.cro{left:65.4cqw;top:76.7cqw;width:12.1cqw;height:12.1cqw;padding:0;background:#141824;color:#aab0c4}
+.zb.cro svg{width:7cqw;height:7cqw}
+.kb{position:absolute;inset:0;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4cqw}
+.kb .micb{width:24cqw;height:24cqw;border-radius:50%;background:#13263a;color:var(--eye);display:grid;place-items:center;animation:pulse 1.2s ease-in-out infinite}
+.kb .micb svg{width:11cqw;height:11cqw}
+.kb .said{min-height:14cqw;max-width:66cqw;text-align:center;font:500 5.6cqw/1.3 var(--body);color:#e4e7f0}
+.kb .hintk{font:500 4.2cqw/1 var(--body);color:#8e95ad}
+.kb .okk{width:15cqw;height:15cqw;border-radius:50%;border:0;background:var(--eye);color:#04121f;display:grid;place-items:center;cursor:pointer}
+.kb .okk svg{width:7cqw;height:7cqw}
+.col{position:absolute;inset:0;overflow:hidden}
+.col .in{position:absolute;left:0;right:0;top:0;transition:transform .25s ease-out}
+.col .ey{position:relative;height:13cqw;margin-top:5cqw}
+.col .ey > div{position:absolute;left:50%;top:50%;width:63cqw;aspect-ratio:178.4/38;transform:translate(-50%,-50%)}
+.col .q{margin:2cqw 15cqw 0;text-align:center;font:500 4.6cqw/1.3 var(--body);color:#8e95ad;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.col .tl{margin:1.5cqw 15cqw 0;text-align:center;font:500 3.8cqw/1.3 var(--mono);color:#f59e0b}
+.col .a{margin:3cqw 15.6cqw 0;font:500 5.8cqw/1.42 var(--body);color:#e4e7f0}
+.col .btns{display:flex;flex-direction:column;align-items:center;gap:3cqw;margin:5cqw 0 30cqw}
+.col .btns .zb{position:static}
+.col .hd{margin-top:8cqw;text-align:center;font:700 5.8cqw/1 var(--display);color:#e4e7f0}
+.col .rows{display:flex;flex-direction:column;gap:2.5cqw;margin:4cqw 10cqw 30cqw}
+.col .rw{display:flex;gap:1.6cqw;align-items:center}
+.col .rw .zb{position:static;height:15.8cqw;white-space:normal;line-height:1.2}
+.col .rw .o{flex:1;justify-content:flex-start;text-align:left;padding:0 5cqw;flex-direction:column;align-items:flex-start}
+.col .rw .o small{font:500 3.6cqw/1.2 var(--body);color:#7d849c}
+.col .rw .o.cur{background:#1b2636;color:#fff}
+.col .rw .f{width:20cqw;height:12.5cqw;font-size:3.9cqw;color:#7d849c}
+.col .rw .f.on{background:#13263a;color:var(--eye)}
+.col .newb{position:static;height:14.6cqw;width:100%;background:#13263a;color:var(--eye)}
 @keyframes pulse{50%{opacity:.25}}
-@keyframes scroll{0%,12%{transform:translateY(0)}88%,100%{transform:translateY(-38%)}}
-@media (prefers-reduced-motion:reduce){.read div,.chip i{animation:none}}
+
+/* side panel */
+.side{display:flex;flex-direction:column;gap:18px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.card h3{display:flex;align-items:center;gap:8px}
+.steps{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:7px;font-size:13.5px;color:#c9cde0}
+.steps b{color:var(--fg)}
+.btns{display:flex;flex-wrap:wrap;gap:8px}
+.btn{font:500 13px var(--body);color:var(--fg);background:var(--raise);border:1px solid var(--line);border-radius:10px;padding:7px 11px;cursor:pointer}
+.btn:hover{border-color:#353a52}
+.btn.on{background:#13263a;border-color:#2d5a86;color:#cfe8ff}
+.btn:focus-visible{outline:2px solid var(--eye);outline-offset:1px}
+.log{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px;max-height:270px;overflow:auto;font:12px/1.4 var(--mono)}
+.log li{display:grid;grid-template-columns:70px minmax(0,1fr);gap:8px;color:#b9bfd4}
+.log li em{font-style:normal;color:var(--dim)}
+.log li.w em{color:var(--eye)}.log li.p em{color:var(--gold)}.log li.h em{color:var(--ok)}
+.empty{color:var(--dim);font:12px var(--mono)}
+.facts{display:flex;flex-direction:column;gap:10px}
+.fact{border-left:2px solid var(--line);padding-left:11px;display:flex;flex-direction:column;gap:2px}
+.fact b{font-size:13.5px}.fact span{font-size:13px;color:var(--muted)}
+.fact.risk{border-color:var(--gold)}
+.fact code{font:500 11.5px var(--mono);color:#c7cbe0}
+@media (prefers-reduced-motion:reduce){.watch.buzz,.chip i,.caret,.notif{animation:none}.eyes,.read .txt{transition:none}}
 </style>
 
 <div class="wrap">
   <header>
-    <span class="eyebrow">Iris Dial · bozza delle schermate</span>
-    <h1>Iris al polso, sull'Amazfit Balance 2</h1>
-    <p class="lede">Gli stessi occhi dell'isola, sullo schermo rotondo da 480×480 dell'orologio. Tieni premuto per parlare, giri la corona per leggere la risposta, dai il via libera con un tocco. Gli occhi sono vivi: è lo stesso motore dell'app per Windows. Qui sotto ogni schermata con quello che la fa comparire.</p>
+    <span class="eyebrow">Iris Dial · interactive prototype</span>
+    <h1>Try Iris on the Balance 2</h1>
+    <p class="lede">A pretend watch you can actually use, with made-up answers. It works like the real app: dictation, a pinned chat, history, and animated eyes while Iris works. Turn the crown with your mouse wheel. On the right you can see what travels between watch, phone and home.</p>
   </header>
-
-  <section>
-    <span class="eyebrow">Il percorso di una domanda</span>
-    <div class="flow">
-      <div class="hop"><small>OROLOGIO</small><b>Iris Dial</b><span>Registra la voce, mostra gli occhi e la risposta. Non va mai su internet da solo.</span></div>
-      <div class="hop"><small>BLUETOOTH → TELEFONO</small><b>App Zepp</b><span>La parte "lato telefono" del programma: riceve l'audio e fa le chiamate. Lì incolli le chiavi.</span></div>
-      <div class="hop"><small>INTERNET → CLOUDFLARE</small><b>Tunnel con doppia chiave</b><span>Passa solo chi ha il service token di Cloudflare. Nessuna porta aperta sul router.</span></div>
-      <div class="hop"><small>CASA</small><b>Hermes e Whisper</b><span>Whisper trascrive la voce, Hermes risponde con la chiave API. Gli stessi dell'isola.</span></div>
-    </div>
-  </section>
-
-  <section>
-    <span class="eyebrow">Le schermate</span>
-    <div class="grid" id="grid"></div>
-  </section>
-
-  <section>
-    <span class="eyebrow">Come sarà fatto il progetto</span>
-    <div class="cols">
-<pre class="tree">IrisDial/
-├── app.json            <em># nome, permessi, Balance 2 (480×480)</em>
-├── app.js
-├── page/               <em># sull'orologio</em>
-│   ├── faccia.js       <em># occhi, premi e parla</em>
-│   ├── risposta.js     <em># testo che scorre con la corona</em>
-│   ├── via-libera.js   <em># una volta / nega</em>
-│   └── sessioni.js     <em># elenco con la corona</em>
-├── app-side/
-│   └── index.js        <em># sul telefono: Hermes, Whisper, tunnel</em>
-├── setting/
-│   └── index.js        <em># impostazioni nell'app Zepp</em>
-├── shared/
-│   ├── occhi.js        <em># il motore degli occhi, ridotto</em>
-│   └── messaggi.js     <em># orologio ⇄ telefono</em>
-├── assets/             <em># icone e suoni</em>
-├── docs/
-│   ├── architettura.md
-│   └── cloudflare-tunnel.md
-└── design/             <em># queste demo</em></pre>
-      <div class="notes">
-        <div class="note"><b>Tre pezzi in un solo programma</b><span>Zepp OS divide ogni app in tre: la parte sull'orologio, la parte che gira dentro l'app Zepp del telefono e la pagina delle impostazioni. Si installano insieme.</span></div>
-        <div class="note"><b>Le chiavi restano sul telefono</b><span>Indirizzo del tunnel, i due codici del service token e la chiave di Hermes stanno nell'archivio delle impostazioni dell'app Zepp. L'orologio non le vede mai.</span></div>
-        <div class="note"><b>La voce</b><span>L'orologio registra in Opus, il file passa al telefono via Bluetooth e il telefono lo manda a Whisper. Una frase di 5 secondi è circa 10 KB.</span></div>
-        <div class="note risk"><b>Da provare sull'orologio vero</b><span>La durata della batteria con lo schermo acceso durante la risposta. La lettura ad alta voce dall'altoparlante del Balance 2: se le app possono usarlo, altrimenti solo testo. La fluidità degli occhi, che sull'orologio vanno disegnati con meno dettagli.</span></div>
+  <div class="main">
+    <div class="stage">
+      <div class="watch" id="watch">
+        <div class="case"></div><div class="bezel"></div><div class="ticks" id="ticks"></div>
+        <button class="crown" id="crown" aria-label="Crown: press to go back, turn to scroll"></button>
+        <button class="btn2" id="btn2" aria-label="Button: history"></button>
+        <div class="screen" id="screen">
+          <svg class="ring" id="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="47.5" fill="none" stroke="#1b2a3a" stroke-width="2"/><circle id="lv" cx="50" cy="50" r="47.5" fill="none" stroke="#7cc4ff" stroke-width="2.4" stroke-linecap="round" transform="rotate(-90 50 50)" stroke-dasharray="0 300"/></svg>
+          <div class="eyes" id="eyes"></div>
+          <div id="ui"></div>
+        </div>
+        <div class="offnote">screen off</div>
+      </div>
+      <div class="legend">
+        <span>tap the buttons on screen</span><span>wheel or <kbd>↑</kbd><kbd>↓</kbd> = crown</span><span>click the crown or <kbd>Esc</kbd> = back</span><span>lower button or <kbd>S</kbd> = history</span>
       </div>
     </div>
-  </section>
+    <div class="side">
+      <div class="card">
+        <h3>What to try</h3>
+        <ol class="steps">
+          <li><b>Ask Iris</b> starts a new chat with the watch's dictation, then ✓. The eyes show what Iris is doing; read the reply with the crown, with small eyes on top.</li>
+          <li><b>Continue</b> (at the end of the reply) dictates again in the same conversation; <b>New chat</b> starts a new one.</li>
+          <li><b>History</b> (the round clock button next to the pinned chat): tap a conversation to continue it, or <b>Pin</b> to put it on the "Pinned chat" button (just one).</li>
+          <li>Pick the next question to "dictate" below.</li>
+        </ol>
+        <div class="btns" id="qs"></div>
+        <div class="btns">
+          <button class="btn" id="tunnel">Turn off the home tunnel</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Behind the scenes</h3>
+        <ul class="log" id="log"><li class="empty">Ask something: the steps show up here.</li></ul>
+      </div>
+      <div class="card">
+        <h3>How it works</h3>
+        <div class="facts">
+          <div class="fact"><b>The watch's own dictation</b><span>The system keyboard with the microphone. Hermes receives the text.</span></div>
+          <div class="fact"><b>Screen stays on while you wait</b><span>Until the reply arrives; if it goes off anyway, raising your wrist brings you back into Iris Dial.</span></div>
+          <div class="fact"><b>Full-screen eyes while you wait</b><span>Big eyes and what Iris is doing. Every 2 seconds the phone asks Hermes for the run's status and the tool in use. If it takes longer than about 5 minutes, "Keep waiting" resumes the same answer.</span></div>
+          <div class="fact risk"><b>Not yet</b><span>Approvals from the wrist, a notification when the reply is ready with the screen off, replies read aloud.</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -922,6 +974,7 @@ code{font:500 12.5px var(--mono);background:var(--raise);border:1px solid var(--
 </script>
 <script>
 (function () {
+  const $ = (id) => document.getElementById(id);
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const I = {
     x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
@@ -929,56 +982,141 @@ code{font:500 12.5px var(--mono);background:var(--raise);border:1px solid var(--
     vol: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></svg>',
     mic: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5"/></svg>',
     list: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 7h14M5 12h14M5 17h9"/></svg>',
+    hist: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3 3.5v4.5h4.5"/><path d="M12 7.5V12l3 2"/></svg>',
   };
-  const SHOTS = [
-    { name: "A riposo", when: "quando apri l'app", desc: "Solo gli occhi, che si guardano intorno e ogni tanto fanno uno dei loro scherzi. In alto l'ora.", state: "idle",
-      html: '<div class="time">21:47</div><div class="eyes"></div><div class="hint">Tieni premuto per parlare</div>' },
-    { name: "Ti ascolto", when: "dito premuto sullo schermo", desc: "L'anello sul bordo segue la tua voce. Lasci il dito e la frase parte.", state: "listening", ring: true,
-      html: '<svg class="ring" viewBox="0 0 100 100"><circle cx="50" cy="50" r="47.5" fill="none" stroke="#1b2a3a" stroke-width="2"/><circle class="lv" cx="50" cy="50" r="47.5" fill="none" stroke="#7cc4ff" stroke-width="2.4" stroke-linecap="round" transform="rotate(-90 50 50)" stroke-dasharray="0 300"/></svg><div class="eyes"></div><div class="status">Ti ascolto…</div><div class="hint">Lascia per inviare</div>' },
-    { name: "Ho capito bene?", when: "subito dopo, se l'anteprima è accesa", desc: "La trascrizione da controllare: ✓ la manda, ✕ fa riprovare. Si può spegnere per mandare tutto subito.", state: "idle",
-      html: '<div class="top"><div class="eyes small"></div></div><div class="bubble">Che impegni ho domani mattina?</div><div class="pair"><div class="rb no">' + I.x + '</div><div class="rb yes">' + I.ok + '</div></div>' },
-    { name: "Ci penso", when: "mentre Hermes lavora", desc: "Come sull'isola: i puntini vicino all'occhio destro.", state: "thinking",
-      html: '<div class="eyes"></div><div class="status">Sto pensando…</div>' },
-    { name: "Uso uno strumento", when: "quando apre calendario, posta, casa…", desc: "Il nome dello strumento in piccolo, così sai cosa sta guardando.", state: "tool",
-      html: '<div class="eyes"></div><div class="chip"><i></i>calendario · leggi</div>' },
-    { name: "La risposta", when: "quando arriva", desc: "Il testo scorre con la corona. Sotto: rileggi ad alta voce, nuova domanda, sessioni.", state: "replying",
-      html: '<div class="top"><div class="eyes small"></div></div><div class="read"><div><span class="tool">calendario · leggi</span>Domani mattina hai <b>due impegni</b>: alle 9:30 il dentista in via Roma, e alle 11 la call con Luca per il preventivo. Dalle 12 sei libero. Vuoi che ti ricordi del dentista un\'ora prima?</div></div><div class="foot">' + I.vol + I.mic + I.list + '</div>' },
-    { name: "Posso farlo?", when: "quando un'azione chiede il permesso", desc: "Come nell'isola, solo due scelte: una volta o nega. Vibra per avvisarti.", state: "approval",
-      html: '<div class="top"><div class="eyes small"></div></div><div class="ask"><b>Posso farlo?</b><span>Mandare una mail a Paola</span><code>«Arrivo alle 8, ciao!»</code></div><div class="choose"><div class="pill stop">Nega</div><div class="pill go">Una volta</div></div>' },
-    { name: "Le sessioni", when: "dall'icona elenco, si scorre con la corona", desc: "In cima la chat nuova, poi le ultime. Quella al centro è quella che si apre.", state: null,
-      html: '<div class="list"><div class="far new">+ Nuova chat</div><div>Bollette di ottobre</div><div class="on">Impegni di domani</div><div>Luci del soggiorno</div><div class="far">Ricetta del ragù</div></div>' },
-    { name: "Non trovo Hermes", when: "telefono lontano o tunnel spento", desc: "Gli occhi dormono e dice cosa controllare, senza codici d'errore.", state: "sleep",
-      html: '<div class="eyes"></div><div class="err"><b>Non trovo Hermes</b><span>Il telefono è vicino? Il tunnel di casa è acceso?</span></div>' },
+  // example questions (made-up answers)
+  const QS = [
+    { label: "Tomorrow's plans", q: "What do I have tomorrow morning?", tool: "calendar read", title: "Tomorrow's plans",
+      a: "Tomorrow morning you have **two things**: the dentist at 9:30, and a call with Luca about the quote at 11. You're free from noon, and in the afternoon there's just the gym at 6 pm. Want me to remind you about the dentist an hour before?" },
+    { label: "Weather", q: "What's the weather tomorrow?", tool: "weather forecast", title: "Tomorrow's weather",
+      a: "Tomorrow: **clear** in the morning, cloudy from the afternoon. High 21°, low 12°, light wind. No rain expected: you can leave the umbrella at home." },
+    { label: "Turn on a light", q: "Turn on the living room light", tool: "homeassistant lights", title: "Living room light",
+      a: "I turned on the **living room light** at 70%. It's getting dark outside: want me to turn on the hallway light too?" },
   ];
-  const grid = document.getElementById("grid");
-  const ticks = (() => { // le 60 tacche della lunetta, una volta sola come immagine
-    let s = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">';
-    for (let i = 0; i < 60; i++) { const a = i * 6 * Math.PI / 180, big = i % 5 === 0, r1 = 49.2, r2 = big ? 46.6 : 47.8; s += `<line x1="${50 + Math.sin(a) * r1}" y1="${50 - Math.cos(a) * r1}" x2="${50 + Math.sin(a) * r2}" y2="${50 - Math.cos(a) * r2}" stroke="${big ? "#8a8f9c" : "#4a4e59"}" stroke-width="${big ? 0.7 : 0.35}"/>`; }
-    return s + "</svg>";
-  })();
-  SHOTS.forEach((sh) => {
-    const el = document.createElement("article"); el.className = "shot";
-    el.innerHTML = `<div class="watch"><div class="case"></div><div class="bezel"></div><div class="ticks">${ticks}</div><div class="crown"></div><div class="btn2"></div><div class="screen">${sh.html}</div></div>
-      <div class="cap"><h3>${sh.name}</h3><span class="when">${sh.when}</span><p>${sh.desc}</p></div>`;
-    grid.appendChild(el);
-    const box = el.querySelector(".eyes"); if (!box) return;
-    const eyes = Iris.createEyes(box, { island: true, idleLife: sh.state === "idle" });
-    eyes.setState(sh.state);
-    if (sh.ring) {
-      const lv = el.querySelector(".lv"); let v = 0;
-      const tick = () => { const t = performance.now(); v = v * 0.7 + 0.3 * Math.max(0, Math.sin(t / 170) * Math.sin(t / 530) + Math.random() * 0.35); eyes.setLevel(Math.min(1, v)); lv.setAttribute("stroke-dasharray", `${(v * 300).toFixed(1)} 300`); if (!reduce) requestAnimationFrame(tick); };
-      tick();
+  let sessions = [
+    { title: "October bills", ago: "2 h" }, { title: "Lasagna recipe", ago: "1 d" },
+    { title: "Gift for mom", ago: "3 d" }, { title: "Bedroom AC", ago: "5 d" },
+  ];
+  let qi = 0, tunnelOff = false, curTitle = "New conversation", pinned = null, last = null;
+  let page = "home", cur = null, timers = [], scrollY = 0, sideEyes = null;
+  const eyes = Iris.createEyes($("eyes"), { island: true, idleLife: true });
+  const ui = $("ui"), log = $("log");
+  const md = (s) => s.replace(/\*\*([^*]+)\*\*/g, "<b>$1</b>");
+  const later = (ms, f) => timers.push(setTimeout(f, ms));
+  const clear = () => { timers.forEach(clearTimeout); timers = []; };
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const short = (s, n) => (s.length > n ? s.slice(0, n - 1) + "…" : s);
+
+  function trace(who, text) {
+    const e = log.querySelector(".empty"); if (e) e.remove();
+    const li = document.createElement("li"); li.className = who;
+    li.innerHTML = `<em>${{ w: "watch", p: "phone", h: "home" }[who]}</em><span>${text}</span>`;
+    log.appendChild(li); log.scrollTop = log.scrollHeight;
+  }
+  function buzz() { const w = $("watch"); w.classList.remove("buzz"); void w.offsetWidth; if (!reduce) w.classList.add("buzz"); }
+  function showEyes(on, state, full) { const e = $("eyes"); e.classList.toggle("hide", !on); e.classList.remove("small"); e.classList.toggle("mid", !full); e.classList.toggle("full", !!full); if (state) eyes.setState(state); }
+  const btn = (id, f) => { const b = $(id); if (b) b.onclick = (e) => { e.stopPropagation(); f(); }; };
+
+  /* ---------- pages ---------- */
+  function go(p, data) {
+    page = p; $("ring").classList.remove("on");
+    if (sideEyes && p !== "reply") sideEyes = null;
+    if (p === "home") {
+      showEyes(true, data && data.state || "idle");
+      ui.innerHTML = `<div class="st" id="st">${data && data.msg || ""}</div>
+        <button class="zb big" id="ask">Ask Iris</button>
+        <button class="zb fis" id="pin">${esc(short(pinned ? pinned : "Pinned chat", 15))}</button>
+        <button class="zb cro" id="hist" aria-label="History">${I.hist}</button>`;
+      if (data && data.color) $("st").style.color = data.color;
+      btn("ask", () => { curTitle = "New conversation"; trace("p", "new chat (created on Hermes with the first question)"); dettatura(); });
+      btn("hist", () => go("sessions"));
+      btn("pin", () => { if (pinned) { curTitle = pinned; trace("p", `resuming the pinned chat “${pinned}”`); dettatura(); } else { $("st").textContent = "No pinned chat: pick one from the history"; later(3500, () => $("st") && ($("st").textContent = "")); } });
     }
+    if (p === "kb") {
+      showEyes(false);
+      ui.innerHTML = `<div class="kb"><div class="micb">${I.mic}</div><div class="said" id="said"></div><div class="hintk" id="hk">Speak now…</div><button class="okk" id="okk" aria-label="Confirm" style="visibility:hidden">${I.ok}</button></div>`;
+      const q = QS[qi].q; let n = 0;
+      later(900, function type() { if (page !== "kb") return; n = Math.min(q.length, n + 2); $("said").textContent = q.slice(0, n); if (n < q.length) later(45, type); else { $("hk").textContent = "Tap ✓ to send"; $("okk").style.visibility = "visible"; } });
+      btn("okk", () => { cur = Object.assign({}, QS[qi]); trace("w", `dictation: “${cur.q}”`); ask(); });
+    }
+    if (p === "think") { showEyes(true, "thinking", true); ui.innerHTML = `<div class="st full" style="color:#a78bfa">Thinking…</div>`; }
+    if (p === "tool") { showEyes(true, "tool", true); ui.innerHTML = `<div class="st full" style="color:#f59e0b">Using: ${esc(cur.tool)}</div>`; }
+    if (p === "ready") { showEyes(true, "done", true); ui.innerHTML = `<div class="st full" style="color:#5eead4">Reply ready</div>`; }
+    if (p === "reply") {
+      showEyes(false);
+      const q = (data && data.q) || cur;
+      ui.innerHTML = `<div class="col" id="read"><div class="in" id="txt"><div class="ey"><div id="sey"></div></div>
+        <div class="q">“${esc(q.q)}”</div><div class="tl">${esc(q.tool)}</div><div class="a" id="ans"></div>
+        <div class="btns"><button class="zb big" id="cont" style="width:50cqw;height:14cqw">Continue</button><button class="zb" id="nw" style="width:42cqw;height:11.6cqw">New chat</button></div></div></div>`;
+      sideEyes = Iris.createEyes($("sey"), { island: true, idleLife: true });
+      sideEyes.setState(data && data.streaming ? "replying" : "done"); later(2400, () => sideEyes && sideEyes.setState("idle"));
+      $("ans").innerHTML = data && data.text != null ? data.text : "";
+      btn("cont", () => { trace("w", "Continue: same conversation"); dettatura(); });
+      btn("nw", () => { curTitle = "New conversation"; trace("p", "new conversation"); dettatura(); });
+      scrollY = 0;
+    }
+    if (p === "sessions") {
+      showEyes(false);
+      const all = [{ title: curTitle === "New conversation" ? null : curTitle, ago: "now", cur: true }, ...sessions.filter((s) => s.title !== curTitle)].filter((s) => s.title);
+      ui.innerHTML = `<div class="col" id="read"><div class="in" id="txt"><div class="hd">Conversations</div><div class="rows">
+        <button class="zb newb" id="nwc">+ New chat</button>
+        ${all.map((s, i) => `<div class="rw"><button class="zb o${s.cur ? " cur" : ""}" data-i="${i}">${esc(short(s.title, 18))}<small>${s.cur ? "current · " : ""}${s.ago}</small></button><button class="zb f${pinned === s.title ? " on" : ""}" data-f="${i}">${pinned === s.title ? "Pinned" : "Pin"}</button></div>`).join("")}
+      </div></div></div>`;
+      btn("nwc", () => { curTitle = "New conversation"; dettatura(); });
+      ui.querySelectorAll("[data-i]").forEach((b) => (b.onclick = (e) => { e.stopPropagation(); const s = all[+b.dataset.i]; if (curTitle !== s.title && curTitle !== "New conversation") sessions.unshift({ title: curTitle, ago: "now" }); curTitle = s.title; sessions = sessions.filter((x) => x.title !== s.title); trace("p", `continuing “${s.title}”`); dettatura(); }));
+      ui.querySelectorAll("[data-f]").forEach((b) => (b.onclick = (e) => { e.stopPropagation(); const s = all[+b.dataset.f]; pinned = pinned === s.title ? null : s.title; trace("p", pinned ? `pinned “${s.title}” on the first screen` : "pinned chat removed"); const y = scrollY; go("sessions"); scrollY = y; $("txt").style.transform = `translateY(${-scrollY}px)`; }));
+      scrollY = 0;
+    }
+    if (p === "error") { showEyes(true, "sleep"); ui.innerHTML = `<div class="st" style="color:#f87171">Test: the network isn't answering. Is the home tunnel on?</div><button class="zb big" id="ask">Ask Iris</button>`; btn("ask", () => { curTitle = "New conversation"; dettatura(); }); }
+  }
+  function dettatura() { clear(); trace("w", "the system keyboard opens with the microphone"); go("kb"); }
+
+  /* ---------- one question ---------- */
+  function ask() {
+    clear();
+    if (tunnelOff) { trace("p", "the home tunnel isn't answering"); go("error"); buzz(); return; }
+    trace("p", "Hermes ← new run (Cloudflare service token + Hermes key)");
+    trace("w", "screen: stays on until the reply arrives");
+    if (curTitle === "New conversation") curTitle = cur.title;
+    go("think");
+    later(1600, () => { trace("p", `every 2 s: run status · tool in use: ${cur.tool}`); trace("w", "eyes: tool"); go("tool"); });
+    later(3400, () => { trace("h", "Hermes is done"); trace("p", "→ watch: the reply"); reply(cur.a); });
+  }
+  function reply(text) {
+    cur.answer = text; last = cur;
+    buzz();
+    go("ready");
+    later(900, () => go("reply", { text: md(text), q: cur }));
+  }
+
+  // choose the next question
+  QS.forEach((q, i) => { const b = document.createElement("button"); b.className = "btn" + (i === 0 ? " on" : ""); b.textContent = q.label; b.onclick = () => { qi = i; [...$("qs").children].forEach((c, j) => c.classList.toggle("on", j === i)); }; $("qs").appendChild(b); });
+  $("tunnel").onclick = () => { tunnelOff = !tunnelOff; $("tunnel").textContent = tunnelOff ? "Turn the tunnel back on" : "Turn off the home tunnel"; $("tunnel").classList.toggle("on", tunnelOff); if (!tunnelOff && page === "error") go("home"); };
+
+  /* ---------- gestures, crown, buttons ---------- */
+  let sx = null;
+  $("screen").addEventListener("pointerdown", (e) => { sx = e.clientX; });
+  addEventListener("pointerup", (e) => { if (sx != null && e.clientX - sx > 70 && page !== "home") back(); sx = null; });
+  function back() { clear(); go("home"); }
+  function crown(dir) {
+    if (page !== "reply" && page !== "sessions") return;
+    const t = $("txt"), r = $("read"); const max = Math.max(0, t.scrollHeight - r.clientHeight);
+    scrollY = Math.min(max, Math.max(0, scrollY + dir * 42)); t.style.transform = `translateY(${-scrollY}px)`;
+  }
+  $("watch").addEventListener("wheel", (e) => { e.preventDefault(); crown(e.deltaY > 0 ? 1 : -1); }, { passive: false });
+  $("crown").onclick = () => back();
+  $("btn2").onclick = () => { clear(); go("sessions"); };
+  addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown") { e.preventDefault(); crown(1); }
+    if (e.key === "ArrowUp") { e.preventDefault(); crown(-1); }
+    if (e.key === "Escape") back();
+    if (e.key === "s" || e.key === "S") { clear(); go("sessions"); }
   });
-  // la schermata del telefono
-  const ph = document.createElement("article"); ph.className = "shot";
-  ph.innerHTML = `<div class="phone"><h4>Iris Dial</h4>
-    <label>Indirizzo del tunnel<div class="f">https://iris.tuodominio.it</div></label>
-    <label>Cloudflare · Client ID<div class="f">3f9a1c…e2.access</div></label>
-    <label>Cloudflare · Client Secret<div class="f">••••••••••••••••</div></label>
-    <label>Chiave di Hermes<div class="f">••••••••••••••••</div></label>
-    <div class="t">Prova il collegamento</div><div class="ok">Collegata · Hermes e Whisper rispondono</div></div>
-    <div class="cap"><h3>Sul telefono: le chiavi</h3><span class="when">app Zepp → Iris Dial → Impostazioni</span><p>Si incollano una volta. Due barriere: senza il service token Cloudflare non fa passare nessuno, senza la chiave Hermes non risponde.</p></div>`;
-  grid.appendChild(ph);
+
+  // bezel
+  let s = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">';
+  for (let i = 0; i < 60; i++) { const a = i * 6 * Math.PI / 180, big = i % 5 === 0, r1 = 49.2, r2 = big ? 46.6 : 47.8; s += `<line x1="${50 + Math.sin(a) * r1}" y1="${50 - Math.cos(a) * r1}" x2="${50 + Math.sin(a) * r2}" y2="${50 - Math.cos(a) * r2}" stroke="${big ? "#8a8f9c" : "#4a4e59"}" stroke-width="${big ? 0.7 : 0.35}"/>`; }
+  $("ticks").innerHTML = s + "</svg>";
+  go("home");
 })();
 </script>

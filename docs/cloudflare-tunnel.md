@@ -1,53 +1,55 @@
-# Tunnel Cloudflare per Iris Dial
+# Cloudflare tunnel for Iris Dial
 
-L'orologio (attraverso l'app Zepp del telefono) deve arrivare a Hermes anche fuori casa, senza aprire porte sul router.
-Un **Cloudflare Tunnel** pubblica Hermes su un indirizzo tuo, e **Cloudflare Access** lo chiude dietro un **service token**:
-senza i due codici del token Cloudflare non fa passare nessuno, e senza la chiave di Hermes, Hermes non risponde.
+*[Leggi in italiano](cloudflare-tunnel.it.md)*
 
-## Cosa serve
+The watch (through the Zepp app on your phone) has to reach Hermes even when you're away from home, without opening ports on your router.
+A **Cloudflare Tunnel** publishes Hermes on an address of yours, and **Cloudflare Access** locks it behind a **service token**:
+without the token's two codes Cloudflare lets nobody through, and without the Hermes key, Hermes doesn't answer.
 
-- Un dominio gestito da Cloudflare (piano gratuito).
-- Un computer o container sempre acceso nella stessa rete di Hermes, dove gira `cloudflared`.
+## What you need
 
-## 1. Il tunnel
+- A domain managed by Cloudflare (the free plan is fine).
+- A computer or container that is always on, in the same network as Hermes, to run `cloudflared`.
 
-Cloudflare → **Zero Trust** → **Networks** → **Tunnels** → **Create a tunnel** (tipo *Cloudflared*).
-Segui le istruzioni per installare `cloudflared` sulla macchina scelta, poi in **Public Hostname**:
+## 1. The tunnel
 
-| Campo | Valore |
+Cloudflare → **Zero Trust** → **Networks** → **Tunnels** → **Create a tunnel** (type *Cloudflared*).
+Follow the instructions to install `cloudflared` on the chosen machine, then under **Public Hostname**:
+
+| Field | Value |
 |---|---|
-| Subdomain | es. `iris` |
-| Domain | il tuo dominio |
-| Service | `HTTP` → `indirizzo-di-hermes:8642` |
+| Subdomain | e.g. `iris` |
+| Domain | your domain |
+| Service | `HTTP` → `hermes-address:8642` |
 
-## 2. Il service token
+## 2. The service token
 
 Zero Trust → **Access** → **Service Auth** → **Service Tokens** → **Create Service Token**.
-Copia subito **Client ID** e **Client Secret**: il segreto si vede una volta sola. Scegli la durata (per esempio 1 anno) e segnati quando scade.
+Copy the **Client ID** and **Client Secret** right away: the secret is shown only once. Choose a duration (for example one year) and note when it expires.
 
-## 3. L'applicazione Access
+## 3. The Access application
 
 Zero Trust → **Access** → **Applications** → **Add an application** → **Self-hosted**:
 
-- dominio: lo stesso del tunnel (es. `iris.tuodominio.it`);
-- **policy** con *Action* **Service Auth** e regola *Include* → **Service Token** → quello appena creato.
+- domain: the same as the tunnel (e.g. `iris.yourdomain.com`);
+- a **policy** with *Action* **Service Auth** and an *Include* rule → **Service Token** → the one you just created.
 
-## 4. Prova
+## 4. Test
 
-Da un computer qualsiasi, senza i codici deve rispondere Cloudflare con un errore 403:
-
-```
-curl -i https://iris.tuodominio.it/health
-```
-
-Con i codici deve rispondere Hermes:
+From any computer, without the codes Cloudflare must answer with a 403 error:
 
 ```
-curl -i https://iris.tuodominio.it/health -H "CF-Access-Client-Id: <id>" -H "CF-Access-Client-Secret: <segreto>"
+curl -i https://iris.yourdomain.com/health
 ```
 
-Poi incolla i valori nelle impostazioni di Iris Dial nell'app Zepp e premi **Prova il collegamento**.
+With the codes, Hermes must answer:
 
-## Quando scade il token
+```
+curl -i https://iris.yourdomain.com/health -H "CF-Access-Client-Id: <id>" -H "CF-Access-Client-Secret: <secret>"
+```
 
-Crea un token nuovo, aggiungilo alla policy, incolla i nuovi codici nell'app Zepp, poi elimina quello vecchio.
+Then paste the values into Iris Dial's settings in the Zepp app and press **Prova il collegamento** *(test the connection)*.
+
+## When the token expires
+
+Create a new token, add it to the policy, paste the new codes into the Zepp app, then delete the old one.

@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iris Dial</title>
+<meta name="description" content="Your Hermes agent on your wrist: Iris Dial brings Iris' animated eyes and chat to the Amazfit Balance 2 (Zepp OS).">
+<meta property="og:title" content="Iris Dial — your Hermes agent on your wrist">
+<meta property="og:description" content="Dictate a question on your Amazfit Balance 2, watch the eyes think, read the reply. Straight to your own Hermes, through your phone.">
+<meta property="og:image" content="images/hero.gif">
+<meta name="theme-color" content="#07080c">
+<link rel="icon" href="images/logo.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#"><img src="images/logo.svg" alt="">Iris Dial</a>
+    <nav>
+      <a href="#how"><span lang="en">How it works</span><span lang="it">Come funziona</span></a>
+      <a href="#screens"><span lang="en">Screens</span><span lang="it">Schermate</span></a>
+      <a href="demo.html">Demo</a>
+      <a href="#privacy">Privacy</a>
+      <a href="#install"><span lang="en">Install</span><span lang="it">Installa</span></a>
+      <a href="#notch">Iris Notch</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language"><button data-l="en">EN</button><button data-l="it">IT</button></div>
+    <a class="gh" href="https://github.com/Mark9712Seto/IrisDial"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>GitHub</a>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div class="wrap">
+      <div class="stage" style="padding-top:44px">
+        <div class="watch" id="watch">
+          <div class="case"></div><div class="bezel"></div><div class="ticks" id="ticks"></div><div class="crown"></div><div class="btn2"></div>
+          <div class="screen">
+            <div class="eyes" id="eyes"></div>
+            <div class="home">
+              <button class="zb big" tabindex="-1">Chiedi a Iris</button>
+              <button class="zb fis" tabindex="-1">Chat fissata</button>
+              <button class="zb cro" tabindex="-1" aria-label="History"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3 3.5v4.5h4.5"/><path d="M12 7.5V12l3 2"/></svg></button>
+            </div>
+            <div class="wst" id="st"></div>
+            <div class="ans" id="ans"></div>
+          </div>
+        </div>
+        <div class="cap" id="cap"></div>
+      </div>
+      <div class="copy">
+        <span class="eyebrow"><span lang="en">For Hermes Agent · Amazfit Balance 2</span><span lang="it">Per Hermes Agent · Amazfit Balance 2</span></span>
+        <h1><span lang="en">Your AI agent, <em>on your wrist</em></span><span lang="it">Il tuo agente AI, <em>al polso</em></span></h1>
+        <p class="lede">
+          <span lang="en">Iris Dial puts Iris' animated eyes and a chat with your <a href="https://github.com/NousResearch/hermes-agent">Hermes agent</a> on your watch. Dictate a question, watch the eyes think and use tools, and read the reply with the crown — without taking out your phone.</span>
+          <span lang="it">Iris Dial porta gli occhi animati di Iris e la chat con il tuo <a href="https://github.com/NousResearch/hermes-agent">agente Hermes</a> sull'orologio. Detti una domanda, guardi gli occhi pensare e usare gli strumenti, e leggi la risposta con la corona, senza tirare fuori il telefono.</span>
+        </p>
+        <div class="btns" style="justify-content:center">
+          <a class="btn primary" href="#install"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11m0 0-4.5-4.5M12 14l4.5-4.5M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span lang="en">Install on your watch</span><span lang="it">Installa sull'orologio</span></a>
+          <a class="btn" href="demo.html"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg><span lang="en">Try the prototype</span><span lang="it">Prova il prototipo</span></a>
+        </div>
+        <div class="fine">
+          <span lang="en">Free for personal use</span><span lang="it">Gratis per uso personale</span>
+          <span lang="en">Keys never leave your phone</span><span lang="it">Le chiavi non lasciano il telefono</span>
+          <span lang="en">Talks only to your own Hermes</span><span lang="it">Parla solo con il tuo Hermes</span>
+        </div>
+        <span class="hint"><span lang="en">Early version 0.1 · the watch interface is in Italian for now</span><span lang="it">Versione di prova 0.1</span></span>
+      </div>
+    </div>
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <div class="sh">
+        <span class="eyebrow"><span lang="en">How it works</span><span lang="it">Come funziona</span></span>
+        <h2><span lang="en">From your wrist to your Hermes, and back</span><span lang="it">Dal polso al tuo Hermes, e ritorno</span></h2>
+        <p><span lang="en">The watch has no internet of its own: the Zepp app on your phone carries the question through a Cloudflare tunnel to the Hermes you run at home, and brings the answer back.</span><span lang="it">L'orologio non ha internet suo: l'app Zepp sul telefono porta la domanda, attraverso un tunnel Cloudflare, all'Hermes che hai a casa, e riporta la risposta.</span></p>
+      </div>
+      <div class="flow">
+        <span>⌚ <span lang="en">Watch</span><span lang="it">Orologio</span></span><i>— Bluetooth →</i>
+        <span>📱 <span lang="en">Zepp app</span><span lang="it">App Zepp</span></span><i>— HTTPS →</i>
+        <span>☁️ Cloudflare Access</span><i>— <span lang="en">tunnel</span><span lang="it">tunnel</span> →</i>
+        <span>🏠 Hermes Agent</span>
+      </div>
+      <div class="cards" style="margin-top:34px">
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></div>
+          <h3><span lang="en">Dictate</span><span lang="it">Detta</span></h3>
+          <p><span lang="en">Press Ask Iris and talk: the watch's own dictation turns it into text. Or type it.</span><span lang="it">Premi Chiedi a Iris e parla: la dettatura dell'orologio la trasforma in testo. Oppure scrivila.</span></p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="12" r="2.5"/><circle cx="15" cy="12" r="2.5"/><rect x="2.5" y="6" width="19" height="12" rx="6"/></svg></div>
+          <h3><span lang="en">Watch it work</span><span lang="it">Guardalo lavorare</span></h3>
+          <p><span lang="en">Full-screen eyes show whether Iris is thinking or using a tool, and which one. The screen stays on until the answer.</span><span lang="it">Gli occhi a tutto schermo mostrano se Iris pensa o usa uno strumento, e quale. Lo schermo resta acceso fino alla risposta.</span></p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 11h16M4 16h10"/></svg></div>
+          <h3><span lang="en">Read and continue</span><span lang="it">Leggi e continua</span></h3>
+          <p><span lang="en">A buzz when it's ready. Scroll the reply with the crown, then continue the same chat or start a new one.</span><span lang="it">Una vibrazione quando è pronta. Scorri la risposta con la corona, poi continua la stessa chat o aprine una nuova.</span></p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3.5 12a8.5 8.5 0 1 0 2.5-6"/><path d="M3 3.5v4.5h4.5"/><path d="M12 7.5V12l3 2"/></svg></div>
+          <h3><span lang="en">Every conversation</span><span lang="it">Tutte le conversazioni</span></h3>
+          <p><span lang="en">History shows Hermes' latest chats, including Telegram and Iris Notch ones. Pin one to reach it in one tap.</span><span lang="it">La cronologia mostra le ultime chat di Hermes, anche di Telegram e di Iris Notch. Fissane una per averla a un tocco.</span></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="screens">
+    <div class="wrap">
+      <div class="sh">
+        <span class="eyebrow"><span lang="en">A conversation</span><span lang="it">Una conversazione</span></span>
+        <h2><span lang="en">What it looks like on the watch</span><span lang="it">Com'è sull'orologio</span></h2>
+        <p><span lang="en">Screens from the prototype, with made-up answers. The real ones come from your Hermes and its tools.</span><span lang="it">Schermate dal prototipo, con risposte inventate. Quelle vere le scrive il tuo Hermes con i suoi strumenti.</span></p>
+      </div>
+      <div class="dshots">
+        <figure><img src="images/1-home.png" alt="" loading="lazy"><figcaption><b><span lang="en">Home</span><span lang="it">Prima schermata</span></b><span lang="en">Ask Iris, your pinned chat, history</span><span lang="it">Chiedi a Iris, chat fissata, cronologia</span></figcaption></figure>
+        <figure><img src="images/2-dictation.png" alt="" loading="lazy"><figcaption><b><span lang="en">Dictation</span><span lang="it">Dettatura</span></b><span lang="en">“What do I have tomorrow morning?”</span><span lang="it">“Che impegni ho domani mattina?”</span></figcaption></figure>
+        <figure><img src="images/4-tool.png" alt="" loading="lazy"><figcaption><b><span lang="en">Using a tool</span><span lang="it">Usa uno strumento</span></b><span lang="en">orange eyes and the tool's name</span><span lang="it">occhi arancioni e nome dello strumento</span></figcaption></figure>
+        <figure><img src="images/5-reply.png" alt="" loading="lazy"><figcaption><b><span lang="en">The reply</span><span lang="it">La risposta</span></b><span lang="en">scroll with the crown</span><span lang="it">si scorre con la corona</span></figcaption></figure>
+        <figure><img src="images/6-history.png" alt="" loading="lazy"><figcaption><b><span lang="en">History</span><span lang="it">Cronologia</span></b><span lang="en">continue any chat, pin one</span><span lang="it">continua una chat, fissane una</span></figcaption></figure>
+        <figure><img src="images/7-pinned.png" alt="" loading="lazy"><figcaption><b><span lang="en">Pinned</span><span lang="it">Fissata</span></b><span lang="en">one tap from the home screen</span><span lang="it">a un tocco dalla prima schermata</span></figcaption></figure>
+      </div>
+      <div class="btns" style="margin-top:30px"><a class="btn" href="demo.html"><span lang="en">Try it yourself in the prototype →</span><span lang="it">Provalo tu nel prototipo →</span></a></div>
+    </div>
+  </section>
+
+  <section id="privacy">
+    <div class="wrap">
+      <div class="sh">
+        <span class="eyebrow">Privacy</span>
+        <h2><span lang="en">Two locks, and no one in the middle</span><span lang="it">Due serrature, e nessuno in mezzo</span></h2>
+        <p><span lang="en">Iris Dial has no servers of its own and collects nothing. Your questions go from your phone to your own Hermes, and nowhere else.</span><span lang="it">Iris Dial non ha server suoi e non raccoglie niente. Le tue domande vanno dal telefono al tuo Hermes, e da nessun'altra parte.</span></p>
+      </div>
+      <div class="cards">
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 8.3 8 9 4.6-.7 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></div>
+          <h3><span lang="en">Cloudflare Access</span><span lang="it">Cloudflare Access</span></h3>
+          <p><span lang="en">The tunnel only lets through requests carrying your service token. No ports open on your router.</span><span lang="it">Il tunnel fa passare solo le richieste con il tuo service token. Nessuna porta aperta sul router.</span></p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></div>
+          <h3><span lang="en">Hermes key</span><span lang="it">Chiave di Hermes</span></h3>
+          <p><span lang="en">Then Hermes checks its own API key, exactly as with Iris Notch.</span><span lang="it">Poi Hermes controlla la sua chiave API, come con Iris Notch.</span></p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2.5"/><path d="M11 18.5h2"/></svg></div>
+          <h3><span lang="en">Keys stay on the phone</span><span lang="it">Chiavi solo sul telefono</span></h3>
+          <p><span lang="en">The address and the keys live in the Zepp app's settings. The watch never receives them.</span><span lang="it">Indirizzo e chiavi stanno nelle impostazioni dell'app Zepp. L'orologio non le riceve mai.</span></p></div>
+        <div class="card"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div>
+          <h3><span lang="en">No tracking</span><span lang="it">Niente tracciamento</span></h3>
+          <p><span lang="en">No account of ours, no analytics, no ads. Dictation is done by the watch's own system.</span><span lang="it">Nessun account nostro, nessuna statistica, nessuna pubblicità. La dettatura la fa il sistema dell'orologio.</span></p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="install">
+    <div class="wrap">
+      <div class="sh">
+        <span class="eyebrow"><span lang="en">Get started</span><span lang="it">Per iniziare</span></span>
+        <h2><span lang="en">Set up in four steps</span><span lang="it">Pronta in quattro passi</span></h2>
+        <p><span lang="en">Zepp OS apps outside the store are installed from a PC with a QR code. A script does the work for you.</span><span lang="it">Le app Zepp OS fuori dallo store si installano dal PC con un QR. Uno script fa il lavoro per te.</span></p>
+      </div>
+      <div class="steps" style="grid-template-columns:repeat(auto-fit,minmax(230px,1fr))">
+        <div class="step"><h3><span lang="en">Hermes and a tunnel</span><span lang="it">Hermes e un tunnel</span></h3>
+          <p><span lang="en">Turn on Hermes' API server and put a </span><span lang="it">Accendi l'API server di Hermes e mettici davanti un </span><a href="https://github.com/Mark9712Seto/IrisDial/blob/main/docs/cloudflare-tunnel.md"><span lang="en">Cloudflare tunnel</span><span lang="it">tunnel Cloudflare</span></a><span lang="en"> with a service token in front of it.</span><span lang="it"> con un service token.</span></p></div>
+        <div class="step"><h3><span lang="en">Developer mode</span><span lang="it">Modalità sviluppatore</span></h3>
+          <p><span lang="en">Zepp app → Profile → Settings → About: tap the Zepp icon 7 times.</span><span lang="it">App Zepp → Profilo → Impostazioni → Informazioni: tocca 7 volte l'icona di Zepp.</span></p></div>
+        <div class="step"><h3><span lang="en">Run the script, scan the QR</span><span lang="it">Lancia lo script, inquadra il QR</span></h3>
+          <p><span lang="en">On Windows, run </span><span lang="it">Su Windows lancia </span><code>tools\installa-sul-telefono.ps1</code><span lang="en">, then scan the QR code from Developer mode. Run it again to update.</span><span lang="it">, poi inquadra il QR da Modalità sviluppatore. Rilancialo per aggiornare.</span></p></div>
+        <div class="step"><h3><span lang="en">Paste the keys</span><span lang="it">Incolla le chiavi</span></h3>
+          <p><span lang="en">In the Zepp app, open Iris Dial's settings, paste the tunnel address and keys, and test the connection.</span><span lang="it">Nell'app Zepp apri le impostazioni di Iris Dial, incolla indirizzo e chiavi, e prova il collegamento.</span></p></div>
+      </div>
+      <p style="margin-top:22px;color:var(--muted)">
+        <span lang="en">Step-by-step guide: </span><span lang="it">Guida passo per passo: </span>
+        <a href="https://github.com/Mark9712Seto/IrisDial/blob/main/docs/install.md">English</a> ·
+        <a href="https://github.com/Mark9712Seto/IrisDial/blob/main/docs/installazione.md">Italiano</a>.
+        <span lang="en">Requirements: a Zepp OS 3+ watch with a round screen (designed for the Amazfit Balance 2), the Zepp app, a Windows PC with Node.js for the install.</span><span lang="it">Requisiti: un orologio Zepp OS 3+ con schermo rotondo (pensato per Amazfit Balance 2), l'app Zepp, un PC Windows con Node.js per l'installazione.</span>
+      </p>
+    </div>
+  </section>
+
+  <section id="notch">
+    <div class="wrap dial">
+      <div>
+        <span class="eyebrow"><span lang="en">Also from Variety Project</span><span lang="it">Sempre da Variety Project</span></span>
+        <h2 style="font-size:clamp(28px,4.4vw,42px);margin:12px 0 14px">Iris Notch</h2>
+        <p style="color:var(--muted);font-size:17px"><span lang="en">The same eyes at the top of your Windows screen, like a Dynamic Island. Hover it to chat with Hermes, hold a shortcut to talk, hear it answer, approve its actions.</span><span lang="it">Gli stessi occhi in cima allo schermo di Windows, come una Dynamic Island. Ci passi sopra per scrivere a Hermes, tieni premuta una scorciatoia per parlargli, ti risponde a voce, dai il via libera alle azioni.</span></p>
+        <div class="btns" style="margin-top:22px"><a class="btn" href="https://mark9712seto.github.io/IrisNotch/"><span lang="en">Discover Iris Notch →</span><span lang="it">Scopri Iris Notch →</span></a></div>
+      </div>
+      <img src="images/notch.gif" alt="Iris Notch eyes" loading="lazy" style="border-radius:18px">
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <a class="brand" href="#"><img src="images/logo.svg" alt="" style="width:28px">Iris Dial</a>
+    <span>© 2026 Variety Project</span>
+    <nav>
+      <a href="https://github.com/Mark9712Seto/IrisDial">GitHub</a>
+      <a href="https://github.com/Mark9712Seto/IrisDial/blob/main/LICENSE"><span lang="en">License</span><span lang="it">Licenza</span></a>
+      <a href="https://github.com/Mark9712Seto/IrisDial/blob/main/PRIVACY.md">Privacy</a>
+      <a href="https://github.com/Mark9712Seto/IrisDial/blob/main/docs/architecture.md"><span lang="en">Architecture</span><span lang="it">Architettura</span></a>
+    </nav>
+    <p><span lang="en">Free to use, study, modify and share for non-commercial purposes under the PolyForm Noncommercial License 1.0.0. Iris Dial is an independent project, not affiliated with Zepp Health / Amazfit or Nous Research.</span><span lang="it">Gratis da usare, studiare, modificare e condividere per scopi non commerciali, con la licenza PolyForm Noncommercial 1.0.0. Iris Dial è un progetto indipendente, non legato a Zepp Health / Amazfit o Nous Research.</span></p>
+  </div>
+</footer>
+
+<script src="eyes.js"></script>
+<script src="site.js"></script>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  // lunetta
+  let s = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">';
+  for (let i = 0; i < 60; i++) { const a = i * 6 * Math.PI / 180, big = i % 5 === 0, r1 = 49.2, r2 = big ? 46.6 : 47.8; s += `<line x1="${50 + Math.sin(a) * r1}" y1="${50 - Math.cos(a) * r1}" x2="${50 + Math.sin(a) * r2}" y2="${50 - Math.cos(a) * r2}" stroke="${big ? "#8a8f9c" : "#4a4e59"}" stroke-width="${big ? 0.7 : 0.35}"/>`; }
+  $("ticks").innerHTML = s + "</svg>";
+
+  const w = $("watch"), eyesEl = $("eyes"), st = $("st"), ans = $("ans"), cap = $("cap");
+  const eyes = Iris.createEyes(eyesEl, { island: true, idleLife: true });
+  const C = Iris.EYE_COLOR;
+  const T = {
+    idle: ["Ready when you are", "Ask Iris starts a new chat", "Pronta quando vuoi", "Chiedi a Iris apre una chat nuova", ""],
+    thinking: ["Thinking", "your Hermes agent is on it", "Ci pensa", "il tuo agente Hermes ci sta lavorando", "Sto pensando…"],
+    tool: ["Using a tool", "and the watch tells you which", "Usa uno strumento", "e l'orologio ti dice quale", "Uso: calendario leggi"],
+    done: ["Reply ready", "a buzz on your wrist", "Risposta pronta", "una vibrazione al polso", "Risposta pronta"],
+    reading: ["Read it with the crown", "then continue, or start a new chat", "Leggila con la corona", "poi continua, o apri una chat nuova", ""],
+  };
+  let cur = "idle";
+  function label(k) {
+    const t = T[k], it = Site.lang() === "it";
+    cap.style.opacity = 0;
+    setTimeout(() => { cap.innerHTML = `<b style="color:${C[k] || "var(--fg)"}">${it ? t[2] : t[0]}</b><span>${it ? t[3] : t[1]}</span>`; cap.style.opacity = 1; }, 220);
+  }
+  document.addEventListener("iris-lang", () => label(cur));
+  const seq = [["idle", 3200], ["thinking", 2600], ["tool", 2600], ["done", 1600], ["reading", 4200]];
+  let i = 0;
+  function step() {
+    const [k, ms] = seq[i++ % seq.length]; cur = k; label(k);
+    w.classList.toggle("busy", k !== "idle");
+    w.classList.toggle("reading", k === "reading");
+    eyesEl.classList.toggle("full", k === "thinking" || k === "tool" || k === "done");
+    st.textContent = T[k][4]; st.style.color = C[k] || "#8e95ad";
+    ans.innerHTML = k === "reading" ? '<small>calendario leggi</small>Domani mattina hai <b>due impegni</b>: alle 9:30 il dentista, e alle 11 la call con Luca…' : "";
+    eyes.setState(k === "reading" ? "idle" : k);
+    setTimeout(step, ms);
+  }
+  if (Site.reduce) label("idle"); else step();
+})();
+</script>
+</body>
+</html>
